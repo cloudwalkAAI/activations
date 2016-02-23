@@ -1,0 +1,98 @@
+html, body {
+    /*background: #6f93a6; /!* For browsers that do not support gradients *!/
+    background: -webkit-linear-gradient(right top, #6f93a6, #0f4c83,#bf5c34) !important; /!* For Safari 5.1 to 6.0 *!/
+    background: -o-linear-gradient(bottom left,#6f93a6, #0f4c83,#bf5c34) !important; /!* For Opera 11.1 to 12.0 *!/
+    background: -moz-linear-gradient(bottom left,#6f93a6, #0f4c83,#bf5c34) !important; /!* For Firefox 3.6 to 15 *!/
+    background: linear-gradient(to bottom left,#6f93a6, #0f4c83,#bf5c34) !important; /!* Standard syntax *!/*/
+}
+
+.login-box {
+    background: #fff;
+    border: 1px solid #ddd;
+    /*margin: 100px 0;*/
+    padding: 10px 20px 0 20px;
+}
+
+/*.main-section{*//*option1*/
+    /*min-height: 94vh;*/
+    /*background: #6f93a6; /!* For browsers that do not support gradients *!/*/
+    /*background: -webkit-linear-gradient(right top, #6f93a6, #0f4c83,#bf5c34); /!* For Safari 5.1 to 6.0 *!/*/
+    /*background: -o-linear-gradient(bottom left,#6f93a6, #0f4c83,#bf5c34); /!* For Opera 11.1 to 12.0 *!/*/
+    /*background: -moz-linear-gradient(bottom left,#6f93a6, #0f4c83,#bf5c34); /!* For Firefox 3.6 to 15 *!/*/
+    /*background: linear-gradient(to bottom left,#6f93a6, #0f4c83,#bf5c34); /!* Standard syntax *!/*/
+/*}*/
+
+.main-section{
+    /*min-height: 94vh;*/
+    background: #fff; /* For browsers that do not support gradients */
+    /*background: -webkit-linear-gradient( #0f4c83, #808080  ); /!* For Safari 5.1 to 6.0 *!/
+    background: -o-linear-gradient( #0f4c83, #808080  ); /!* For Opera 11.1 to 12.0 *!/
+    background: -moz-linear-gradient( #0f4c83, #808080  ); /!* For Firefox 3.6 to 15 *!/
+    background: linear-gradient( #0f4c83, #808080  ); /!* Standard syntax *!/
+    background-repeat: no-repeat;
+    background-size: 100%*/;
+}
+
+.dash_button{
+    width:100%;
+}
+
+.dash_col{
+    padding-top: 2em;
+}
+
+.accordion_bg {
+    background: #015ea1 !important;
+    color: white !important;
+    border-bottom: thin solid #FFFFFF;
+}
+
+.width80{
+    width: 80% !important;
+}
+
+.width20{
+    width: 20% !important;
+}
+
+.profile_picture, .profile_img{
+    max-width: 150px;
+}
+
+.mar10{
+    margin-top: 10px;
+}
+
+.profile_img{
+    /*margin-bottom: 5%;*/
+    min-width: 230px;
+    margin-bottom: 10px;
+}
+
+#ta_contact{
+    max-width: 315px;
+    min-width: 315px;
+    min-height: 69px;
+}
+
+.nav_logo{
+    max-height: 38px;
+}
+
+ul.off-canvas-list li a:hover {
+     color: #000;
+}
+
+.login_logo{
+    margin-bottom: 10px;
+    max-height: 75px;
+}
+
+.accordion li > a {
+    border-radius: 15px;
+    margin-top: 3px;
+}
+
+.force_right_align{
+    text-align: right;
+}

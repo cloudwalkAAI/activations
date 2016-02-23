@@ -1,0 +1,68 @@
+.twidth{
+    width: 100%;
+}
+
+.hide-normal{
+    display: none;
+}
+
+span{
+    font-size: 12px;
+}
+
+.vert-mid{
+    margin: 0px auto !important;
+}
+/*
+.left-off-canvas-menu {
+    background: #005a8e; /!* For browsers that do not support gradients *!/
+    background: -webkit-linear-gradient(#005a8e,#42a7ac, #63b8cd); /!* For Safari 5.1 to 6.0 *!/
+    background: -o-linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* For Opera 11.1 to 12.0 *!/
+    background: -moz-linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* For Firefox 3.6 to 15 *!/
+    background: linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* Standard syntax *!/
+}*/
+
+.left-off-canvas-menu {
+    min-height: 100vh;
+    background: #6f93a6; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient( #0f4c83, #808080  ); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient( #0f4c83, #808080  ); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient( #0f4c83, #808080  ); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #0f4c83, #808080  ); /* Standard syntax */
+}
+
+.exit-off-canvas{
+    min-height: 100vh;
+}
+/*
+.tab-bar {
+    background: #005a8e; /!* For browsers that do not support gradients *!/
+    background: -webkit-linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* For Safari 5.1 to 6.0 *!/
+    background: -o-linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* For Opera 11.1 to 12.0 *!/
+    background: -moz-linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* For Firefox 3.6 to 15 *!/
+    background: linear-gradient(#005a8e, #42a7ac,#63b8cd); /!* Standard syntax *!/
+}*/
+
+.tab-bar {
+    background: #6f93a6; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient( #0f4c83, #808080  ); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient( #0f4c83, #808080  ); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient( #0f4c83, #808080  ); /* For Firefox 3.6 to 15 */
+    background: linear-gradient( #0f4c83, #808080  ); /* Standard syntax */
+}
+
+.off-canvas-wrap, .inner-wrap, .main-section {
+    min-height: 100%;
+}
+
+thead tr > th { cursor: pointer; cursor: hand; }
+
+.image-preview-single {
+    padding: 10px 0;
+}
+.image-preview-single > img {
+    width: 128px;
+    height: 96px;
+    vertical-align: middle;
+    visibility: hidden;
+}

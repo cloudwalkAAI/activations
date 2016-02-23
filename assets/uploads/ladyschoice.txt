@@ -1,0 +1,13 @@
+REAL CHEF CHALLENGE FACEBOOK MANAGEMENT
+-        Setting up of page
+-        Upload contents from client
+-        Ensure all page info is properly filled out
+		o   Cover photos/
+		o   Profile picture/
+		o   About Info/
+		o   Photo and video contents
+-        Upload entries given by client
+-        Content calendar plotting
+-        Provide weekly reports on “likes” per entry
+-        Notify client on any Qs and concern posted by customer
+-       Reply to Qs and concern with client advice
