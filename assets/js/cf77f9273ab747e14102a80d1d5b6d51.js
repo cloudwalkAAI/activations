@@ -940,7 +940,6 @@ $('.loadmvrfbydate').on('click', function(){
 
 function client_reload(){
     $('.load_client').on('click', function(){
-        //alert($(this).attr('alt'));return false;
         $.ajax({
             url: MyNameSpace.config.base_url+'emp/load_client_info',
             type:'post',
@@ -948,17 +947,20 @@ function client_reload(){
                 'setupid' : $(this).attr('alt')
             },
             success: function(data) {
-                var rep1 = data.replace("[","");
-                var rep2 = rep1.replace("]","");
-                var json = $.parseJSON(rep2);
-
-                $('#hid_client_id').val( json.client_id );
-                $('#inp_companyname_u').val( json.company_name );
-                $('#inp_contactperson_u').val( json.contact_person );
-                $('#inp_contactnumber_u').val( json.contact_number );
-                $('#inp_birthday_u').val( json.birth_date );
-                $('#inp_email_u').val( json.email );
-
+                $.each($.parseJSON(data), function (item, value) {
+                    if( item == 0 ){
+                        $('#hid_client_id').val( value.client_id );
+                        $('#inp_companyname_u').val( value.company_name );
+                        $('#inp_contactperson_u').val( value.contact_person );
+                        $('#inp_contactnumber_u').val( value.contact_number );
+                        $('#inp_birthday_u').val( value.birth_date );
+                        $('#inp_email_u').val( value.email );
+                    }else if( item == 1 ){
+                        $('div.input_fields_wrap_u').empty(); //add input box
+                        $('div.input_fields_wrap_u').append(value); //add input box
+                    }
+                });
+                reload_brand_u();
                 $('#myModalclient_u').foundation('reveal', 'open');
             }
         });
@@ -1253,6 +1255,13 @@ $('#btn_save_client').on('click', function() {
         success: function (response) {
             $("#client_table > tbody").prepend( response );
             client_reload();
+            $('#inp_companyname').val('');
+            $('#inp_contactperson').val('');
+            $('#inp_contactnumber').val('');
+            $('#inp_birthday').val('');
+            $('#inp_email').val('');
+            $('.cls_brand').val('');
+            $('#myModal').foundation( 'reveal', 'close' );
         }
 
     }).submit();
@@ -1276,6 +1285,49 @@ $(document).ready(function() {
         e.preventDefault(); $(this).parent('div').remove(); x--;
     })
 });
+
+$(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_brand_button"); //Add button ID
+
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            $(wrapper).append('<div><input type="text" class="cls_brand" name="ta_brand[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+    });
+
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+
+
+function reload_brand_u(){
+    $(document).ready(function() {
+        var max_fields      = 10; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap_u"); //Fields wrapper
+        var add_button      = $(".add_brand_button_u"); //Add button ID
+
+        var x = 1; //initlal text box count
+        $(add_button).click(function(e){ //on add input button click
+            e.preventDefault();
+            if(x < max_fields){ //max input box allowed
+                x++; //text box increment
+                $(wrapper).append('<div><input type="text" class="cls_brand" name="ta_brand[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            }
+        });
+
+        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+    });
+}
+
+reload_brand_u();
 
 if($('textarea').length > 1) {
     CKEDITOR.replace( 'editor_campaign_overview' );
