@@ -92,6 +92,14 @@ class Insert_model extends CI_Model
 
         $insid = $this->db->insert_id();
 
+        $data = array(
+            'client_id'              => $insid,
+            'brand_name'             => implode(',',$a['ta_brand']),
+            'date_inputted'          => date("m-d-Y H:i:s")
+        );
+
+        $this->db->insert('brand', $data);
+
         return $insid;
     }
 

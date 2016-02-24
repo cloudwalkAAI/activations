@@ -621,7 +621,24 @@ class Get_model extends CI_Model
 
     function get_client_info( $a ){
         $query = $this->db->get_where( 'clients', array( 'client_id' => $a ) );
-        return json_encode( $query->result_array() );
+        return $query->result();
+    }
+
+    function get_client_brand( $a ){
+        $input_text = '<a href="#" class="add_brand_button_u tiny twidth button">Add Brands</a>';
+        $array_brands = array();
+        $query = $this->db->get_where( 'brand', array( 'client_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+
+                $array_brands = explode(',',$row->brand_name);
+                foreach($array_brands as $brand){
+                    $input_text .= '<div><input type="text" name="ta_brand[]" value="'.$brand.'"/></div>';
+                }
+            }
+        }
+        return $input_text;
     }
 
     function check_account( $a, $b ){
