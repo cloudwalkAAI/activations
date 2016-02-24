@@ -641,6 +641,37 @@ class Get_model extends CI_Model
         return $input_text;
     }
 
+    function get_project_type(){
+        $input_text = '';
+        $array_brands = array();
+        $i=0;
+        $query = $this->db->get( 'project_type' );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $input_text .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_projtype[]" id="inp_projtype" value="' . $row->pt_name . '"><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype[]" id="inp_projtype" value="' . $row->pt_name . '"><span> ' . $row->pt_name . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype[]" id="inp_projtype" value="' . $row->pt_name . '"><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $input_text;
+    }
+
     function check_account( $a, $b ){
         $this->db->select( 'email' );
         $this->db->from( 'employee_list' );

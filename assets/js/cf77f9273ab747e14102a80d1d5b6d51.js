@@ -38,9 +38,9 @@ $('#form_jo').ajaxForm({
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
-        }else if($.trim( $('#inp_projtype').val() ) == '' ){
+        }else if( $("#form_jo input:checkbox:checked").length == 0 ){
             $('#alert_box').text();
-            $('#alert_box').text("You haven't input a project type!.");
+            $('#alert_box').text("You haven't choose a project type!.");
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
@@ -55,6 +55,8 @@ $('#form_jo').ajaxForm({
         }
     },
     success:  function(response){
+        console.log(response);
+        return false;
         var rep1 = response.replace("[","");
         var rep2 = rep1.replace("]","");
         var json = $.parseJSON(rep2);
@@ -773,6 +775,22 @@ function reload_animation_table( response_id ){
         }
     });
 }
+
+$('#btn_add_pt').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/add_pt',
+        type:'post',
+        data: {
+            'pt_added' : $('#other_pt').val()
+        },
+        success: function(data) {
+            //console.log(data);
+            $('#other_pt').val('')
+            $('#pt_list').empty();
+            $('#pt_list').append(data);
+        }
+    });
+});
 
 $('#form_client_u').ajaxForm({
     type: 'POST',
