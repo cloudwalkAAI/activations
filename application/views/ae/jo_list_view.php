@@ -45,7 +45,6 @@
                                 }
                             ?>
                         </select>
-
                     </label>
                     <label for="inp_brand" id="hd" class="hide">Brand
                         <select name="inp_brand" id="inp_brand">
@@ -94,12 +93,12 @@
                         $c = $row_company->company_name;
                     }
 
-                    $query_brand = $this->db->get_where( 'brand', array( 'brand_id' => $row['brand'] ) );
-                    $row_brand = $query_brand->row();
-                    if (isset($row_brand))
-                    {
-                        $b = $row_brand->brand_name;
-                    }
+//                    $query_brand = $this->db->get_where( 'brand', array( 'brand_id' => $row['brand'] ) );
+//                    $row_brand = $query_brand->row();
+//                    if (isset($row_brand))
+//                    {
+//                        $b = $row_brand->brand_name;
+//                    }
 
                     echo '
                         <tr>
@@ -109,7 +108,7 @@
                         <td>'.$row['project_name'].'</td>
                         <td>'.$row['project_type'].'</td>
                         <td>'.$c.'</td>
-                        <td>'.$b.'</td>
+                        <td>'.$row['brand'].'</td>
                         <td>'.$row['billed_date'].'</td>
                         <td>'.$row['paid_date'].'</td>
                         </tr>

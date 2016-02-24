@@ -69,7 +69,7 @@ class Insert_model extends CI_Model
             $this->db->where('jo_id', $insid);
             $this->db->update('job_order_list', $data_update);
 
-            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list.',$insid);
+//            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list.',$insid);
 
         }
 

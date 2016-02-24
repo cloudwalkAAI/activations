@@ -6,15 +6,15 @@ $('#inp_client').on('change',function(){
             cid : $('#inp_client').val()
         },
         success: function(data) {
-            var json = $.parseJSON(data);
+            var arr = data.split(',');
             $('label#hd').show();
             $('#inp_brand').empty();
 
-            $.each( json, function( key, value ) {
+            $.each( arr, function( key, value ) {
                 $('#inp_brand')
                     .append($("<option></option>")
-                    .attr("value", value.client_id)
-                    .text(value.brand_name));
+                    .attr("value", value)
+                    .text(value));
             });
         }
     });
@@ -55,18 +55,18 @@ $('#form_jo').ajaxForm({
         }
     },
     success:  function(response){
-        console.log(response);
-        return false;
-        var rep1 = response.replace("[","");
-        var rep2 = rep1.replace("]","");
-        var json = $.parseJSON(rep2);
-        $('#inp_projtype').val('');
+        //var rep1 = response.replace("[","");
+        //var rep2 = rep1.replace("]","");
+        var json = $.parseJSON(response);
+        $('input:checkbox').removeAttr('checked');
         $('#inp_projname').val('');
+        $('#inp_client').val('0');
         $('label#hd').hide();
         $('#btn_save_jo').prop('disabled', false);
         $("<tr><td>" + json.date_created + "</td><td><a href='" + MyNameSpace.config.base_url + "jo/in?a=" + json.jo_id + "'>" + json.jo_number + "</a></td><td>" + json.do_contract_no +
             "</td><td>" + json.project_name + "</td><td>" + json.project_type + "</td><td>" + json.client_company_name +
-            "</td><td>" + json.brand + "</td><td>" + json.billed_date + "</td><td>" + json.paid_date + "</td></tr>").appendTo("#table_jo_list > tbody");
+            "</td><td>" + json.brand + "</td><td>" + json.billed_date + "</td><td>" + json.paid_date + "</td></tr>").prependTo("#table_jo_list > tbody");
+        $('#joModal').foundation( 'reveal', 'close' );
     }
 
 });
@@ -142,7 +142,6 @@ $('#emp_form').ajaxForm({
     },
     complete: function() { $('#alert_box_progress').hide(); },
     success:  function(response){
-        console.log(response);
         if( response == 'exist' ){
 
             $('#alert_box_emp_box').text();

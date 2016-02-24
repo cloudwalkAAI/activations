@@ -69,7 +69,7 @@ class Get_model extends CI_Model
             $jolist_array['project_name'] = $row->project_name;
             $jolist_array['project_type'] = $row->project_type;
             $jolist_array['client_company_name'] = $this->get_company( $row->client_company_name );
-            $jolist_array['brand'] = $this->get_brand( $row->brand );
+            $jolist_array['brand'] = $row->brand;
 
             if( !is_null( $row->billed_date ) ){
                 $jolist_array['billed_date'] = $row->billed_date;
@@ -123,11 +123,15 @@ class Get_model extends CI_Model
     }
 
     function get_brand_list( $a ){
+        $str_brand = '';
         $this->db->select( 'client_id, brand_name' );
         $this->db->from( 'brand' );
         $this->db->where( 'client_id =', $a );
         $query = $this->db->get();
-        return json_encode( $query->result_array() );
+        foreach( $query->result() as $row ){
+            $str_brand = $row->brand_name;
+        }
+        return $str_brand;
     }
 
     function get_employee( $id ){
