@@ -202,11 +202,13 @@ class Jo extends CI_Controller{
         $data['content'] = $this->load->view('iped', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
+
     function fped(){
         $data['navigator'] = $this->load->view('nav', NULL, TRUE);
         $data['content'] = $this->load->view('fped', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
+
     function clients(){
         if( $this->session->userdata('sess_id') ) {
             $data_client['client_list'] = $this->get_model->get_load_client_list();

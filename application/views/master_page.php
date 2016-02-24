@@ -83,7 +83,7 @@
         format:'d/m/Y'
     });
 
-    jQuery('#datepicker_emp').datetimepicker({
+    jQuery('#datepicker_emp, #inp_birthday_u').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });

@@ -41,13 +41,28 @@
         </div>
         <div class="row">
           <div class="small-12 columns">
-            <input type="text" id="inp_birthday" name="inp_birthday" placeholder="Birthday">
+            <input type="text" id="inp_birthday" name="inp_birthday" placeholder="Birthdate">
           </div>
         </div>
         <div class="row">
           <div class="small-12 columns">
             <input type="text" id="inp_email" name="inp_email" placeholder="Email Address">
           </div>
+        </div>
+        <div class="row">
+            <div class="input_fields_wrap">
+                <a href="#" class="add_brand_button tiny twidth button">Add Brands</a>
+                <?php
+    //            if( isset($arr_profile[0]->contact_nos) ){
+    //                $ctacts = explode(',',$arr_profile[0]->contact_nos);
+    //                foreach( $ctacts as $cdetails ){
+    //                    echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+    //                }
+    //            }else{
+                    echo '<div><input type="text" class="cls_brand" name="ta_brand[]"></div>';
+    //            }
+                ?>
+            </div>
         </div>
         <div class="row">
           <div class="small-offset-6 small-3 columns">
@@ -95,6 +110,11 @@
           <input type="text" id="inp_email_u" name="inp_email_u" class="req" placeholder="Email Address">
         </div>
       </div>
+        <div class="row">
+            <div class="input_fields_wrap_u">
+
+            </div>
+        </div>
       <div class="row">
         <div class="small-offset-6 small-3 columns">
           <button class="button alert" aria-label="Close">Cancel</button>
