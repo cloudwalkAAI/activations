@@ -1,5 +1,9 @@
 <!doctype html>
 <html lang="en">
+<?php
+//    header('Content-Disposition: inline; filename="file.pdf"');
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +11,7 @@
     <link rel="stylesheet" href="<?=base_url('assets/css/custom.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/foundation.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/constants.css');?>">
+    <link rel="stylesheet" href="<?=base_url('assets/css/rcswitcher.min.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/foundation-icons/foundation-icons.css');?>">
     <script>
         var MyNameSpace = {
@@ -19,6 +24,9 @@
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>
     <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>
     <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
+    <?php
+
+    ?>
 </head>
 <body>
 
