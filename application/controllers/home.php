@@ -5,13 +5,29 @@ class Home extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->library('calendar');
+//        $this->load->library('calendar');
+        $this->load->model('cal_model');
     }
-    public function index()
+    public function index($year = null, $month = null)
     {
         if( $this->session->userdata('sess_id') && ( $this->session->userdata('sess_status') != 'resigned') ){
+            if (!$year){
+                $year = date('Y');
+            }
+            if (!$month){
+                $month = date('M');
+            }
+
+            if ($day = $this->input->post('day')){
+                $this->cal_model->add_calendar_data(
+                    "$year-$month-$day",
+                    $this->input->post('data')
+
+                );
+            }
+            $data['calendar'] = $this->cal_model->generate($year, $month);
             $data['navigator'] = $this->load->view('nav', NULL, TRUE);
-            $data['content'] = $this->load->view('ae/dashboard', NULL, TRUE);
+            $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
 
             $this->load->view('master_page', $data);
         }else{
@@ -26,6 +42,7 @@ class Home extends CI_Controller {
             $this->load->view('master_page', $data);
         }
     }
+
 
     function logout(){
         $user_data = $this->session->all_userdata();

@@ -96,3 +96,38 @@ ul.off-canvas-list li a:hover {
 .force_right_align{
     text-align: right;
 }
+
+/*calendar*/
+.calendar {
+    font-family: Arial;
+}
+table.calendar{
+    margin: auto; border-collapse: collapse;
+}
+.calendar .days td {
+    width: 80px; height: 80px; padding: 4px;
+    border: 2px solid #a8a9ad;
+    vertical-align: top;
+    /*background-color: #def;*/
+}
+.calendar .days td:hover {
+    background-color: #f57e20;
+}
+.calendar .highlight {
+    font-weight: bold; color: #00f;
+}
+.day_num:hover{
+    color: #fff;
+}
+.day_num{
+    font-size: 20px;
+    color: #a8a9ad;
+}
+.content{
+    color: #a8a9ad;
+}
+
+table tr.even, table tr.alt, table tr:nth-of-type(even) {
+    background: rgba(0,0,0,0) !important;
+}
+/*end calendar*/
