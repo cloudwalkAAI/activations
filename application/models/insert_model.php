@@ -43,7 +43,7 @@ class Insert_model extends CI_Model
             'msg' => 'A JO has been created with JO ID of '.date("Y").str_pad( $insid, 5, "0", STR_PAD_LEFT ).'.'
         );
 
-        $this->sms_model->sms_send( $text_array );
+        // $this->sms_model->sms_send( $text_array );
 
     }
 

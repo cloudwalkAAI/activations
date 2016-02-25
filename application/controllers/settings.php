@@ -16,13 +16,15 @@ class Settings extends CI_Controller {
 
     function index()
     {
-        if( $this->session->userdata('sess_id') ){
+		$data['active_menu'] = 'settings';
+		$data['active_submenu'] = null;
+	   if( $this->session->userdata('sess_id') ){
             $data_profile['data_prof'] = $this->get_model->emp_info( $this->session->userdata('sess_id') );
             $data_profile['jo_counts'] = $this->get_model->emp_jo_count( $this->session->userdata('sess_id') );
             $data_profile['last_task'] = $this->get_model->emp_last_task_off( $this->session->userdata('sess_id') );
             $data_profile['current_task'] = $this->get_model->emp_last_task( $this->session->userdata('sess_id') );
             $data_profile['jolist'] = $this->get_model->get_ae_jo( $this->session->userdata('sess_id') );
-            $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
             $data['content'] = $this->load->view('profile_view', $data_profile, TRUE);
             $this->load->view('master_page', $data);
         }else{
