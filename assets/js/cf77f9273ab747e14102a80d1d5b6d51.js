@@ -75,6 +75,30 @@ $('#datepicker_emp_tmp').on('change', function(){
     //alert($(this).val());
 });
 
+$('#btn_export').on('click', function(){
+    //$('#form_archive').ajaxForm({
+    //    type: 'get',
+    //    url: MyNameSpace.config.base_url+'jo/mpdf',
+    //    beforeSubmit: function(arr, jform, option){
+    //
+    //    },
+    //    success:  function(response){
+    //        console.log(response);
+    //    }
+    //}).submit();
+    var jid = $('#jid').val();
+    $.ajax({
+        type: 'get',
+        url: MyNameSpace.config.base_url+'jo/pdf_data',
+        data: {
+            'jid' : jid
+        },
+        success: function(res) {
+            $('#pdf-btn').attr('href', MyNameSpace.config.base_url+'jo/mpdf?jid='+jid);
+        }
+    });
+});
+
 $('#emp_form').ajaxForm({
     type: 'POST',
     url: MyNameSpace.config.base_url+'emp/add_emp',
@@ -178,7 +202,7 @@ $('#emp_form').ajaxForm({
             load_click_emp();
         }
     }
-})
+});
 
 $('#emp_form_up').ajaxForm({
     type: 'POST',
@@ -320,7 +344,7 @@ $('#cpass_form').ajaxForm({
         $('#sml_pass2').css('display','none');
     },
     success:  function(response){
-        console.log(response);
+        //console.log(response);
         //var json = $.parseJSON(response);
         $('#pass_content').empty();
         $('#pass_content').append(response);

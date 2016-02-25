@@ -180,6 +180,19 @@
     </div>
 </div>
 <div class="column large-10 medium-10 small-12">
+    <div class="row">
+        <a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
+    </div>
+    <div id="modal_pdf_selector" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+<!--        <h2 id="modalTitle">Select Archive</h2>-->
+
+        <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
+<!--        <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom">Minutes of the Meeting</label>-->
+<!--        <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed">Event Details</label>-->
+<!--        <input type="button" class="button" value="Export" id="btn_export">-->
+        <a href="<?=base_url('jo/mpdf?jid='.$this->input->get('a'))?>" id="pdf-btn" target="_blank" href="">Save and Print PDF</a>
+
+    </div>
     <ul class="accordion" data-accordion>
         <li class="accordion-navigation">
             <a id="show_table_mom" class="accordion_bg" href="#panel1a">Minutes of the meeting</a>
