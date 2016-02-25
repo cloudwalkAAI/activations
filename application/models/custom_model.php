@@ -65,6 +65,12 @@ class Custom_model extends CI_Model
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update( 'clients', $data );
 
+        $data = array(
+            'brand_name'             => implode(',',$a['ta_brand']),
+        );
+        $this->db->where( 'client_id', $a['hid_client_id'] );
+        $this->db->update('brand', $data);
+
         return $this->db->affected_rows();
     }
 

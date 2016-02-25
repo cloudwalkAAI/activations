@@ -101,7 +101,7 @@
         format:'m/d/Y'
     });
 
-    jQuery('#datepicker_emp').datetimepicker({
+    jQuery('#datepicker_emp, #inp_birthday_u').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });
@@ -111,5 +111,27 @@
         format:'Y/d/m h:i:s'
     });
 
+    $(document).ready(function(){
+        $('.calendar .day').click(function(){
+            day_num = $(this).find('.day_num').html();
+            day_data = prompt('Enter details');
+            if (day_data != null){
+
+                $.ajax({
+                    url: window.location,
+                    type: 'POST',
+                    data: {
+                        day: day_num,
+                        data: day_data
+                    },
+                    success: function(msg){
+                        location.reload();
+                    }
+                });
+            }
+        });
+    });
+
 </script>
+
 </html>

@@ -25,6 +25,7 @@ class Jo extends CI_Controller{
         if( $this->session->userdata('sess_id') ){
 //            if( $arr ){
                 $data_a['jo_list'] = $arr;
+                $data_a['project_type'] = $this->get_model->get_project_type();
                 $data_a['client_list'] = $this->get_model->get_client_list();
                 $data['navigator'] = $this->load->view('nav', $data, TRUE);
                 $data['content'] = $this->load->view('ae/jo_list_view', $data_a, TRUE);
@@ -39,6 +40,13 @@ class Jo extends CI_Controller{
         }
     }
 
+    function add_pt(){
+        $res = $this->insert_model->insert_protype( $this->input->post('pt_added') );
+        if( $res != 'fail' ){
+            echo $this->get_model->get_project_type();
+        }
+    }
+
     function add_client(){
         $insid = $this->insert_model->insert_client( $this->input->post() );
         echo $this->get_model->get_added_client( $insid );
@@ -49,6 +57,8 @@ class Jo extends CI_Controller{
     }
 
     function add_jo(){
+//        print_r($this->input->post());
+//        return false;
         $insid = $this->insert_model->insert_jo( $this->input->post() );
         echo $this->get_model->get_ae_jo_w( $insid );
     }
@@ -231,6 +241,7 @@ class Jo extends CI_Controller{
         $data['content'] = $this->load->view('iped', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
+
     function fped(){
 		$data['active_menu'] = 'ex';
 		$data['active_submenu'] = 'fped';
@@ -238,6 +249,7 @@ class Jo extends CI_Controller{
         $data['content'] = $this->load->view('fped', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
+
     function clients(){
 		$data['active_menu'] = 'clients';
 		$data['active_submenu'] = 'clients';

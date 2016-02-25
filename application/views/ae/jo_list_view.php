@@ -15,7 +15,6 @@
 
 				<div id="joModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">
 					<h2 id="modalTitle" class="text-center">Create New Job Order</h2>
-
 					<div id="alert_box" data-alert class="alert-box alert radius hide-normal">
 						Special characters are not allowed
 						<a href="#" class="close">&times;</a>
@@ -57,7 +56,6 @@
 							<button id="btn_save_jo" type="submit" class="button medium expand">Create Job Order</button>
 						</div>
 					</form>
-
 					<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 				</div>
 				<div id="joEditModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">
@@ -169,44 +167,6 @@
 				</div>
 				<div class="clearfix"></div>
 			</li>
-			<?php
-                    /* echo '
-                        <tr>
-                        <td>'.$row['date_created'].'</td>
-                        <td><a href="'.base_url('jo/in?a=').$row['jo_id'].'">'.$row['jo_number'].'</a></tdtr>
-                        <td>'.$row['do_contract_no'].'</td>
-                        <td>'.$row['project_name'].'</td>
-                        <td>'.$row['project_type'].'</td>
-                        <td>'.$c.'</td>
-                        <td>'.$b.'</td>
-                        <td>'.$row['billed_date'].'</td>
-                        <td>'.$row['paid_date'].'</td>
-                        </tr>
-                    '; */
-                }
-            ?>
-			<!--<li class="jolist">
-				<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">					
-					<h3>Dove School Event</h3>
-					<h5>JO NO.54768534</h5>
-					<h6>February 26, 2016</h6>					
-				</div>
-				<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">
-					<ul class="inline-list jorightlist right">
-						<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
-						<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Delete.png');?>"/></a></li>
-					</ul>
-					<div class="large-12 columns text-right" style="padding-right: 30px;">
-						<p style="margin-top: 10px;">School Event</p>
-						<p>Uniliver</p>
-						<p>Dove</p>
-						<p>DO: February 24, 2016</p>
-						<p>Billed: P203,000</p>
-						<p>Paid: P133,000</p>
-					</div>					
-				</div>
-				<div class="clearfix"></div>
-			</li>-->
 		</ul>
 	</div>
 </div>

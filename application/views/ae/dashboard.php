@@ -1,3 +1,8 @@
+<?php
+//    print_r($this->session->userdata('sess_dept'));
+
+    if( $this->session->userdata('sess_dept') <= 2 ){
+?>
 <div class="row aaidashboard">
 	<div class="medium-5 medium-centered large-5 columns large-centered" style="margin-top: 7%;">
 		<ul class="tabs" data-tab role="tablist">
@@ -53,3 +58,20 @@
 		</div>
 	</div>
 </div>
+
+<?php
+    }elseif( $this->session->userdata('sess_dept') == '10' ){
+?>
+<div class="row">
+            <div class="column large-12 medium-12 small-12 dash_col">
+                <?=$calendar?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column large-12 medium-12 small-12 dash_col">
+                <a href="<?=base_url('jo?id='.$this->session->userdata('sess_id'))?>" class="dash_button button round">Job Order</a>
+            </div>
+        </div>
+<?php
+    }
+?>

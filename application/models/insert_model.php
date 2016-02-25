@@ -51,7 +51,7 @@ class Insert_model extends CI_Model
         $insid = 0;
         $data = array(
             'emp_id'                => $this->session->userdata('sess_id'),
-            'project_type'          => $a['inp_projtype'],
+            'project_type'          => implode(',',$a['inp_projtype']),
             'client_company_name'   => $a['inp_client'],
             'brand'                 => $a['inp_brand'],
             'project_name'          => $a['inp_projname'],
@@ -69,7 +69,7 @@ class Insert_model extends CI_Model
             $this->db->where('jo_id', $insid);
             $this->db->update('job_order_list', $data_update);
 
-            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list.',$insid);
+//            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list.',$insid);
 
         }
 
@@ -91,6 +91,14 @@ class Insert_model extends CI_Model
         $this->db->insert('clients', $data);
 
         $insid = $this->db->insert_id();
+
+        $data = array(
+            'client_id'              => $insid,
+            'brand_name'             => implode(',',$a['ta_brand']),
+            'date_inputted'          => date("m-d-Y H:i:s")
+        );
+
+        $this->db->insert('brand', $data);
 
         return $insid;
     }
@@ -304,6 +312,21 @@ class Insert_model extends CI_Model
 
         if( $this->db->affected_rows() > 0 ) {
             echo $a['rq_joid'];
+        }else{
+            echo 'fail';
+        }
+    }
+
+    function insert_protype( $a ){
+        $data = array(
+            'pt_name'             => ucfirst($a),
+            'date_inputted'      => date("Y-m-d H:i:s")
+        );
+
+        $this->db->insert( 'project_type', $data );
+
+        if( $this->db->affected_rows() > 0 ) {
+            echo $a;
         }else{
             echo 'fail';
         }
