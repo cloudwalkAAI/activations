@@ -60,6 +60,8 @@ class Jo extends CI_Controller{
 
     /*for loading a JO*/
     function in(){
+		$data['active_menu'] = 'jo';
+		$data['active_submenu'] = null;
         if( $this->session->userdata('sess_id') ){
             $data_a['departments'] = $this->get_model->get_departments();
             $data_a['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
@@ -85,7 +87,7 @@ class Jo extends CI_Controller{
             $data_a['other_details'] = $this->get_model->get_last_other( $this->input->get('a') );
             $data_a['reference'] = $this->load->view('reference_view', NULL, TRUE);
             $data_a['comments'] = $this->load->view('comments_view', NULL, TRUE);
-            $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
             $data['content'] = $this->load->view('ae/jo_in', $data_a, TRUE);
             $this->load->view('master_page', $data);
         }else{
