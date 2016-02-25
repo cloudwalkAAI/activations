@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="<?=base_url('assets/css/custom.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/foundation.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/constants.css');?>">
-    <link rel="stylesheet" href="<?=base_url('assets/css/rcswitcher.min.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/foundation-icons/foundation-icons.css');?>">
 	<link rel="shortcut icon" type="image/png" href="<?= base_url('assets/img/logos/header_logo-c.png')?>"/>
     <script>
@@ -25,11 +24,6 @@
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
     <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>
     <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
-<<<<<<< HEAD
-    <?php
-
-    ?>
-=======
 	<?php
 		if(isset($homepage) && $homepage == true){
 	?>
@@ -43,7 +37,6 @@
 	<?php
 		}
 	?>
->>>>>>> refs/remotes/origin/Henry-Branch
 </head>
 <body>
 
@@ -124,8 +117,8 @@
 
     $(document).ready(function(){
         $('.calendar .day').click(function(){
-            day_num = $(this).find('.day_num').html();
-            day_data = prompt('Enter details');
+            var day_num = $(this).find('.day_num').html();
+            var day_data = prompt('Enter details');
             if (day_data != null){
 
                 $.ajax({
