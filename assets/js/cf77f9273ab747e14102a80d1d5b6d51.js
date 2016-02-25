@@ -1,3 +1,24 @@
+$('#inp_client_edit').on('change',function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/load_brand',
+        type:'post',
+        data: {
+            cid : $('#inp_client_edit').val()
+        },
+        success: function(data) {
+            var arr = data.split(',');
+            $('label#hd').show();
+            $('#inp_brand_edit').empty();
+
+            $.each( json, function( key, value ) {
+                $('#inp_brand_edit')
+                    .append($("<option></option>")
+                    .attr("value", value)
+                    .text(value));
+            });
+        }
+    });
+});
 $('#inp_client').on('change',function(){
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/load_brand',
@@ -19,6 +40,40 @@ $('#inp_client').on('change',function(){
         }
     });
 });
+$('#btn_save_jo_edit').on('click',function(){
+	var dataString = "joid="+$();
+	$.ajax({
+		type: "POST",
+		url: MyNameSpace.config.base_url +'jo/get_jo',
+		data: dataString,
+		success: function (response) {		
+			$('#joEditModal').foundation( 'reveal', 'close' );
+		}
+	});
+});
+function getJoId(x){
+	var parent = $(x).parents(".jolist");
+	var joid = parent.attr("alt");
+	$("#joid").val(joid);
+	var dataString = "joid="+joid;
+	
+	$.ajax({
+		type: "POST",
+		url: MyNameSpace.config.base_url +'jo/get_jo',
+		data: dataString,
+		success: function (response) {
+			var rep1 = response.replace("[","");
+			var rep2 = rep1.replace("]","");
+			var json = $.parseJSON(rep2);
+			$("#inp_projtype_edit").val(json.project_type);			
+			$("#inp_client_edit").val(json.client_company_name);
+			$("#inp_brand_edit").val(json.brand);
+			$("#hd").show();
+			$("#inp_projname_edit").val(json.project_name);			
+			$('#joEditModal').foundation( 'reveal', 'open' );
+		}
+	});
+}
 
 $('#form_jo').ajaxForm({
     type: 'POST',
@@ -63,10 +118,30 @@ $('#form_jo').ajaxForm({
         $('#inp_client').val('0');
         $('label#hd').hide();
         $('#btn_save_jo').prop('disabled', false);
-        $("<tr><td>" + json.date_created + "</td><td><a href='" + MyNameSpace.config.base_url + "jo/in?a=" + json.jo_id + "'>" + json.jo_number + "</a></td><td>" + json.do_contract_no +
-            "</td><td>" + json.project_name + "</td><td>" + json.project_type + "</td><td>" + json.client_company_name +
-            "</td><td>" + json.brand + "</td><td>" + json.billed_date + "</td><td>" + json.paid_date + "</td></tr>").prependTo("#table_jo_list > tbody");
-        $('#joModal').foundation( 'reveal', 'close' );
+		var lidata = '<li class="jolist">'+
+				'<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">' +
+					'<h3>'+json.project_name+'</h3>' +
+					'<h5><a href="'+MyNameSpace.config.base_url+'jo/in?a='+json.jo_id+'">JO NO.'+json.jo_number+'</a></h5>'+
+					'<h6>'+json.date_created+'</h6>'+					
+				'</div>'+
+				'<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">'+
+					'<ul class="inline-list jorightlist right">'+
+						'<li><a href="#"><img src="'+MyNameSpace.config.base_url+'assets/img/logos/Edit.png" /></a></li>'+						
+					'</ul>'+
+					'<div class="large-12 columns text-right" style="padding-right: 30px;">'+
+						'<p style="margin-top: 10px;">'+json.project_type+'</p>'+
+						'<p>'+json.client_company_name+'</p>'+
+						'<p>'+json.brand+'</p>'+
+						'<p>DO: '+json.do_contract_no+'</p>'+
+						'<p>Billed: '+json.billed_date+'</p>'+
+						'<p>Paid: '+json.paid_date+'</p>'+
+					'</div>'+
+				'</div>'+
+				'<div class="clearfix"></div>'+
+			'</li>';
+		
+		$(lidata).appendTo("#jo_table_list");
+		window.location.href = MyNameSpace.config.base_url + "jo";
     }
 
 });
@@ -1170,10 +1245,10 @@ $('#inp_search_client').keyup(function() {
 /*end for clients table*/
 
 /*for JO list table*/
-var $rows_jolist = $('#jo_table_list tr');
+var $rows_jolist = $('#jo_table_list li');
 $('#search_jolist').keyup(function() {
     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-
+	
     $rows_jolist.show().filter(function() {
         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
         return !~text.indexOf(val);
@@ -1251,6 +1326,7 @@ $('#btn_save_client').on('click', function() {
         url: MyNameSpace.config.base_url + 'jo/add_client',
         beforeSubmit: function (arr, jform, option) {
             $('#btn_save_client').prop('disabled', true);
+			$('#alert_box_client_s').hide();
             if( $.trim( $('#inp_companyname').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
                 $("#alert_box_client_s").addClass("alert");
@@ -1295,6 +1371,12 @@ $('#btn_save_client').on('click', function() {
         },
         success: function (response) {
             $("#client_table > tbody").prepend( response );
+			$('#inp_companyname').val('');
+			$('#inp_contactperson').val('');
+			$('#inp_contactnumber').val('');
+			$('#inp_birthday').val('');
+			$('#inp_email').val('');
+			$('#myModal').foundation('reveal', 'close');
             client_reload();
             $('#inp_companyname').val('');
             $('#inp_contactperson').val('');

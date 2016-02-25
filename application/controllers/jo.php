@@ -15,6 +15,8 @@ class Jo extends CI_Controller{
     }
 
     public function index(){
+		$data['active_menu'] = 'in';
+		$data['active_submenu'] = 'jo';
         if( $this->session->userdata('sess_dept') == '2' ){
             $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
         }else{
@@ -26,7 +28,7 @@ class Jo extends CI_Controller{
                 $data_a['jo_list'] = $arr;
                 $data_a['project_type'] = $this->get_model->get_project_type();
                 $data_a['client_list'] = $this->get_model->get_client_list();
-                $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+                $data['navigator'] = $this->load->view('nav', $data, TRUE);
                 $data['content'] = $this->load->view('ae/jo_list_view', $data_a, TRUE);
                 $this->load->view('master_page', $data);
 //            }else{
@@ -61,9 +63,16 @@ class Jo extends CI_Controller{
         $insid = $this->insert_model->insert_jo( $this->input->post() );
         echo $this->get_model->get_ae_jo_w( $insid );
     }
+	
+	function get_jo(){
+		$joid = $this->input->post('joid');
+		echo $this->get_model->get_ae_jo_w( $joid );
+	}
 
     /*for loading a JO*/
     function in(){
+		$data['active_menu'] = 'jo';
+		$data['active_submenu'] = null;
         if( $this->session->userdata('sess_id') ){
             $data_a['departments'] = $this->get_model->get_departments();
             $data_a['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
@@ -88,7 +97,7 @@ class Jo extends CI_Controller{
             $data_a['other_details'] = $this->get_model->get_last_other( $this->input->get('a') );
             $data_a['reference'] = $this->load->view('reference_view', NULL, TRUE);
             $data_a['comments'] = $this->load->view('comments_view', NULL, TRUE);
-            $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
             $data['content'] = $this->load->view('ae/jo_in', $data_a, TRUE);
             $this->load->view('master_page', $data);
         }else{
@@ -183,66 +192,90 @@ class Jo extends CI_Controller{
     }
 
     function production(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'in';
+		$data['active_submenu'] = 'production';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('production', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function mvrf(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'in';
+		$data['active_submenu'] = 'mvrf';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('mvrf', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function setup(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'in';
+		$data['active_submenu'] = 'setup';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('Setup', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function activations(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'in';
+		$data['active_submenu'] = 'activations';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('Activations', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function instore(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'in';
+		$data['active_submenu'] = 'instore';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('instore', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function motm(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'motm';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('motm', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function bd(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'bd';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('bd', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function ppld(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'ppld';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('ppld', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function wrd(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'wrd';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('wrd', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
     function iped(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'iped';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('iped', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
 
     function fped(){
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'fped';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('fped', NULL, TRUE);
         $this->load->view('master_page', $data);
     }
 
     function clients(){
+		$data['active_menu'] = 'clients';
+		$data['active_submenu'] = 'clients';
         if( $this->session->userdata('sess_id') ) {
             $data_client['client_list'] = $this->get_model->get_load_client_list();
-            $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
             $data['content'] = $this->load->view('clients', $data_client, TRUE);
             $this->load->view('master_page', $data);
         }else{
@@ -251,8 +284,9 @@ class Jo extends CI_Controller{
     }
 
     function references(){
-
-        $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+		$data['active_menu'] = 'references';
+		$data['active_submenu'] = null;
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('references', NULL, TRUE);
         $this->load->view('master_page', $data);
     }

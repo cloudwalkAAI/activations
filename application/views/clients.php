@@ -13,17 +13,17 @@
       </div>
     </div>
     <div class="column large-6 medium-6 small-12 dash_col">
-      <a href="#" data-reveal-id="myModal" class="button tiny fi-plus right">  Add Clients</a>
+      <a href="#" data-reveal-id="myModal" class="button tiny fi-plus right">  Add Client</a>
     </div>
   </div>
 <!-- Reveal Modals begin -->
 
       <div id="myModal" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
-        <h2 class="text-center">Client Form</h2>
+        <h2 class="text-center">Add Client</h2>
         <div id="alert_box_client_s" data-alert class="alert-box radius hide-normal">
           <a href="#" class="close">&times;</a>
         </div>
-        <form id="form_client" action="" method="post">
+        <form id="form_client" method="post">
         <div class="row">
           <div class="small-12 columns">
             <input type="text" id="inp_companyname" name="inp_companyname" placeholder="Company Name">
@@ -49,27 +49,22 @@
             <input type="text" id="inp_email" name="inp_email" placeholder="Email Address">
           </div>
         </div>
+		<div class="input_fields_wrap">
+			<a href="#" class="add_brand_button tiny twidth button">Add Brands</a>
+			<?php
+//            if( isset($arr_profile[0]->contact_nos) ){
+//                $ctacts = explode(',',$arr_profile[0]->contact_nos);
+//                foreach( $ctacts as $cdetails ){
+//                    echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+//                }
+//            }else{
+				echo '<div><input type="text" class="cls_brand" name="ta_brand[]"></div>';
+//            }
+			?>
+		</div>
         <div class="row">
-            <div class="input_fields_wrap">
-                <a href="#" class="add_brand_button tiny twidth button">Add Brands</a>
-                <?php
-    //            if( isset($arr_profile[0]->contact_nos) ){
-    //                $ctacts = explode(',',$arr_profile[0]->contact_nos);
-    //                foreach( $ctacts as $cdetails ){
-    //                    echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
-    //                }
-    //            }else{
-                    echo '<div><input type="text" class="cls_brand" name="ta_brand[]"></div>';
-    //            }
-                ?>
-            </div>
-        </div>
-        <div class="row">
-          <div class="small-offset-6 small-3 columns">
-            <a href="#" class="button alert">Cancel</a>
-          </div>
-          <div class="small-3 columns">
-            <a href="#" class="button success" id="btn_save_client">Add</a>
+          <div class="small-12 columns text-right">
+            <a href="#" class="button success" id="btn_save_client">Save</a>
           </div>
         </div>
       </form>
