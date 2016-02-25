@@ -8,13 +8,13 @@
             </div>
             <div class="column large-offset-4 large-4 medium-4 medium-offset-4 small-12">
                 <?php if( $this->session->userdata('sess_dept') <= 2 ){
-                    echo '<a class="button right tiny" data-reveal-id="joModal" ><i class="fi-plus small"></i> Add a Job Order</a>';
+                    echo '<a class="button right tiny" data-reveal-id="joModal" ><i class="fi-plus small"></i> Add Job Order</a>';
                 }?>
             </div>
 
 
             <div id="joModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-                <h2 id="modalTitle">Add a Job Order</h2>
+                <h2 id="modalTitle">Add Job Order</h2>
 
                 <div id="alert_box" data-alert class="alert-box alert radius hide-normal">
                     Special characters are not allowed
@@ -22,12 +22,21 @@
                 </div>
 
                 <form id="form_jo" action="" method="post">
-                    <label for="inp_projtype"> Project type
-                        <input type="text" id="inp_projtype" name="inp_projtype" placeholder="Sampling,Activations,Events,etc.." autocomplete="on">
-                    </label>
+                    <label>Project Type</label>
+                    <table id="pt_list" class="pt_list twidth">
+                        <?= $project_type ?>
+                    </table>
+
+                    <div class="column large-8 medium-8 small-8">
+                        <input type="text" class="twidth" id="other_pt" placeholder="Input other project type">
+                    </div>
+                    <div class="column large-4 medium-4 small-4">
+                        <a href="#" id="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
+                    </div>
+
                     <label for="inp_client">Client
                         <select name="inp_client" id="inp_client">
-                            <option value="0">Select</option>
+                            <option value="0">Select...</option>
                             <?php
                                 foreach( $client_list as $row ){
                                     echo '
@@ -39,7 +48,7 @@
                     </label>
                     <label for="inp_brand" id="hd" class="hide">Brand
                         <select name="inp_brand" id="inp_brand">
-                            <option value="0">Select</option>
+                            <option value="0">Select...</option>
                         </select>
                     </label>
 
@@ -84,12 +93,12 @@
                         $c = $row_company->company_name;
                     }
 
-                    $query_brand = $this->db->get_where( 'brand', array( 'brand_id' => $row['brand'] ) );
-                    $row_brand = $query_brand->row();
-                    if (isset($row_brand))
-                    {
-                        $b = $row_brand->brand_name;
-                    }
+//                    $query_brand = $this->db->get_where( 'brand', array( 'brand_id' => $row['brand'] ) );
+//                    $row_brand = $query_brand->row();
+//                    if (isset($row_brand))
+//                    {
+//                        $b = $row_brand->brand_name;
+//                    }
 
                     echo '
                         <tr>
@@ -99,7 +108,7 @@
                         <td>'.$row['project_name'].'</td>
                         <td>'.$row['project_type'].'</td>
                         <td>'.$c.'</td>
-                        <td>'.$b.'</td>
+                        <td>'.$row['brand'].'</td>
                         <td>'.$row['billed_date'].'</td>
                         <td>'.$row['paid_date'].'</td>
                         </tr>
