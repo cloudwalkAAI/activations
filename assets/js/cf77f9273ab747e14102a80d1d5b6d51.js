@@ -1,3 +1,24 @@
+$('#inp_client_edit').on('change',function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/load_brand',
+        type:'post',
+        data: {
+            cid : $('#inp_client_edit').val()
+        },
+        success: function(data) {
+            var arr = data.split(',');
+            $('label#hd').show();
+            $('#inp_brand_edit').empty();
+
+            $.each( json, function( key, value ) {
+                $('#inp_brand_edit')
+                    .append($("<option></option>")
+                    .attr("value", value)
+                    .text(value));
+            });
+        }
+    });
+});
 $('#inp_client').on('change',function(){
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/load_brand',
@@ -6,19 +27,53 @@ $('#inp_client').on('change',function(){
             cid : $('#inp_client').val()
         },
         success: function(data) {
-            var json = $.parseJSON(data);
+            var arr = data.split(',');
             $('label#hd').show();
             $('#inp_brand').empty();
 
-            $.each( json, function( key, value ) {
+            $.each( arr, function( key, value ) {
                 $('#inp_brand')
                     .append($("<option></option>")
-                    .attr("value", value.client_id)
-                    .text(value.brand_name));
+                    .attr("value", value)
+                    .text(value));
             });
         }
     });
 });
+$('#btn_save_jo_edit').on('click',function(){
+	var dataString = "joid="+$();
+	$.ajax({
+		type: "POST",
+		url: MyNameSpace.config.base_url +'jo/get_jo',
+		data: dataString,
+		success: function (response) {		
+			$('#joEditModal').foundation( 'reveal', 'close' );
+		}
+	});
+});
+function getJoId(x){
+	var parent = $(x).parents(".jolist");
+	var joid = parent.attr("alt");
+	$("#joid").val(joid);
+	var dataString = "joid="+joid;
+	
+	$.ajax({
+		type: "POST",
+		url: MyNameSpace.config.base_url +'jo/get_jo',
+		data: dataString,
+		success: function (response) {
+			var rep1 = response.replace("[","");
+			var rep2 = rep1.replace("]","");
+			var json = $.parseJSON(rep2);
+			$("#inp_projtype_edit").val(json.project_type);			
+			$("#inp_client_edit").val(json.client_company_name);
+			$("#inp_brand_edit").val(json.brand);
+			$("#hd").show();
+			$("#inp_projname_edit").val(json.project_name);			
+			$('#joEditModal').foundation( 'reveal', 'open' );
+		}
+	});
+}
 
 $('#form_jo').ajaxForm({
     type: 'POST',
@@ -38,9 +93,9 @@ $('#form_jo').ajaxForm({
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
-        }else if($.trim( $('#inp_projtype').val() ) == '' ){
+        }else if( $("#form_jo input:checkbox:checked").length == 0 ){
             $('#alert_box').text();
-            $('#alert_box').text("You haven't input a project type!.");
+            $('#alert_box').text("You haven't choose a project type!.");
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
@@ -55,22 +110,68 @@ $('#form_jo').ajaxForm({
         }
     },
     success:  function(response){
-        var rep1 = response.replace("[","");
-        var rep2 = rep1.replace("]","");
-        var json = $.parseJSON(rep2);
-        $('#inp_projtype').val('');
+        //var rep1 = response.replace("[","");
+        //var rep2 = rep1.replace("]","");
+        var json = $.parseJSON(response);
+        $('input:checkbox').removeAttr('checked');
         $('#inp_projname').val('');
+        $('#inp_client').val('0');
         $('label#hd').hide();
         $('#btn_save_jo').prop('disabled', false);
-        $("<tr><td>" + json.date_created + "</td><td><a href='" + MyNameSpace.config.base_url + "jo/in?a=" + json.jo_id + "'>" + json.jo_number + "</a></td><td>" + json.do_contract_no +
-            "</td><td>" + json.project_name + "</td><td>" + json.project_type + "</td><td>" + json.client_company_name +
-            "</td><td>" + json.brand + "</td><td>" + json.billed_date + "</td><td>" + json.paid_date + "</td></tr>").appendTo("#table_jo_list > tbody");
+		var lidata = '<li class="jolist">'+
+				'<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">' +
+					'<h3>'+json.project_name+'</h3>' +
+					'<h5><a href="'+MyNameSpace.config.base_url+'jo/in?a='+json.jo_id+'">JO NO.'+json.jo_number+'</a></h5>'+
+					'<h6>'+json.date_created+'</h6>'+					
+				'</div>'+
+				'<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">'+
+					'<ul class="inline-list jorightlist right">'+
+						'<li><a href="#"><img src="'+MyNameSpace.config.base_url+'assets/img/logos/Edit.png" /></a></li>'+						
+					'</ul>'+
+					'<div class="large-12 columns text-right" style="padding-right: 30px;">'+
+						'<p style="margin-top: 10px;">'+json.project_type+'</p>'+
+						'<p>'+json.client_company_name+'</p>'+
+						'<p>'+json.brand+'</p>'+
+						'<p>DO: '+json.do_contract_no+'</p>'+
+						'<p>Billed: '+json.billed_date+'</p>'+
+						'<p>Paid: '+json.paid_date+'</p>'+
+					'</div>'+
+				'</div>'+
+				'<div class="clearfix"></div>'+
+			'</li>';
+		
+		$(lidata).appendTo("#jo_table_list");
+		window.location.href = MyNameSpace.config.base_url + "jo";
     }
 
 });
 
 $('#datepicker_emp_tmp').on('change', function(){
     //alert($(this).val());
+});
+
+$('#btn_export').on('click', function(){
+    //$('#form_archive').ajaxForm({
+    //    type: 'get',
+    //    url: MyNameSpace.config.base_url+'jo/mpdf',
+    //    beforeSubmit: function(arr, jform, option){
+    //
+    //    },
+    //    success:  function(response){
+    //        console.log(response);
+    //    }
+    //}).submit();
+    var jid = $('#jid').val();
+    $.ajax({
+        type: 'get',
+        url: MyNameSpace.config.base_url+'jo/pdf_data',
+        data: {
+            'jid' : jid
+        },
+        success: function(res) {
+            $('#pdf-btn').attr('href', MyNameSpace.config.base_url+'jo/mpdf?jid='+jid);
+        }
+    });
 });
 
 $('#emp_form').ajaxForm({
@@ -140,7 +241,6 @@ $('#emp_form').ajaxForm({
     },
     complete: function() { $('#alert_box_progress').hide(); },
     success:  function(response){
-        console.log(response);
         if( response == 'exist' ){
 
             $('#alert_box_emp_box').text();
@@ -177,7 +277,7 @@ $('#emp_form').ajaxForm({
             load_click_emp();
         }
     }
-})
+});
 
 $('#emp_form_up').ajaxForm({
     type: 'POST',
@@ -319,7 +419,7 @@ $('#cpass_form').ajaxForm({
         $('#sml_pass2').css('display','none');
     },
     success:  function(response){
-        console.log(response);
+        //console.log(response);
         //var json = $.parseJSON(response);
         $('#pass_content').empty();
         $('#pass_content').append(response);
@@ -503,6 +603,9 @@ $('#attach_form').ajaxForm({
 			setTimeout(function(){
 				$('#attachModal').foundation('reveal', 'close');
 				$('#alert_box_attach_ok').hide();
+                setTimeout(function(){
+                    location.reload();
+                }, 2000);
 			}, 3000);
         }else{
             $('#alert_box_attach_ok').hide();
@@ -609,15 +712,24 @@ $('#btn_mvrf_submit').on('click',function(){
 
         },
         success:  function(response){
-            //console.log(response);
             if( response == 'success' ){
-                //$('#alert_box_mom_form_fail').hide();
-                //$('#alert_box_mom_form_success').show();
-                $('#alert_box_mvrf_form_success').show();
+                $("#alert_box_mvfr").removeClass("alert");
+                $("#alert_box_mvfr").addClass("success");
+                $('#alert_box_mvfr').text();
+                $('#alert_box_mvfr').text("Successfully Saved");
+                $('#alert_box_mvfr').show();
+                setTimeout(function(){
+                    $('#alert_box_mvfr').hide();
+                },3000);
             }else{
-                //$('#alert_box_mom_form_success').hide();
-                //$('#alert_box_mom_form_fail').show();
-                $('#alert_box_mvrf_form_fail').show();0
+                $("#alert_box_mvfr").removeClass("success");
+                $("#alert_box_mvfr").addClass("alert");
+                $('#alert_box_mvfr').text();
+                $('#alert_box_mvfr').text("Fail to Save");
+                $('#alert_box_mvfr').show();
+                setTimeout(function(){
+                    $('#alert_box_mvfr').hide();
+                },3000);
             }
             $('#btn_mvrf_submit').prop('disabled', false);
         }
@@ -638,13 +750,23 @@ $('#btn_other_submit').on('click',function(){
         success:  function(response){
             // //console.log(response);
             if( response == 'success' ){
-                //$('#alert_box_mom_form_fail').hide();
-                //$('#alert_box_mom_form_success').show();
-                $('#alert_box_other_form_success').show();
+                $("#alert_box_oth").removeClass("alert");
+                $("#alert_box_oth").addClass("success");
+                $('#alert_box_oth').text();
+                $('#alert_box_oth').text("Successfully Saved");
+                $('#alert_box_oth').show();
+                setTimeout(function(){
+                    $('#alert_box_oth').hide();
+                },3000);
             }else{
-                //$('#alert_box_mom_form_success').hide();
-                //$('#alert_box_mom_form_fail').show();
-                $('#alert_box_other_form_fail').show();
+                $("#alert_box_oth").removeClass("success");
+                $("#alert_box_oth").addClass("alert");
+                $('#alert_box_oth').text();
+                $('#alert_box_oth').text("Fail to Save");
+                $('#alert_box_oth').show();
+                setTimeout(function(){
+                    $('#alert_box_oth').hide();
+                },3000);
             }
             $('#btn_other_submit').prop('disabled', false);
         }
@@ -665,13 +787,23 @@ $('#btn_setup_submit').on('click',function(){
         success:  function(response){
             // //console.log(response);
             if( response == 'success' ){
-                //$('#alert_box_mom_form_fail').hide();
-                //$('#alert_box_mom_form_success').show();
-                $('#alert_box_setup_form_success').show();
+                $("#alert_box_set").removeClass("alert");
+                $("#alert_box_set").addClass("success");
+                $('#alert_box_set').text();
+                $('#alert_box_set').text("Successfully Saved");
+                $('#alert_box_set').show();
+                setTimeout(function(){
+                    $('#alert_box_set').hide();
+                },3000);
             }else{
-                //$('#alert_box_mom_form_success').hide();
-                //$('#alert_box_mom_form_fail').show();
-                $('#alert_box_setup_form_fail').show();0
+                $("#alert_box_set").removeClass("success");
+                $("#alert_box_set").addClass("alert");
+                $('#alert_box_set').text();
+                $('#alert_box_set').text("Fail to Save");
+                $('#alert_box_set').show();
+                setTimeout(function(){
+                    $('#alert_box_set').hide();
+                },3000);
             }
             $('#btn_setup_submit').prop('disabled', false);
         }
@@ -696,6 +828,17 @@ $('#btn_add_detail').on('click', function(){
 
             }else{
 
+                $("#eda_particulars").val("");
+                $("#eda_activity").val("");
+                $("#eda_sched").val("");
+                $("#eda_sell").val("");
+                $("#eda_fly").val("");
+                $("#eda_survey").val("");
+                $("#eda_experiment").val("");
+                $("#eda_other").val("");
+                $("#datepicker_details").val("");
+                $("#eda_duration").val("");
+                $("#editor_detail").val("");
                 $("#alert_box_details").removeClass("alert");
                 $("#alert_box_details").addClass("success");
                 $("#alert_box_details").text('');
@@ -704,8 +847,12 @@ $('#btn_add_detail').on('click', function(){
 
                 reload_animation_table(response);
 
-                setTimeout( function(){ $('#detailsModal').foundation('reveal', 'close') }, 3000 );
+                setTimeout( function(){
+                    $('#detailsModal').foundation('reveal', 'close');
+                    $("#alert_box_details").hide();
+                }, 3000 );
             }
+
             $('#btn_add_detail').prop('disabled', false);
         }
     });
@@ -730,6 +877,10 @@ $('#btn_add_requ').on('click', function(){
 
             }else{
 
+                $("#sel_dept_ad").val('0');
+                $("#editor_req").val('');
+                $("#datepicker_deadline").val('');
+                $("#editor_ns").val('');
                 $("#alert_box_requ").removeClass("alert");
                 $("#alert_box_requ").addClass("success");
                 $("#alert_box_requ").text('');
@@ -738,7 +889,10 @@ $('#btn_add_requ').on('click', function(){
 
                 reload_req_table(response);
 
-                setTimeout( function(){ $('#requModal').foundation('reveal', 'close') }, 3000 );
+                setTimeout( function(){
+                    $('#requModal').foundation('reveal', 'close');
+                    $("#alert_box_requ").hide();
+                }, 3000 );
             }
             $('#btn_add_requ').prop('disabled', false);
         }
@@ -755,6 +909,7 @@ function reload_req_table( response_id ){
         success: function(data) {
             $("#tbody_req").empty();
             $(data).appendTo("#tbl_req > tbody");
+            search_req_reload();
         }
     });
 }
@@ -769,10 +924,26 @@ function reload_animation_table( response_id ){
         success: function(data) {
             $("#tbody_animation").empty();
             $(data).appendTo("#tbl_animation > tbody");
-
+            reload_table_animation();
         }
     });
 }
+
+$('#btn_add_pt').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/add_pt',
+        type:'post',
+        data: {
+            'pt_added' : $('#other_pt').val()
+        },
+        success: function(data) {
+            //console.log(data);
+            $('#other_pt').val('')
+            $('#pt_list').empty();
+            $('#pt_list').append(data);
+        }
+    });
+});
 
 $('#form_client_u').ajaxForm({
     type: 'POST',
@@ -940,7 +1111,6 @@ $('.loadmvrfbydate').on('click', function(){
 
 function client_reload(){
     $('.load_client').on('click', function(){
-        //alert($(this).attr('alt'));return false;
         $.ajax({
             url: MyNameSpace.config.base_url+'emp/load_client_info',
             type:'post',
@@ -948,17 +1118,20 @@ function client_reload(){
                 'setupid' : $(this).attr('alt')
             },
             success: function(data) {
-                var rep1 = data.replace("[","");
-                var rep2 = rep1.replace("]","");
-                var json = $.parseJSON(rep2);
-
-                $('#hid_client_id').val( json.client_id );
-                $('#inp_companyname_u').val( json.company_name );
-                $('#inp_contactperson_u').val( json.contact_person );
-                $('#inp_contactnumber_u').val( json.contact_number );
-                $('#inp_birthday_u').val( json.birth_date );
-                $('#inp_email_u').val( json.email );
-
+                $.each($.parseJSON(data), function (item, value) {
+                    if( item == 0 ){
+                        $('#hid_client_id').val( value.client_id );
+                        $('#inp_companyname_u').val( value.company_name );
+                        $('#inp_contactperson_u').val( value.contact_person );
+                        $('#inp_contactnumber_u').val( value.contact_number );
+                        $('#inp_birthday_u').val( value.birth_date );
+                        $('#inp_email_u').val( value.email );
+                    }else if( item == 1 ){
+                        $('div.input_fields_wrap_u').empty(); //add input box
+                        $('div.input_fields_wrap_u').append(value); //add input box
+                    }
+                });
+                reload_brand_u();
                 $('#myModalclient_u').foundation('reveal', 'open');
             }
         });
@@ -1067,15 +1240,18 @@ $('#upload_file_button').on('click', function(){
 });
 
 /*for animation table*/
-var $rows_animation = $('#tbody_animation tr');
-$('#search_animation').keyup(function() {
-    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+function reload_table_animation(){
+    var $rows_animation = $('#tbody_animation tr');
+    $('#search_animation').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-    $rows_animation.show().filter(function() {
-        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-        return !~text.indexOf(val);
-    }).hide();
-});
+        $rows_animation.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_animation();
 /*end for jo table*/
 
 /*for employee table*/
@@ -1091,15 +1267,18 @@ $('#search_emp').keyup(function() {
 /*end for employee table*/
 
 /*for requirements table*/
-var $rows_req = $('#tbody_req tr');
-$('#search_requirements').keyup(function() {
-    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+function search_req_reload(){
+    var $rows_req = $('#tbody_req tr');
+    $('#search_requirements').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-    $rows_req.show().filter(function() {
-        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-        return !~text.indexOf(val);
-    }).hide();
-});
+        $rows_req.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+search_req_reload();
 /*end for requirements table*/
 
 /*for account jo table*/
@@ -1127,10 +1306,10 @@ $('#inp_search_client').keyup(function() {
 /*end for clients table*/
 
 /*for JO list table*/
-var $rows_jolist = $('#jo_table_list tr');
+var $rows_jolist = $('#jo_table_list li');
 $('#search_jolist').keyup(function() {
     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-
+	
     $rows_jolist.show().filter(function() {
         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
         return !~text.indexOf(val);
@@ -1208,6 +1387,7 @@ $('#btn_save_client').on('click', function() {
         url: MyNameSpace.config.base_url + 'jo/add_client',
         beforeSubmit: function (arr, jform, option) {
             $('#btn_save_client').prop('disabled', true);
+			$('#alert_box_client_s').hide();
             if( $.trim( $('#inp_companyname').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
                 $("#alert_box_client_s").addClass("alert");
@@ -1252,7 +1432,20 @@ $('#btn_save_client').on('click', function() {
         },
         success: function (response) {
             $("#client_table > tbody").prepend( response );
+			$('#inp_companyname').val('');
+			$('#inp_contactperson').val('');
+			$('#inp_contactnumber').val('');
+			$('#inp_birthday').val('');
+			$('#inp_email').val('');
+			$('#myModal').foundation('reveal', 'close');
             client_reload();
+            $('#inp_companyname').val('');
+            $('#inp_contactperson').val('');
+            $('#inp_contactnumber').val('');
+            $('#inp_birthday').val('');
+            $('#inp_email').val('');
+            $('.cls_brand').val('');
+            $('#myModal').foundation( 'reveal', 'close' );
         }
 
     }).submit();
@@ -1276,6 +1469,49 @@ $(document).ready(function() {
         e.preventDefault(); $(this).parent('div').remove(); x--;
     })
 });
+
+$(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_brand_button"); //Add button ID
+
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            $(wrapper).append('<div><input type="text" class="cls_brand" name="ta_brand[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+    });
+
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+
+
+function reload_brand_u(){
+    $(document).ready(function() {
+        var max_fields      = 10; //maximum input boxes allowed
+        var wrapper         = $(".input_fields_wrap_u"); //Fields wrapper
+        var add_button      = $(".add_brand_button_u"); //Add button ID
+
+        var x = 1; //initlal text box count
+        $(add_button).click(function(e){ //on add input button click
+            e.preventDefault();
+            if(x < max_fields){ //max input box allowed
+                x++; //text box increment
+                $(wrapper).append('<div><input type="text" class="cls_brand" name="ta_brand[]"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            }
+        });
+
+        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+    });
+}
+
+reload_brand_u();
 
 if($('textarea').length > 1) {
     CKEDITOR.replace( 'editor_campaign_overview' );

@@ -13,11 +13,13 @@ class Emp extends CI_Controller{
     }
 
     function index(){
+		$data['active_menu'] = 'emp';
+		$data['active_submenu'] = 'clients';
         if( $this->session->userdata('sess_id') ){
             $data_a['emp_list'] = $this->get_model->get_emp_list();
             $data_a['departments'] = $this->get_model->get_departments();
             $data_a['pos'] = $this->get_model->get_positions();
-            $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
             $data['content'] = $this->load->view('employee_view', $data_a, TRUE);
             $this->load->view('master_page', $data);
         }else{
@@ -56,7 +58,10 @@ class Emp extends CI_Controller{
     }
 
     function load_client_info(){
-        echo $this->get_model->get_client_info( $this->input->post('setupid') );
+        $client = $this->get_model->get_client_info( $this->input->post('setupid') );
+        $cbrand = $this->get_model->get_client_brand( $this->input->post('setupid') );
+        array_push($client, $cbrand);
+        echo json_encode($client);
     }
 
     function update_client(){

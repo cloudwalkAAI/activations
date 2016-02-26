@@ -69,7 +69,7 @@ class Get_model extends CI_Model
             $jolist_array['project_name'] = $row->project_name;
             $jolist_array['project_type'] = $row->project_type;
             $jolist_array['client_company_name'] = $this->get_company( $row->client_company_name );
-            $jolist_array['brand'] = $this->get_brand( $row->brand );
+            $jolist_array['brand'] = $row->brand;
 
             if( !is_null( $row->billed_date ) ){
                 $jolist_array['billed_date'] = $row->billed_date;
@@ -123,11 +123,15 @@ class Get_model extends CI_Model
     }
 
     function get_brand_list( $a ){
+        $str_brand = '';
         $this->db->select( 'client_id, brand_name' );
         $this->db->from( 'brand' );
         $this->db->where( 'client_id =', $a );
         $query = $this->db->get();
-        return json_encode( $query->result_array() );
+        foreach( $query->result() as $row ){
+            $str_brand = $row->brand_name;
+        }
+        return $str_brand;
     }
 
     function get_employee( $id ){
@@ -621,7 +625,55 @@ class Get_model extends CI_Model
 
     function get_client_info( $a ){
         $query = $this->db->get_where( 'clients', array( 'client_id' => $a ) );
-        return json_encode( $query->result_array() );
+        return $query->result();
+    }
+
+    function get_client_brand( $a ){
+        $input_text = '<a href="#" class="add_brand_button_u tiny twidth button">Add Brands</a>';
+        $array_brands = array();
+        $query = $this->db->get_where( 'brand', array( 'client_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+
+                $array_brands = explode(',',$row->brand_name);
+                foreach($array_brands as $brand){
+                    $input_text .= '<div><input type="text" name="ta_brand[]" value="'.$brand.'"/></div>';
+                }
+            }
+        }
+        return $input_text;
+    }
+
+    function get_project_type(){
+        $input_text = '';
+        $array_brands = array();
+        $i=0;
+        $query = $this->db->get( 'project_type' );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $input_text .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_projtype[]" id="inp_projtype" value="' . $row->pt_name . '"><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype[]" id="inp_projtype" value="' . $row->pt_name . '"><span> ' . $row->pt_name . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype[]" id="inp_projtype" value="' . $row->pt_name . '"><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $input_text;
     }
 
     function check_account( $a, $b ){
@@ -670,7 +722,7 @@ class Get_model extends CI_Model
                     <td>'.$row->survey.'</td>
                     <td>'.$row->experiment.'</td>
                     <td>'.$row->other.'</td>
-                    <td>'.$row->target_date.' days</td>
+                    <td>'.$row->target_date.'</td>
                     <td>'.$row->duration.'</td>
                     <td><span title="'.$text.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">More Info</span></td>
                 </tr>
