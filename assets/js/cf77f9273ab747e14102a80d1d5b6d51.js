@@ -56,21 +56,14 @@ function getJoId(x){
 	var joid = parent.attr("alt");
 	$("#joid").val(joid);
 	var dataString = "joid="+joid;
-	
+	$('#joEditModal').foundation( 'reveal', 'open' );
 	$.ajax({
 		type: "POST",
 		url: MyNameSpace.config.base_url +'jo/get_jo',
 		data: dataString,
 		success: function (response) {
-			var rep1 = response.replace("[","");
-			var rep2 = rep1.replace("]","");
-			var json = $.parseJSON(rep2);
-			$("#inp_projtype_edit").val(json.project_type);			
-			$("#inp_client_edit").val(json.client_company_name);
-			$("#inp_brand_edit").val(json.brand);
-			$("#hd").show();
-			$("#inp_projname_edit").val(json.project_name);			
-			$('#joEditModal').foundation( 'reveal', 'open' );
+			$("#contentJoEdit").empty();
+			$("#contentJoEdit").html(response);
 		}
 	});
 }

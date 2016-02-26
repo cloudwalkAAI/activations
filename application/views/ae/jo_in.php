@@ -10,7 +10,13 @@
 
     ?>
     <div class="row text-center">
-        <img src="<?= base_url( 'assets/img/profile/'.$info->emp_info[0]->img_loc ) ?>" alt="">
+		<?php
+			if(file_exists(base_url( 'assets/img/profile/'.$info->emp_info[0]->img_loc ))){
+		?>
+				<img src="<?= base_url( 'assets/img/profile/'.$info->emp_info[0]->img_loc ) ?>" alt="">
+		<?php
+			}
+		?>
     </div>
 
     <div class="row">
@@ -195,49 +201,49 @@
     </div>
     <ul class="accordion" data-accordion>
         <li class="accordion-navigation">
-            <a id="show_table_mom" class="accordion_bg" href="#panel1a">Minutes of the meeting</a>
+            <a id="show_table_mom" class="accordion_bg" href="#panel1a" style="background-color:#125679 !important;">Minutes of the meeting</a>
             <div id="panel1a" class="content">
                 <?= $mom ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_table_details" class="accordion_bg" href="#panel2a">Event details</a>
+            <a id="show_table_details" class="accordion_bg" href="#panel2a" style="background-color:#125679 !important;">Event details</a>
             <div id="panel2a" class="content">
                 <?= $event_details ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_emp_tasks" class="accordion_bg" href="#accordion_emp_task">Tasks assignment</a>
+            <a id="show_emp_tasks" class="accordion_bg" href="#accordion_emp_task" style="background-color:#125679 !important;">Tasks assignment</a>
             <div id="accordion_emp_task" class="content">
                 <?= $emp_task ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_table_projects" class="accordion_bg" href="#panel3a">Project attachments</a>
+            <a id="show_table_projects" class="accordion_bg" href="#panel3a" style="background-color:#125679 !important;">Project attachments</a>
             <div id="panel3a" class="content">
                 <?= $project_attachments ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_table_setup" class="accordion_bg" href="#panel4a">Set up details</a>
+            <a id="show_table_setup" class="accordion_bg" href="#panel4a" style="background-color:#125679 !important;">Set up details</a>
             <div id="panel4a" class="content">
                 <?= $setup_details ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_table_mvrf" class="accordion_bg" href="#panel5a">Manpower and vehicle request form</a>
+            <a id="show_table_mvrf" class="accordion_bg" href="#panel5a" style="background-color:#125679 !important;">Manpower and vehicle request form</a>
             <div id="panel5a" class="content">
                 <?= $mvrf_view ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_table_references" class="accordion_bg" href="#accordion_references">References</a>
+            <a id="show_table_references" class="accordion_bg" href="#accordion_references" style="background-color:#125679 !important;">References</a>
             <div id="accordion_references" class="content">
                 <?= $reference ?>
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="show_table_other" class="accordion_bg" href="#accordion_other">Other</a>
+            <a id="show_table_other" class="accordion_bg" href="#accordion_other" style="background-color:#125679 !important;">Other</a>
             <div id="accordion_other" class="content">
                 <?php
                     $other = json_decode($other_details);
@@ -256,7 +262,7 @@
             </div>
         </li>
         <li class="accordion-navigation">
-            <a id="comment_box" class="accordion_bg" href="#accordion_comment">Comments</a>
+            <a id="comment_box" class="accordion_bg" href="#accordion_comment" style="background-color:#125679 !important;">Comments</a>
             <div id="accordion_comment" class="content">
                 <?= $comments ?>
             </div>

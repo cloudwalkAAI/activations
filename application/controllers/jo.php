@@ -66,7 +66,8 @@ class Jo extends CI_Controller{
 	
 	function get_jo(){
 		$joid = $this->input->post('joid');
-		echo $this->get_model->get_ae_jo_w( $joid );
+		$data["joData"] = $this->get_model->get_ae_jo_w( $joid );
+		$this->load->view("joeditmodal",$data);
 	}
 
     /*for loading a JO*/
