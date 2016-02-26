@@ -127,31 +127,26 @@
         $b = '';
 
         //                foreach( $toc->result_array() as $row){
-        foreach( $jolist as $row){
+        if( isset($jolist) ){
 
-            $query_company = $this->db->get_where( 'clients', array( 'client_id' => $row['client_company_name'] ) );
-            $row_company = $query_company->row();
-            if (isset($row_company))
-            {
-                $c = $row_company->company_name;
+            foreach( $jolist as $row){
+                $query_company = $this->db->get_where( 'clients', array( 'client_id' => $row['client_company_name'] ) );
+                $row_company = $query_company->row();
+                if (isset($row_company))
+                {
+                    $c = $row_company->company_name;
+                }
+
+                echo '
+                    <tr>
+                    <td><a href="'.base_url('jo/in?a=').$row['jo_id'].'">'.$row['jo_number'].'</a></tdtr>
+                    <td>'.$row['project_type'].'</td>
+                    <td>'.$c.'</td>
+                    <td>'.$row['brand'].'</td>
+                    <td>'.$row['project_name'].'</td>
+                    </tr>
+                ';
             }
-
-            $query_brand = $this->db->get_where( 'brand', array( 'brand_id' => $row['brand'] ) );
-            $row_brand = $query_brand->row();
-            if (isset($row_brand))
-            {
-                $b = $row_brand->brand_name;
-            }
-
-            echo '
-                        <tr>
-                        <td><a href="'.base_url('jo/in?a=').$row['jo_id'].'">'.$row['jo_number'].'</a></tdtr>
-                        <td>'.$row['project_type'].'</td>
-                        <td>'.$c.'</td>
-                        <td>'.$b.'</td>
-                        <td>'.$row['project_name'].'</td>
-                        </tr>
-                    ';
         }
         ?>
         </tbody>

@@ -34,15 +34,15 @@ $md = json_decode($result_mom);
         </tr>
         <tr>
             <td colspan="2">What :  <span style="color:#2a92db;"><?=isset($md->what) ? ucfirst($md->what) : '';?></span></td>
-            <td colspan="2">Notes :  <span style="color:#2a92db;"><?=isset($md->what_notes) ? ucfirst($md->what_notes) : '';?></span></td>
+            <td colspan="2">Notes :  <span style="color:#000000;"><?=isset($md->what_notes) ? ucfirst($md->what_notes) : '';?></span></td>
         </tr>
         <tr>
             <td colspan="2">When :  <span style="color:#2a92db;"><?=isset($md->when) ? ucfirst($md->when) : '';?></td>
-            <td colspan="2">Notes :  <span style="color:#2a92db;"><?=isset($md->when_notes) ? ucfirst($md->when_notes) : '';?></span></td>
+            <td colspan="2">Notes :  <span style="color:#000000;"><?=isset($md->when_notes) ? ucfirst($md->when_notes) : '';?></span></td>
         </tr>
         <tr>
             <td colspan="2">Where :  <span style="color:#2a92db;"><?=isset($md->where) ? ucfirst($md->where) : '';?></td>
-            <td colspan="2">Notes :  <span style="color:#2a92db;"><?=isset($md->where_notes) ? ucfirst($md->where_notes) : '';?></span></td>
+            <td colspan="2">Notes :  <span style="color:#000000;"><?=isset($md->where_notes) ? ucfirst($md->where_notes) : '';?></span></td>
         </tr>
         <tr>
             <td colspan="4">Expected Guests :  <span style="color:#2a92db;"><?=isset($md->guest) ? $md->guest : '';?></span></td>
