@@ -10,6 +10,11 @@ class Home extends CI_Controller {
     }
     public function index($year = null, $month = null)
     {
+        if( ($year == null) && $month == null ){
+            $year = date("Y");
+            $month = date("m");
+        }
+
         if( $this->session->userdata('sess_id') && ( $this->session->userdata('sess_status') != 'resigned') ){
             if (!$year){
                 $year = date('Y');
