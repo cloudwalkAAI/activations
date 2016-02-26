@@ -1,5 +1,9 @@
 <!doctype html>
 <html lang="en">
+<?php
+//    header('Content-Disposition: inline; filename="file.pdf"');
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -113,8 +117,8 @@
 
     $(document).ready(function(){
         $('.calendar .day').click(function(){
-            day_num = $(this).find('.day_num').html();
-            day_data = prompt('Enter details');
+            var day_num = $(this).find('.day_num').html();
+            var day_data = prompt('Enter details');
             if (day_data != null){
 
                 $.ajax({

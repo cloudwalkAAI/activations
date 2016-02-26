@@ -722,7 +722,7 @@ class Get_model extends CI_Model
                     <td>'.$row->survey.'</td>
                     <td>'.$row->experiment.'</td>
                     <td>'.$row->other.'</td>
-                    <td>'.$row->target_date.' days</td>
+                    <td>'.$row->target_date.'</td>
                     <td>'.$row->duration.'</td>
                     <td><span title="'.$text.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">More Info</span></td>
                 </tr>

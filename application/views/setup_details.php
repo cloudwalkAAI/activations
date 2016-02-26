@@ -1,6 +1,11 @@
 <?php
 $setups = json_decode($setup_details);
 ?>
+
+<div id="alert_box_set" data-alert class="alert-box alert radius hide-normal">
+    Special characters are not allowed
+    <a href="#" class="close">&times;</a>
+</div>
 <form id="setup_form" action="" method="post">
     <input type="hidden" name="setupid" value="<?=$this->input->get('a')?>">
     <textarea name="setup_particular" id="setup_particular" cols="30" rows="10" <?=$this->session->userdata('sess_dept') > '2' ? 'disabled' : '';?>><?=isset($setups->contents) ? $setups->contents : '';?></textarea>

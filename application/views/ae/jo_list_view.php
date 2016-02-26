@@ -12,24 +12,30 @@
 					<a data-reveal-id="joModal" class="right plussign">&#43;</a>
 				<?php } ?>
 
-
 				<div id="joModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">
 					<h2 id="modalTitle" class="text-center">Create New Job Order</h2>
 					<div id="alert_box" data-alert class="alert-box alert radius hide-normal">
 						Special characters are not allowed
 						<a href="#" class="close">&times;</a>
 					</div>
-
 					<form id="form_jo" action="" method="post">
 						<div class="large-11 columns large-centered">
-							<label for="inp_projtype"> Project type
-								<input type="text" id="inp_projtype" name="inp_projtype" placeholder="Project Type" autocomplete="on">
-							</label>
+							<label for="inp_projtype"> Project type</label>
+                            <table id="pt_list" class="pt_list twidth">
+                                <?= $project_type ?>
+                            </table>
+
+                            <div class="column large-8 medium-8 small-8">
+                                <input type="text" class="twidth" id="other_pt" placeholder="Input other project type">
+                            </div>
+                            <div class="column large-4 medium-4 small-4">
+                                <a href="#" id="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
+                            </div>
 						</div>	
 						<div class="large-11 columns large-centered">
 							<label for="inp_client">Client
 								<select name="inp_client" id="inp_client">
-									<option value="0">Select</option>
+									<option value="0">Select...</option>
 									<?php
 										foreach($client_list as $row){
 											echo '
@@ -43,7 +49,7 @@
 						<div class="large-11 columns large-centered">
 							<label for="inp_brand" id="hd" class="hide">Brand
 								<select name="inp_brand" id="inp_brand">
-									<option value="0">Select</option>
+									<option value="0">Select...</option>
 								</select>
 							</label>
 						</div>
@@ -129,44 +135,46 @@
                 $b = '';
 
 //                foreach( $toc->result_array() as $row){
-                foreach( $jo_list as $row){
+                foreach( $jo_list as $row) {
 
-                    $query_company = $this->db->get_where( 'clients', array( 'client_id' => $row['client_company_name'] ) );
+                    $query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));
                     $row_company = $query_company->row();
-                    if (isset($row_company))
-                    {
+                    if (isset($row_company)) {
                         $c = $row_company->company_name;
                     }
 
-                    $query_brand = $this->db->get_where( 'brand', array( 'brand_id' => $row['brand'] ) );
+                    $query_brand = $this->db->get_where('brand', array('brand_id' => $row['brand']));
                     $row_brand = $query_brand->row();
-                    if (isset($row_brand))
-                    {
+                    if (isset($row_brand)) {
                         $b = $row_brand->brand_name;
                     }
+            ?>
+                    <li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>">
+                        <div class="small-7 medium-8 large-8 columns" style="padding: 50px;">
+                            <h3><?php echo $row['project_name']; ?></h3>
+                            <h5><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h5>
+                            <h6><?php echo $row['date_created']; ?></h6>
+                        </div>
+                        <div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">
+                            <ul class="inline-list jorightlist right">
+                                <li><a onclick="getJoId(this)"><img src="<?php echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
+                                <!--<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Delete.png');?>"/></a></li>-->
+                            </ul>
+                            <div class="large-12 columns text-right" style="padding-right: 30px;">
+                                <p style="margin-top: 10px;"><?php echo $row['project_type']; ?></p>
+                                <p><?php echo $c; ?></p>
+                                <p><?php echo $b; ?></p>
+                                <p>DO: <?php echo isset($row['do_contract_no']) ? $row['do_contract_no']:'No Value'; ?></p>
+                                <p>Billed: <?php echo isset($row['billed_date']) ? $row['billed_date']:'No Value'; ?></p>
+                                <p>Paid: <?php echo isset($row['paid_date']) ? $row['paid_date']:'No Value'; ?></p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+            <?php
+                }
 			?>
-			<li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>">
-				<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">					
-					<h3><?php echo $row['project_name']; ?></h3>
-					<h5><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h5>
-					<h6><?php echo $row['date_created']; ?></h6>					
-				</div>
-				<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">
-					<ul class="inline-list jorightlist right">
-						<li><a onclick="getJoId(this)"><img src="<?php echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
-						<!--<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Delete.png');?>"/></a></li>-->
-					</ul>
-					<div class="large-12 columns text-right" style="padding-right: 30px;">
-						<p style="margin-top: 10px;"><?php echo $row['project_type']; ?></p>
-						<p><?php echo $c; ?></p>
-						<p><?php echo $b; ?></p>
-						<p>DO: <?php echo isset($row['do_contract_no']) ? $row['do_contract_no']:'No Value'; ?></p>
-						<p>Billed: <?php echo isset($row['billed_date']) ? $row['billed_date']:'No Value'; ?></p>
-						<p>Paid: <?php echo isset($row['paid_date']) ? $row['paid_date']:'No Value'; ?></p>
-					</div>					
-				</div>
-				<div class="clearfix"></div>
-			</li>
+
 		</ul>
 	</div>
 </div>

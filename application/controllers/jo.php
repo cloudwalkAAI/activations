@@ -9,6 +9,7 @@ class Jo extends CI_Controller{
         $this->load->model('insert_model');
         $this->load->model('get_model');
         $this->load->helper('download');
+        $this->load->library('m_pdf');
 //        $this->load->library('pagination');
 //        $this->load->library('table');
     }
@@ -86,7 +87,6 @@ class Jo extends CI_Controller{
             $data_a['eda_table'] = $this->get_model->get_ada_table( $this->input->get('a') );
             $data_a['req_table'] = $this->get_model->get_req_table( $this->input->get('a') );
             $data_a['event_details'] = $this->load->view('event_details', $data_a, TRUE);
-//            $data_task[''];
             $data_a['emp_task'] = $this->load->view('emp_tasks', $data_a, TRUE);
             $data_project['attachment_list'] = $this->get_model->get_list_attachment( $this->input->get('a') );
             $data_a['project_attachments'] = $this->load->view('project_attachments', $data_project, TRUE);
@@ -103,6 +103,26 @@ class Jo extends CI_Controller{
         }else{
             redirect(base_url());
         }
+    }
+
+    function pdf_data(){
+        return $this->input->get('jid');
+    }
+
+    function mpdf(){
+        $data['result_mom'] = $this->get_model->get_last_mom( $this->input->get('jid') );
+        $page = $this->load->view('pdf/mom', $data, TRUE);
+//        print_r( $result_mom );
+        $mpdf=new mPDF();
+        $mpdf->SetDefaultFont('montserratr');
+//        $mpdf->SetHeader($data['patient_data']['patient_name'].'| |'.$data['patient_data']['id']);
+        $mpdf->defaultfooterline=0;
+        $mpdf->SetFooter('{PAGENO}');
+        $mpdf->WriteHTML($page);
+//            $mpdf->AddPage(); //add new page
+//            $mpdf->WriteHTML($page_gallery);
+        $mpdf->Output('filename.pdf','I');
+        exit();
     }
 
     function jo_save(){
