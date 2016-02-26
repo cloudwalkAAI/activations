@@ -242,6 +242,11 @@
                 <?php
                     $other = json_decode($other_details);
                 ?>
+
+                <div id="alert_box_oth" data-alert class="alert-box alert radius hide-normal">
+                    Special characters are not allowed
+                    <a href="#" class="close">&times;</a>
+                </div>
                 <form id="other_form" action="" method="post">
                     <input type="hidden" name="otherid" value="<?=$this->input->get('a')?>">
                     <textarea name="ta_Other" id="ta_Other" cols="30" rows="10" <?=$this->session->userdata('sess_dept') > '2' ? 'disabled' : '';?>><?=isset($other->texts) ? $other->texts : '';?></textarea>

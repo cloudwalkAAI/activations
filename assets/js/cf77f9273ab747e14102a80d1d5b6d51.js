@@ -603,6 +603,9 @@ $('#attach_form').ajaxForm({
 			setTimeout(function(){
 				$('#attachModal').foundation('reveal', 'close');
 				$('#alert_box_attach_ok').hide();
+                setTimeout(function(){
+                    location.reload();
+                }, 2000);
 			}, 3000);
         }else{
             $('#alert_box_attach_ok').hide();
@@ -709,15 +712,24 @@ $('#btn_mvrf_submit').on('click',function(){
 
         },
         success:  function(response){
-            //console.log(response);
             if( response == 'success' ){
-                //$('#alert_box_mom_form_fail').hide();
-                //$('#alert_box_mom_form_success').show();
-                $('#alert_box_mvrf_form_success').show();
+                $("#alert_box_mvfr").removeClass("alert");
+                $("#alert_box_mvfr").addClass("success");
+                $('#alert_box_mvfr').text();
+                $('#alert_box_mvfr').text("Successfully Saved");
+                $('#alert_box_mvfr').show();
+                setTimeout(function(){
+                    $('#alert_box_mvfr').hide();
+                },3000);
             }else{
-                //$('#alert_box_mom_form_success').hide();
-                //$('#alert_box_mom_form_fail').show();
-                $('#alert_box_mvrf_form_fail').show();0
+                $("#alert_box_mvfr").removeClass("success");
+                $("#alert_box_mvfr").addClass("alert");
+                $('#alert_box_mvfr').text();
+                $('#alert_box_mvfr').text("Fail to Save");
+                $('#alert_box_mvfr').show();
+                setTimeout(function(){
+                    $('#alert_box_mvfr').hide();
+                },3000);
             }
             $('#btn_mvrf_submit').prop('disabled', false);
         }
@@ -738,13 +750,23 @@ $('#btn_other_submit').on('click',function(){
         success:  function(response){
             // //console.log(response);
             if( response == 'success' ){
-                //$('#alert_box_mom_form_fail').hide();
-                //$('#alert_box_mom_form_success').show();
-                $('#alert_box_other_form_success').show();
+                $("#alert_box_oth").removeClass("alert");
+                $("#alert_box_oth").addClass("success");
+                $('#alert_box_oth').text();
+                $('#alert_box_oth').text("Successfully Saved");
+                $('#alert_box_oth').show();
+                setTimeout(function(){
+                    $('#alert_box_oth').hide();
+                },3000);
             }else{
-                //$('#alert_box_mom_form_success').hide();
-                //$('#alert_box_mom_form_fail').show();
-                $('#alert_box_other_form_fail').show();
+                $("#alert_box_oth").removeClass("success");
+                $("#alert_box_oth").addClass("alert");
+                $('#alert_box_oth').text();
+                $('#alert_box_oth').text("Fail to Save");
+                $('#alert_box_oth').show();
+                setTimeout(function(){
+                    $('#alert_box_oth').hide();
+                },3000);
             }
             $('#btn_other_submit').prop('disabled', false);
         }
@@ -765,13 +787,23 @@ $('#btn_setup_submit').on('click',function(){
         success:  function(response){
             // //console.log(response);
             if( response == 'success' ){
-                //$('#alert_box_mom_form_fail').hide();
-                //$('#alert_box_mom_form_success').show();
-                $('#alert_box_setup_form_success').show();
+                $("#alert_box_set").removeClass("alert");
+                $("#alert_box_set").addClass("success");
+                $('#alert_box_set').text();
+                $('#alert_box_set').text("Successfully Saved");
+                $('#alert_box_set').show();
+                setTimeout(function(){
+                    $('#alert_box_set').hide();
+                },3000);
             }else{
-                //$('#alert_box_mom_form_success').hide();
-                //$('#alert_box_mom_form_fail').show();
-                $('#alert_box_setup_form_fail').show();0
+                $("#alert_box_set").removeClass("success");
+                $("#alert_box_set").addClass("alert");
+                $('#alert_box_set').text();
+                $('#alert_box_set').text("Fail to Save");
+                $('#alert_box_set').show();
+                setTimeout(function(){
+                    $('#alert_box_set').hide();
+                },3000);
             }
             $('#btn_setup_submit').prop('disabled', false);
         }
@@ -796,6 +828,17 @@ $('#btn_add_detail').on('click', function(){
 
             }else{
 
+                $("#eda_particulars").val("");
+                $("#eda_activity").val("");
+                $("#eda_sched").val("");
+                $("#eda_sell").val("");
+                $("#eda_fly").val("");
+                $("#eda_survey").val("");
+                $("#eda_experiment").val("");
+                $("#eda_other").val("");
+                $("#datepicker_details").val("");
+                $("#eda_duration").val("");
+                $("#editor_detail").val("");
                 $("#alert_box_details").removeClass("alert");
                 $("#alert_box_details").addClass("success");
                 $("#alert_box_details").text('');
@@ -804,8 +847,12 @@ $('#btn_add_detail').on('click', function(){
 
                 reload_animation_table(response);
 
-                setTimeout( function(){ $('#detailsModal').foundation('reveal', 'close') }, 3000 );
+                setTimeout( function(){
+                    $('#detailsModal').foundation('reveal', 'close');
+                    $("#alert_box_details").hide();
+                }, 3000 );
             }
+
             $('#btn_add_detail').prop('disabled', false);
         }
     });
@@ -830,6 +877,10 @@ $('#btn_add_requ').on('click', function(){
 
             }else{
 
+                $("#sel_dept_ad").val('0');
+                $("#editor_req").val('');
+                $("#datepicker_deadline").val('');
+                $("#editor_ns").val('');
                 $("#alert_box_requ").removeClass("alert");
                 $("#alert_box_requ").addClass("success");
                 $("#alert_box_requ").text('');
@@ -838,7 +889,10 @@ $('#btn_add_requ').on('click', function(){
 
                 reload_req_table(response);
 
-                setTimeout( function(){ $('#requModal').foundation('reveal', 'close') }, 3000 );
+                setTimeout( function(){
+                    $('#requModal').foundation('reveal', 'close');
+                    $("#alert_box_requ").hide();
+                }, 3000 );
             }
             $('#btn_add_requ').prop('disabled', false);
         }
@@ -855,6 +909,7 @@ function reload_req_table( response_id ){
         success: function(data) {
             $("#tbody_req").empty();
             $(data).appendTo("#tbl_req > tbody");
+            search_req_reload();
         }
     });
 }
@@ -869,7 +924,7 @@ function reload_animation_table( response_id ){
         success: function(data) {
             $("#tbody_animation").empty();
             $(data).appendTo("#tbl_animation > tbody");
-
+            reload_table_animation();
         }
     });
 }
@@ -1185,15 +1240,18 @@ $('#upload_file_button').on('click', function(){
 });
 
 /*for animation table*/
-var $rows_animation = $('#tbody_animation tr');
-$('#search_animation').keyup(function() {
-    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+function reload_table_animation(){
+    var $rows_animation = $('#tbody_animation tr');
+    $('#search_animation').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-    $rows_animation.show().filter(function() {
-        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-        return !~text.indexOf(val);
-    }).hide();
-});
+        $rows_animation.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_animation();
 /*end for jo table*/
 
 /*for employee table*/
@@ -1209,15 +1267,18 @@ $('#search_emp').keyup(function() {
 /*end for employee table*/
 
 /*for requirements table*/
-var $rows_req = $('#tbody_req tr');
-$('#search_requirements').keyup(function() {
-    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+function search_req_reload(){
+    var $rows_req = $('#tbody_req tr');
+    $('#search_requirements').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-    $rows_req.show().filter(function() {
-        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-        return !~text.indexOf(val);
-    }).hide();
-});
+        $rows_req.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+search_req_reload();
 /*end for requirements table*/
 
 /*for account jo table*/
