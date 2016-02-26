@@ -4,7 +4,7 @@ class Get_model extends CI_Model
 {
     function get_ae_jo( $empid = '' ){
         if( $empid == $this->session->userdata('sess_id') ){
-            $this->db->order_by("date_created","desc");
+            $this->db->order_by("jo_id","desc");
             $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
             return $query->result_array();
         }elseif( $this->session->userdata('sess_dept') != '2' ){
