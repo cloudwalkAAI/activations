@@ -14,7 +14,7 @@
 
 				<div id="joModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">
 					<h2 id="modalTitle" class="text-center">Create New Job Order</h2>
-					<div id="alert_box" data-alert class="alert-box alert radius hide-normal">
+					<div id="alert_box" data-alert class="alert-box warning radius hide-normal">
 						Special characters are not allowed
 						<a href="#" class="close">&times;</a>
 					</div>
@@ -142,12 +142,6 @@
                     if (isset($row_company)) {
                         $c = $row_company->company_name;
                     }
-
-                    $query_brand = $this->db->get_where('brand', array('brand_id' => $row['brand']));
-                    $row_brand = $query_brand->row();
-                    if (isset($row_brand)) {
-                        $b = $row_brand->brand_name;
-                    }
             ?>
                     <li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>">
                         <div class="small-7 medium-8 large-8 columns" style="padding: 50px;">
@@ -163,7 +157,7 @@
                             <div class="large-12 columns text-right" style="padding-right: 30px;">
                                 <p style="margin-top: 10px;"><?php echo $row['project_type']; ?></p>
                                 <p><?php echo $c; ?></p>
-                                <p><?php echo $b; ?></p>
+                                <p><?php echo isset($row['brand']) ? $row['brand']:'No Value'; ?></p>
                                 <p>DO: <?php echo isset($row['do_contract_no']) ? $row['do_contract_no']:'No Value'; ?></p>
                                 <p>Billed: <?php echo isset($row['billed_date']) ? $row['billed_date']:'No Value'; ?></p>
                                 <p>Paid: <?php echo isset($row['paid_date']) ? $row['paid_date']:'No Value'; ?></p>

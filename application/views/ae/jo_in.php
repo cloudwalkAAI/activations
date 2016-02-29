@@ -184,13 +184,19 @@
         <a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
     </div>
     <div id="modal_pdf_selector" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-<!--        <h2 id="modalTitle">Select Archive</h2>-->
-
-        <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
-<!--        <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom">Minutes of the Meeting</label>-->
-<!--        <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed">Event Details</label>-->
-<!--        <input type="button" class="button" value="Export" id="btn_export">-->
-        <a href="<?=base_url('jo/mpdf?jid='.$this->input->get('a'))?>" id="pdf-btn" target="_blank" href="">Save and Print PDF</a>
+        <h2 id="modalTitle">Select Document to Archive</h2>
+        <form id="form_archive" action="" method="post">
+            <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
+            <input type="hidden" id="jno" name="jno" value="<?= $info->jo_number ?>">
+            <label for="pdf_ex_jo"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
+            <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom"> Minutes of the Meeting</label>
+            <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed"> Event Details</label>
+            <label for="pdf_ex_proj_att"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_proj_att" value="pjat"> Project Attachments</label>
+            <label for="pdf_ex_setup"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_setup" value="setup"> Setup Details</label>
+            <label for="pdf_ex_mvrf"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mvrf" value="mvrf"> Manpower and vehicle request form</label>
+            <label for="pdf_ex_oth"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_oth" value="other"> Others</label>
+            <input type="button" class="button tiny" value="Export" id="btn_export">
+        </form>
 
     </div>
     <ul class="accordion" data-accordion>

@@ -160,7 +160,7 @@ class Get_model extends CI_Model
             $dept_str = $this->get_where_departments( $row->department );
             $post_str = $this->get_where_positions( $row->position );
 
-            $birthDate = explode("-", $row->birth_date);
+            $birthDate = explode("/", $row->birth_date);
 
             $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[0], $birthDate[1], $birthDate[2]))) > date("md")
                 ? ((date("Y") - $birthDate[2]) - 1)
@@ -731,6 +731,37 @@ class Get_model extends CI_Model
         return $result;
     }
 
+    function get_ada_table_no_info( $a ){
+        $result = "";
+        $breaks = array("<br />","<br>","<br/>");
+
+        $this->db->order_by("ad_id","desc");
+
+        if( isset( $a['edaid'] ) ){
+            $query = $this->db->get_where( 'event_animation_details', array( 'jo_id' => $a['edaid'] ) );
+        }else{
+            $query = $this->db->get_where( 'event_animation_details', array( 'jo_id' => $a ) );
+        }
+
+        foreach( $query->result() as $row ){
+            $text = str_ireplace($breaks, "\r\n", $row->num_of_areas);
+            $result .= '
+                <tr>
+                    <td>'.$row->particulars.'</td>
+                    <td>'.$row->target_activity.'</td>
+                    <td>'.$row->selling.'</td>
+                    <td>'.$row->flyering.'</td>
+                    <td>'.$row->survey.'</td>
+                    <td>'.$row->experiment.'</td>
+                    <td>'.$row->other.'</td>
+                    <td>'.$row->target_date.'</td>
+                    <td>'.$row->duration.'</td>
+                </tr>
+            ';
+        }
+        return $result;
+    }
+
     function get_req_table( $a ){
         $result = "";
 //        $breaks = array("<br />","<br>","<br/>");
@@ -752,6 +783,31 @@ class Get_model extends CI_Model
                     <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
                     <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                </tr>
+            ';
+        }
+        return $result;
+    }
+
+    function get_req_table_v2( $a ){
+        $result = "";
+//        $breaks = array("<br />","<br>","<br/>");
+
+        $this->db->order_by("req_id","desc");
+
+        if( isset( $a['reqid'] ) ){
+            $query = $this->db->get_where( 'event_requirement', array( 'jo_id' => $a['reqid'] ) );
+        }else{
+            $query = $this->db->get_where( 'event_requirement', array( 'jo_id' => $a ) );
+        }
+
+        foreach( $query->result() as $row ){
+            $result .= '
+                <tr>
+                    <td>'.$row->department_name.'</td>
+                    <td>'.$row->deliverables.'</td>
+                    <td>'.$row->deadline.'</td>
+                    <td>'.$row->next_steps.'</td>
                 </tr>
             ';
         }
