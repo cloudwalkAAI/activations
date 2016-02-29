@@ -30,8 +30,10 @@ class Home extends CI_Controller {
 
                 );
             }
+			$data['active_menu'] = 'dashboard';
+            $data['active_submenu'] = null;
             $data['calendar'] = $this->cal_model->generate($year, $month);
-            $data['navigator'] = $this->load->view('nav', NULL, TRUE);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
             $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
 
             $this->load->view('master_page', $data);
@@ -43,6 +45,7 @@ class Home extends CI_Controller {
                 $data['param_get'] = null;
             }
 
+            $data['homepage']=true;
             $data['content']=$this->load->view('login_view', $data, TRUE);
             $this->load->view('master_page', $data);
         }
@@ -50,6 +53,7 @@ class Home extends CI_Controller {
 
 
     function logout(){
+		
         $user_data = $this->session->all_userdata();
 
         foreach ($user_data as $key => $value) {

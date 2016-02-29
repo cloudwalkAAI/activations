@@ -24,7 +24,7 @@ html, body {
 
 .main-section{
     /*min-height: 94vh;*/
-    background: #fff; /* For browsers that do not support gradients */
+    /*background: #fff;*/ /* For browsers that do not support gradients */
     /*background: -webkit-linear-gradient( #0f4c83, #808080  ); /!* For Safari 5.1 to 6.0 *!/
     background: -o-linear-gradient( #0f4c83, #808080  ); /!* For Opera 11.1 to 12.0 *!/
     background: -moz-linear-gradient( #0f4c83, #808080  ); /!* For Firefox 3.6 to 15 *!/

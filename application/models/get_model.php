@@ -4,7 +4,7 @@ class Get_model extends CI_Model
 {
     function get_ae_jo( $empid = '' ){
         if( $empid == $this->session->userdata('sess_id') ){
-            $this->db->order_by("date_created","desc");
+            $this->db->order_by("jo_id","desc");
             $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
             return $query->result_array();
         }elseif( $this->session->userdata('sess_dept') != '2' ){
@@ -722,7 +722,7 @@ class Get_model extends CI_Model
                     <td>'.$row->survey.'</td>
                     <td>'.$row->experiment.'</td>
                     <td>'.$row->other.'</td>
-                    <td>'.$row->target_date.' days</td>
+                    <td>'.$row->target_date.'</td>
                     <td>'.$row->duration.'</td>
                     <td><span title="'.$text.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">More Info</span></td>
                 </tr>

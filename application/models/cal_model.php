@@ -12,7 +12,7 @@ class Cal_model extends CI_Model {
         );
 
         $this->conf['template']='
-                 {table_open}<table border="0" cellpadding="0" cellspacing="0" class="calendar twidth" style="border:none;">{/table_open}
+                 {table_open}<table border="0" cellpadding="0" cellspacing="0" class="calendar twidth">{/table_open}
 
            {heading_row_start}<tr   >{/heading_row_start}
 
@@ -22,15 +22,15 @@ class Cal_model extends CI_Model {
 
            {heading_row_end}</tr>{/heading_row_end}
 
-           {week_row_start}<tr> {/week_row_start}
-           {week_day_cell}<td style="text-align: center; font-size: 20px; color: #a8a9ad">{week_day}</td>{/week_day_cell}
+           {week_row_start}<tr>{/week_row_start}
+           {week_day_cell}<td>{week_day}</td>{/week_day_cell}
            {week_row_end}</tr>{/week_row_end}
 
            {cal_row_start}<tr class="days">{/cal_row_start}
            {cal_cell_start}<td class="day">{/cal_cell_start}
 
            {cal_cell_content}
-               <div class="day_num"><b>{day}</b></div>
+               <div class="day_num">{day}</div>
                <div class="content">{content}</div>
            {/cal_cell_content}
            {cal_cell_content_today}
@@ -38,7 +38,7 @@ class Cal_model extends CI_Model {
                <div class="content">{content}</div>
            {/cal_cell_content_today}
 
-           {cal_cell_no_content}<div class="day_num"><b>{day}</b></div>{/cal_cell_no_content}
+           {cal_cell_no_content}<div class="day_num">{day}</div>{/cal_cell_no_content}
            {cal_cell_no_content_today}<div class="day_num highlight">{day}</div>
            {/cal_cell_no_content_today}
 
@@ -74,9 +74,9 @@ class Cal_model extends CI_Model {
 
             $this->db->where('date', $date)
                 ->update('calendar', array(
-                'date' => $date,
-                'data' => $data
-            ));
+                    'date' => $date,
+                    'data' => $data
+                ));
 
         }else{
 
@@ -97,3 +97,4 @@ class Cal_model extends CI_Model {
         return $this->calendar->generate($year, $month, $cal_data);
     }
 }
+
