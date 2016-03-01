@@ -1,3 +1,11 @@
+function reload_date_picker(){
+
+    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
+        timepicker:false,
+        format:'m/d/Y'
+    });
+}
+
 $('#inp_client_edit').on('change',function(){
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/load_brand',
@@ -163,7 +171,9 @@ $('#btn_export').on('click', function(){
         type: 'post',
         url: MyNameSpace.config.base_url+'jo/mpdf_ajax',
         success:  function(response){
-            window.open(response, '_blank');
+            //window.open(response, '_blank');
+            var newWin = window.open('', '_blank');
+            newWin.location = response;
         }
     }).submit();
 });
@@ -1545,21 +1555,33 @@ $('#btn_save_client').on('click', function() {
             }
         },
         success: function (response) {
-            $("#client_table > tbody").prepend( response );
-			$('#inp_companyname').val('');
-			$('#inp_contactperson').val('');
-			$('#inp_contactnumber').val('');
-			$('#inp_birthday').val('');
-			$('#inp_email').val('');
-			$('#myModal').foundation('reveal', 'close');
-            client_reload();
-            $('#inp_companyname').val('');
-            $('#inp_contactperson').val('');
-            $('#inp_contactnumber').val('');
-            $('#inp_birthday').val('');
-            $('#inp_email').val('');
-            $('.cls_brand').val('');
-            $('#myModal').foundation( 'reveal', 'close' );
+            console.log(response);
+            if( response == null ){
+                $("#alert_box_client_s").removeClass("success");
+                $("#alert_box_client_s").addClass("warning");
+                $('#alert_box_client_s').text();
+                $('#alert_box_client_s').text("Input an email.");
+                $('#alert_box_client_s').show();
+            }else{
+                location.reload();
+            }
+
+            //return false;
+            //$("#client_table > tbody").prepend( response );
+            //$('#inp_companyname').val('');
+            //$('#inp_contactperson').val('');
+            //$('#inp_contactnumber').val('');
+            //$('#inp_birthday').val('');
+            //$('#inp_email').val('');
+            //$('#myModal').foundation('reveal', 'close');
+            //client_reload();
+            //$('#inp_companyname').val('');
+            //$('#inp_contactperson').val('');
+            //$('#inp_contactnumber').val('');
+            //$('#inp_birthday').val('');
+            //$('#inp_email').val('');
+            //$('.cls_brand').val('');
+            //$('#myModal').foundation( 'reveal', 'close' );
         }
 
     }).submit();
@@ -1599,6 +1621,29 @@ $(document).ready(function() {
     });
 
     $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+
+$(document).ready(function() {
+    var max_fields_c      = 10; //maximum input boxes allowed
+    var wrapper_c         = $(".input_fields_wrap_client"); //Fields wrapper
+    var add_button_c      = $(".add_client_button"); //Add button ID
+
+    var x = 1; //initlal text box count
+    $(add_button_c).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields_c){ //max input box allowed
+            x++; //text box increment
+            $(wrapper_c).append('<div><hr>' +
+                '<div class="row"><div class="small-12 columns"><input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_contactnumber" name="inp_contactnumber[]"  placeholder="Contact Number"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birthdate"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address"></div></div>' +
+                '<a href="#" class="remove_field">Remove</a>' +
+                '</div>'); //add input box
+            reload_date_picker();
+        }
+    });
+
+    $(wrapper_c).on("click",".remove_field", function(e){ //user click on remove text
         e.preventDefault(); $(this).parent('div').remove(); x--;
     })
 });

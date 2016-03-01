@@ -83,7 +83,7 @@ if( $this->session->userdata('status') == 1 && $this->session->userdata('sess_ro
                         <select name="sel_status" id="sel_status">
                             <option value="0">Select Employee Status...</option>
                             <option value="hired">Hired</option>
-                            <option value="evaluation">Evaluation</option>
+                            <option value="on_probation">On probation</option>
                         </select>
                     </td>
                     <td> </td>
@@ -178,7 +178,7 @@ if( $this->session->userdata('status') == 1 && $this->session->userdata('sess_ro
                         <select name="sel_status_u" id="sel_status_u">
                             <option value="0">Select Employee Status</option>
                             <option value="hired">Hired</option>
-                            <option value="evaluation">Evaluation</option>
+                            <option value="on_probation">On Probation</option>
                             <option value="resigned">Resigned</option>
                         </select>
                     </td>

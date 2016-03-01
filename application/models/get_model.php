@@ -186,6 +186,7 @@ class Get_model extends CI_Model
     }
 
     function get_departments(){
+        $this->db->order_by("department_name","asc");
         $query = $this->db->get('departments');
         return $query->result_array();
     }

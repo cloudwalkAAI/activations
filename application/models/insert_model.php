@@ -77,28 +77,33 @@ class Insert_model extends CI_Model
     }
 
     function insert_client( $a ){
-        $insid = 0;
-        $data = array(
-            'emp_id'                 => $this->session->userdata('sess_id'),
-            'company_name'           => $a['inp_companyname'],
-            'contact_person'         => $a['inp_contactperson'],
-            'contact_number'         => $a['inp_contactnumber'],
-            'birth_date'             => $a['inp_birthday'],
-            'email'                  => $a['inp_email'],
-            'date_created'           => date("m-d-Y H:i:s")
-        );
+        $dtarr = json_decode($a);
+        $i = 0;
+//        print_r( $dtarr->inp_contactperson[0] );
 
-        $this->db->insert('clients', $data);
+        foreach( $dtarr->inp_contactperson as $rcount ){
+            $data = array(
+                'emp_id'                 => $this->session->userdata('sess_id'),
+                'company_name'           => $dtarr->inp_companyname,
+                'contact_person'         => $dtarr->inp_contactperson[$i],
+                'contact_number'         => $dtarr->inp_contactnumber[$i],
+                'birth_date'             => $dtarr->inp_birthday[$i],
+                'email'                  => $dtarr->inp_email[$i],
+                'date_created'           => date("m-d-Y H:i:s")
+            );
+            $this->db->insert('clients', $data);
 
-        $insid = $this->db->insert_id();
+            $insid = $this->db->insert_id();
 
-        $data = array(
-            'client_id'              => $insid,
-            'brand_name'             => implode(',',$a['ta_brand']),
-            'date_inputted'          => date("m-d-Y H:i:s")
-        );
+            $data = array(
+                'client_id'              => $insid,
+                'brand_name'             => implode(',',$dtarr->ta_brand),
+                'date_inputted'          => date("m-d-Y H:i:s")
+            );
 
-        $this->db->insert('brand', $data);
+            $this->db->insert('brand', $data);
+            $i++;
+        }
 
         return $insid;
     }

@@ -49,8 +49,8 @@ class Jo extends CI_Controller{
     }
 
     function add_client(){
-        $insid = $this->insert_model->insert_client( $this->input->post() );
-        echo $this->get_model->get_added_client( $insid );
+        return $insid = $this->insert_model->insert_client( json_encode($this->input->post()) );
+//        echo $this->get_model->get_added_client( $insid );
     }
 
     function load_brand(){
@@ -110,8 +110,13 @@ class Jo extends CI_Controller{
     }
 
     function mpdf_ajax(){
-        $str_req = json_encode( $this->input->post( 'pdf_ex' ) );
-        echo $url = base_url( 'jo/mpdf?a='.$this->input->post('jid').'&b='.$this->input->post('jno').'&c='.$str_req );
+
+        if( $this->session->userdata('sess_id') ){
+            $str_req = json_encode( $this->input->post( 'pdf_ex' ) );
+            echo $url = base_url( 'jo/mpdf?a='.$this->input->post('jid').'&b='.$this->input->post('jno').'&c='.$str_req );
+        }else{
+            redirect(base_url());
+        }
     }
 
     function mpdf(){
