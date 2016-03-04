@@ -1,3 +1,11 @@
+function reload_date_picker(){
+
+    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
+        timepicker:false,
+        format:'m/d/Y'
+    });
+}
+
 $('#inp_client_edit').on('change',function(){
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/load_brand',
@@ -75,24 +83,36 @@ $('#form_jo').ajaxForm({
         $('#btn_save_jo').prop('disabled', true);
 
         if($('#inp_client').val() == 0){
+            $("#alert_box").removeClass("success");
+            $("#alert_box").removeClass("alert");
+            $("#alert_box").addClass("warning");
             $('#alert_box').text();
             $('#alert_box').text("You haven't select a client!.");
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
         }else if( $("#inp_brand").val() == 0 ){
+            $("#alert_box").removeClass("success");
+            $("#alert_box").removeClass("alert");
+            $("#alert_box").addClass("warning");
             $('#alert_box').text();
             $('#alert_box').text("You haven't select a brand!.");
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
         }else if( $("#form_jo input:checkbox:checked").length == 0 ){
+            $("#alert_box").removeClass("success");
+            $("#alert_box").removeClass("alert");
+            $("#alert_box").addClass("warning");
             $('#alert_box').text();
             $('#alert_box').text("You haven't choose a project type!.");
             $('#alert_box').show();
             $('#btn_save_jo').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_projname').val() ) == '' ){
+            $("#alert_box").removeClass("success");
+            $("#alert_box").removeClass("alert");
+            $("#alert_box").addClass("warning");
             $('#alert_box').text();
             $('#alert_box').text("You haven't input a project name!.");
             $('#alert_box').show();
@@ -139,32 +159,16 @@ $('#form_jo').ajaxForm({
 
 });
 
-$('#datepicker_emp_tmp').on('change', function(){
-    //alert($(this).val());
-});
-
 $('#btn_export').on('click', function(){
-    //$('#form_archive').ajaxForm({
-    //    type: 'get',
-    //    url: MyNameSpace.config.base_url+'jo/mpdf',
-    //    beforeSubmit: function(arr, jform, option){
-    //
-    //    },
-    //    success:  function(response){
-    //        console.log(response);
-    //    }
-    //}).submit();
-    var jid = $('#jid').val();
-    $.ajax({
-        type: 'get',
-        url: MyNameSpace.config.base_url+'jo/pdf_data',
-        data: {
-            'jid' : jid
-        },
-        success: function(res) {
-            $('#pdf-btn').attr('href', MyNameSpace.config.base_url+'jo/mpdf?jid='+jid);
+    $('#form_archive').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/mpdf_ajax',
+        success:  function(response){
+            //window.open(response, '_blank');
+            var newWin = window.open('', '_blank');
+            newWin.location = response;
         }
-    });
+    }).submit();
 });
 
 $('#emp_form').ajaxForm({
@@ -174,54 +178,81 @@ $('#emp_form').ajaxForm({
         $('#btn_add_emp').prop('disabled', true);
 
         if($('#sel_dept').val() == 0){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("Choose a department!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $("#sel_pos").val() == 0 ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("Choose a position!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $("#sel_role").val() == 0 ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("Choose a role!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $("#sel_status").val() == 0 ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("Choose a status!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if($.trim( $('#inp_firstname').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("You haven't input the first name!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if($.trim( $('#inp_email').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("You haven't input the email!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_lastname').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("You haven't input the last name!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_midname').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("You haven't input the middle name!");
             $('#alert_box_emp').show();
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $.trim( $('#datepicker_emp').val() ) == '' || $('#datepicker_emp').val() == '00-00-0000' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
             $('#alert_box_emp').text("You haven't input the date!");
             $('#alert_box_emp').show();
@@ -236,6 +267,9 @@ $('#emp_form').ajaxForm({
     success:  function(response){
         if( response == 'exist' ){
 
+            $("#alert_box_emp_box").removeClass("success");
+            $("#alert_box_emp_box").removeClass("alert");
+            $("#alert_box_emp_box").addClass("warning");
             $('#alert_box_emp_box').text();
             $('#alert_box_emp_box').text("Email already used!");
             $('#alert_box_emp_box').show();
@@ -279,54 +313,81 @@ $('#emp_form_up').ajaxForm({
         $('#btn_add_emp_u').prop('disabled', true);
 
         if($('#sel_dept_u').val() == 0){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("Choose a department!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if( $("#sel_pos_u").val() == 0 ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("Choose a position!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if( $("#sel_role_u").val() == 0 ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("Choose a role!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if( $("#sel_status_u").val() == 0 ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("Choose a status!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if($.trim( $('#inp_firstname_u').val() ) == '' ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("You haven't input the first name!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if($.trim( $('#inp_email_u').val() ) == '' ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("You haven't input the email!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_lastname_u').val() ) == '' ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("You haven't input the last name!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_midname_u').val() ) == '' ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("You haven't input the middle name!");
             $('#alert_box_emp_u').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else if( $.trim( $('#datepicker_emp_u').val() ) == '' || $('#datepicker_emp_u').val() == '00-00-0000' ){
+            $("#alert_box_emp_u").removeClass("success");
+            $("#alert_box_emp_u").removeClass("alert");
+            $("#alert_box_emp_u").addClass("warning");
             $('#alert_box_emp_u').text();
             $('#alert_box_emp_u').text("You haven't input the date!");
             $('#alert_box_emp_u').show();
@@ -345,10 +406,20 @@ $('#emp_form_up').ajaxForm({
             $(value).appendTo("#emp_table > tbody");
         });
         //alert_box_emp_success
+        $("#alert_box_emp_success").removeClass("success");
+        $("#alert_box_emp_success").removeClass("alert");
+        $("#alert_box_emp_success").addClass("warning");
         $('#alert_box_emp_success').text();
         $('#alert_box_emp_success').text("Update success!");
         $('#alert_box_emp_success').show();
 
+        setTimeout(function(){
+            $('#alert_box_emp_success').hide();
+        },3000);
+
+        $('#alert_box_emp_success').val();
+
+        $('#empModalupdate').foundation( 'reveal', 'open' );
         $('#btn_add_emp_u').prop('disabled', false);
     }
 
@@ -385,18 +456,30 @@ $('#cpass_form').ajaxForm({
         $('#btn_cpass').prop('disabled', true);
 
         if($('#npass').val().length < 7){
+            $("#sml_pass1").removeClass("success");
+            $("#sml_pass1").removeClass("alert");
+            $("#sml_pass1").addClass("warning");
             $('#sml_pass1').show();
             $('#btn_cpass').prop('disabled', false);
             return false;
         }else if( $("#repass").val().length < 7 ){
+            $("#sml_pass2").removeClass("success");
+            $("#sml_pass2").removeClass("alert");
+            $("#sml_pass2").addClass("warning");
             $('#sml_pass2').show();
             $('#btn_cpass').prop('disabled', false);
             return false;
         }else if( $("#repass").val() == $('#npass').val() ){
+            $("#sml_pass1").removeClass("success");
+            $("#sml_pass1").removeClass("alert");
+            $("#sml_pass1").addClass("warning");
             $('#sml_pass1').text('');
             $('#sml_pass1').text('Password do not match');
             $('#sml_pass1').show();
 
+            $("#sml_pass2").removeClass("success");
+            $("#sml_pass2").removeClass("alert");
+            $("#sml_pass2").addClass("warning");
             $('#sml_pass2').text('');
             $('#sml_pass2').text('Password do not match');
             $('#sml_pass2').show();
@@ -417,6 +500,7 @@ $('#cpass_form').ajaxForm({
         $('#pass_content').empty();
         $('#pass_content').append(response);
         $('#btn_cpass').prop('disabled', false);
+        $('#cpass_alert').show();
     }
 
 });
@@ -428,18 +512,30 @@ $('#cpass_form_profile').ajaxForm({
         $('#btn_cpass').prop('disabled', true);
 
         if($('#npass').val().length < 7){
+            $("#sml_pass1").removeClass("success");
+            $("#sml_pass1").removeClass("alert");
+            $("#sml_pass1").addClass("warning");
             $('#sml_pass1').show();
             $('#btn_cpass').prop('disabled', false);
             return false;
         }else if( $("#repass").val().length < 7 ){
+            $("#sml_pass2").removeClass("success");
+            $("#sml_pass2").removeClass("alert");
+            $("#sml_pass2").addClass("warning");
             $('#sml_pass2').show();
             $('#btn_cpass').prop('disabled', false);
             return false;
         }else if( $("#repass").val() == $('#npass').val() ){
+            $("#sml_pass1").removeClass("success");
+            $("#sml_pass1").removeClass("alert");
+            $("#sml_pass1").addClass("warning");
             $('#sml_pass1').text('');
             $('#sml_pass1').text('Password do not match');
             $('#sml_pass1').show();
 
+            $("#sml_pass2").removeClass("success");
+            $("#sml_pass2").removeClass("alert");
+            $("#sml_pass2").addClass("warning");
             $('#sml_pass2').text('');
             $('#sml_pass2').text('Password do not match');
             $('#sml_pass2').show();
@@ -455,7 +551,7 @@ $('#cpass_form_profile').ajaxForm({
         $('#sml_pass2').css('display','none');
     },
     success:  function(response){
-        console.log(response);
+        //console.log(response);
         if( response == 'Password Changed' ){
             $('#alert_box_profile_pass').css('display','block');
             setTimeout(
@@ -477,18 +573,30 @@ $('#cpass_form_profile_pv').ajaxForm({
         $('#btn_cpass').prop('disabled', true);
 
         if($('#npass').val().length < 7){
+            $("#sml_pass1").removeClass("success");
+            $("#sml_pass1").removeClass("alert");
+            $("#sml_pass1").addClass("warning");
             $('#sml_pass1').show();
             $('#btn_cpass').prop('disabled', false);
             return false;
         }else if( $("#repass").val().length < 7 ){
+            $("#sml_pass2").removeClass("success");
+            $("#sml_pass2").removeClass("alert");
+            $("#sml_pass2").addClass("warning");
             $('#sml_pass2').show();
             $('#btn_cpass').prop('disabled', false);
             return false;
         }else if( $("#repass").val() == $('#npass').val() ){
+            $("#sml_pass1").removeClass("success");
+            $("#sml_pass1").removeClass("alert");
+            $("#sml_pass1").addClass("warning");
             $('#sml_pass1').text('');
             $('#sml_pass1').text('Password do not match');
             $('#sml_pass1').show();
 
+            $("#sml_pass2").removeClass("success");
+            $("#sml_pass2").removeClass("alert");
+            $("#sml_pass2").addClass("warning");
             $('#sml_pass2').text('');
             $('#sml_pass2').text('Password do not match');
             $('#sml_pass2').show();
@@ -505,10 +613,10 @@ $('#cpass_form_profile_pv').ajaxForm({
         //$('#sml_pass2').css('display','none');
     },
     success:  function(response){
-        console.log(response);
+        //console.log(response);
         if( response == 'changed' ){
             $("#alert_box_profile_pass").removeClass("alert");
-            $("#alert_box_profile_pass").addClass("success");
+            $("#alert_box_profile_pass").addClass("warning");
             $("#alert_box_profile_pass").text('');
             $("#alert_box_profile_pass").text('Update Success.');
             $('#alert_box_profile_pass').css('display','block');
@@ -529,7 +637,7 @@ $('#cpass_form_profile_pv').ajaxForm({
             );
         }else if( response == 'pinc' ){
             $("#alert_box_profile_pass").removeClass("success");
-            $("#alert_box_profile_pass").addClass("alert");
+            $("#alert_box_profile_pass").addClass("warning");
             $("#alert_box_profile_pass").text('');
             $("#alert_box_profile_pass").text('Password Incorrect.');
             $('#alert_box_profile_pass').css('display','block');
@@ -549,7 +657,7 @@ $('#cpass_form_profile_pv').ajaxForm({
             );
         }else{
             $("#alert_box_profile_pass").removeClass("success");
-            $("#alert_box_profile_pass").addClass("alert");
+            $("#alert_box_profile_pass").addClass("warning");
             $("#alert_box_profile_pass").text('');
             $("#alert_box_profile_pass").text('Update Failed.');
             $('#alert_box_profile_pass').css('display','block');
@@ -587,6 +695,9 @@ $('#attach_form').ajaxForm({
         //var json = $.parseJSON(response);
         $('#btn_add_attach').prop('disabled', false);
         if( response == 'success' ){
+            $("#alert_box_attach").removeClass("success");
+            $("#alert_box_attach").removeClass("alert");
+            $("#alert_box_attach").addClass("warning");
             $('#alert_box_attach').hide();
             $('#alert_box_attach_ok').show();
 			
@@ -617,12 +728,12 @@ $('#profile_form').ajaxForm({
         var rep1 = response.replace("[","");
         var rep2 = rep1.replace("]","");
         var json = $.parseJSON(rep2);
-        //console.log(json);
+        ////console.log(json);
         //$('#btn_profile_save').prop('disabled', false);
 
         if ( json.length == 0 ) {
             $("#alert_box_profile").removeClass("success");
-            $("#alert_box_profile").addClass("alert");
+            $("#alert_box_profile").addClass("warning");
             $("#alert_box_profile").text('');
             $("#alert_box_profile").text('Json parse error.');
             $("#alert_box_profile").show();
@@ -635,7 +746,7 @@ $('#profile_form').ajaxForm({
             $( '#ta_contact' ).text(json.contact_nos);
 
             $("#alert_box_profile").removeClass("alert");
-            $("#alert_box_profile").addClass("success");
+            $("#alert_box_profile").addClass("warning");
             $("#alert_box_profile").text('');
             $("#alert_box_profile").text('Update Success.');
             $("#alert_box_profile").show();
@@ -659,9 +770,15 @@ $('#btn_mom_submit').on('click', function(){
         },
         success:  function(response){
             if( response == 'success' ){
+                $("#alert_box_mom_form_success").removeClass("success");
+                $("#alert_box_mom_form_success").removeClass("alert");
+                $("#alert_box_mom_form_success").addClass("warning");
                 $('#alert_box_mom_form_fail').hide();
                 $('#alert_box_mom_form_success').show();
             }else{
+                $("#alert_box_mom_form_fail").removeClass("success");
+                $("#alert_box_mom_form_fail").removeClass("alert");
+                $("#alert_box_mom_form_fail").addClass("warning");
                 $('#alert_box_mom_form_success').hide();
                 $('#alert_box_mom_form_fail').show();
             }
@@ -682,9 +799,15 @@ $('#btn_save_ed').on('click', function(){
         },
         success:  function(response){
             if( response == 'success' ){
+                $("#alert_box_ed_form_success").removeClass("success");
+                $("#alert_box_ed_form_success").removeClass("alert");
+                $("#alert_box_ed_form_success").addClass("warning");
                 $('#alert_box_ed_form_fail').hide();
                 $('#alert_box_ed_form_success').show();
             }else{
+                $("#alert_box_ed_form_fail").removeClass("success");
+                $("#alert_box_ed_form_fail").removeClass("alert");
+                $("#alert_box_ed_form_fail").addClass("warning");
                 $('#alert_box_ed_form_success').hide();
                 $('#alert_box_ed_form_fail').show();
             }
@@ -707,7 +830,7 @@ $('#btn_mvrf_submit').on('click',function(){
         success:  function(response){
             if( response == 'success' ){
                 $("#alert_box_mvfr").removeClass("alert");
-                $("#alert_box_mvfr").addClass("success");
+                $("#alert_box_mvfr").addClass("warning");
                 $('#alert_box_mvfr').text();
                 $('#alert_box_mvfr').text("Successfully Saved");
                 $('#alert_box_mvfr').show();
@@ -715,8 +838,9 @@ $('#btn_mvrf_submit').on('click',function(){
                     $('#alert_box_mvfr').hide();
                 },3000);
             }else{
+                $("#alert_box_mvfr").removeClass("alert");
                 $("#alert_box_mvfr").removeClass("success");
-                $("#alert_box_mvfr").addClass("alert");
+                $("#alert_box_mvfr").addClass("warning");
                 $('#alert_box_mvfr').text();
                 $('#alert_box_mvfr').text("Fail to Save");
                 $('#alert_box_mvfr').show();
@@ -741,10 +865,10 @@ $('#btn_other_submit').on('click',function(){
 
         },
         success:  function(response){
-            // //console.log(response);
+            // ////console.log(response);
             if( response == 'success' ){
                 $("#alert_box_oth").removeClass("alert");
-                $("#alert_box_oth").addClass("success");
+                $("#alert_box_oth").addClass("warning");
                 $('#alert_box_oth').text();
                 $('#alert_box_oth').text("Successfully Saved");
                 $('#alert_box_oth').show();
@@ -752,8 +876,8 @@ $('#btn_other_submit').on('click',function(){
                     $('#alert_box_oth').hide();
                 },3000);
             }else{
-                $("#alert_box_oth").removeClass("success");
-                $("#alert_box_oth").addClass("alert");
+                $("#alert_box_oth").removeClass("alert");
+                $("#alert_box_oth").addClass("warning");
                 $('#alert_box_oth').text();
                 $('#alert_box_oth').text("Fail to Save");
                 $('#alert_box_oth').show();
@@ -778,10 +902,10 @@ $('#btn_setup_submit').on('click',function(){
 
         },
         success:  function(response){
-            // //console.log(response);
+            // ////console.log(response);
             if( response == 'success' ){
                 $("#alert_box_set").removeClass("alert");
-                $("#alert_box_set").addClass("success");
+                $("#alert_box_set").addClass("warning");
                 $('#alert_box_set').text();
                 $('#alert_box_set').text("Successfully Saved");
                 $('#alert_box_set').show();
@@ -790,7 +914,7 @@ $('#btn_setup_submit').on('click',function(){
                 },3000);
             }else{
                 $("#alert_box_set").removeClass("success");
-                $("#alert_box_set").addClass("alert");
+                $("#alert_box_set").addClass("warning");
                 $('#alert_box_set').text();
                 $('#alert_box_set').text("Fail to Save");
                 $('#alert_box_set').show();
@@ -814,7 +938,7 @@ $('#btn_add_detail').on('click', function(){
             if( response == 'fail' ){
 
                 $("#alert_box_details").removeClass("success");
-                $("#alert_box_details").addClass("alert");
+                $("#alert_box_details").addClass("warning");
                 $("#alert_box_details").text('');
                 $("#alert_box_details").text('Save Failed.');
                 $("#alert_box_details").show();
@@ -833,7 +957,8 @@ $('#btn_add_detail').on('click', function(){
                 $("#eda_duration").val("");
                 $("#editor_detail").val("");
                 $("#alert_box_details").removeClass("alert");
-                $("#alert_box_details").addClass("success");
+                $("#alert_box_details").removeClass("success");
+                $("#alert_box_details").addClass("warning");
                 $("#alert_box_details").text('');
                 $("#alert_box_details").text('Save Success.');
                 $("#alert_box_details").show();
@@ -859,11 +984,11 @@ $('#btn_add_requ').on('click', function(){
             $('#btn_add_requ').prop('disabled', true);
         },
         success:  function(response){
-            ////console.log(response);
+            //////console.log(response);
             if( response == 'fail' ){
 
                 $("#alert_box_requ").removeClass("success");
-                $("#alert_box_requ").addClass("alert");
+                $("#alert_box_requ").addClass("warning");
                 $("#alert_box_requ").text('');
                 $("#alert_box_requ").text('Save Failed.');
                 $("#alert_box_requ").show();
@@ -874,8 +999,8 @@ $('#btn_add_requ').on('click', function(){
                 $("#editor_req").val('');
                 $("#datepicker_deadline").val('');
                 $("#editor_ns").val('');
-                $("#alert_box_requ").removeClass("alert");
-                $("#alert_box_requ").addClass("success");
+                $("#alert_box_requ").removeClass("success");
+                $("#alert_box_requ").addClass("warning");
                 $("#alert_box_requ").text('');
                 $("#alert_box_requ").text('Save Success.');
                 $("#alert_box_requ").show();
@@ -930,7 +1055,7 @@ $('#btn_add_pt').on('click', function(){
             'pt_added' : $('#other_pt').val()
         },
         success: function(data) {
-            //console.log(data);
+            ////console.log(data);
             $('#other_pt').val('')
             $('#pt_list').empty();
             $('#pt_list').append(data);
@@ -945,7 +1070,7 @@ $('#form_client_u').ajaxForm({
         $('#btn_update_client').prop('disabled', true);
         if( $.trim( $('#inp_companyname_u').val() ) == '' ){
             $("#alert_box_client").removeClass("success");
-            $("#alert_box_client").addClass("alert");
+            $("#alert_box_client").addClass("warning");
             $('#alert_box_client').text();
             $('#alert_box_client').text("Input a company name.");
             $('#alert_box_client').show();
@@ -953,7 +1078,7 @@ $('#form_client_u').ajaxForm({
             return false;
         }else if( $.trim( $('#inp_contactperson_u').val() ) == '' ){
             $("#alert_box_client").removeClass("success");
-            $("#alert_box_client").addClass("alert");
+            $("#alert_box_client").addClass("warning");
             $('#alert_box_client').text();
             $('#alert_box_client').text("Input a contact person.");
             $('#alert_box_client').show();
@@ -961,7 +1086,7 @@ $('#form_client_u').ajaxForm({
             return false;
         }else if( $.trim( $('#inp_contactnumber_u').val() ) == '' ){
             $("#alert_box_client").removeClass("success");
-            $("#alert_box_client").addClass("alert");
+            $("#alert_box_client").addClass("warning");
             $('#alert_box_client').text();
             $('#alert_box_client').text("Input a contact number/s.");
             $('#alert_box_client').show();
@@ -969,7 +1094,7 @@ $('#form_client_u').ajaxForm({
             return false;
         }else if( $.trim( $('#inp_birthday_u').val() ) == '' ){
             $("#alert_box_client").removeClass("success");
-            $("#alert_box_client").addClass("alert");
+            $("#alert_box_client").addClass("warning");
             $('#alert_box_client').text();
             $('#alert_box_client').text("Select a birth date.");
             $('#alert_box_client').show();
@@ -977,7 +1102,7 @@ $('#form_client_u').ajaxForm({
             return false;
         }else if( $.trim( $('#inp_email_u').val() ) == '' ){
             $("#alert_box_client").removeClass("success");
-            $("#alert_box_client").addClass("alert");
+            $("#alert_box_client").addClass("warning");
             $('#alert_box_client').text();
             $('#alert_box_client').text("Input an email.");
             $('#alert_box_client').show();
@@ -986,17 +1111,17 @@ $('#form_client_u').ajaxForm({
         }
     },
     success:  function(response){
-        ////console.log(response);
+        //////console.log(response);
         if( response > 0 ){
             $("#alert_box_client").removeClass("alert");
-            $("#alert_box_client").addClass("success");
+            $("#alert_box_client").addClass("warning");
             $("#alert_box_client").text('');
             $("#alert_box_client").text('Update Success. Refreshing page.');
             $("#alert_box_client").show();
             setTimeout(location.reload(), 3000);
         }else{
             $("#alert_box_client").removeClass("success");
-            $("#alert_box_client").addClass("alert");
+            $("#alert_box_client").addClass("warning");
             $("#alert_box_client").text('');
             $("#alert_box_client").text('Json parse error.');
             $("#alert_box_client").show();
@@ -1143,6 +1268,7 @@ function load_click_emp(){
             },
             success: function(data) {
                 var json = $.parseJSON(data);
+                $('#user_id').val( json.eeid );
                 $('#empid').text( 'ID no. : '+json.eid );
                 $('#uid').val( json.eid );
                 $('#inp_firstname_u').val( json.first_name );
@@ -1154,7 +1280,7 @@ function load_click_emp(){
                 //$('#profile_picture').val( json.img_loc );
 
                 if( !jQuery.isEmptyObject( json.img_loc ) ){
-                    console.log(MyNameSpace.config.base_url_profile +'/'+ json.img_loc);
+                    //console.log(MyNameSpace.config.base_url_profile +'/'+ json.img_loc);
                     $("#profile_img").attr( "src", MyNameSpace.config.base_url_profile +'/'+ json.img_loc );
                 }else{
                     $("#profile_img").attr( "src", MyNameSpace.config.base_url_profile +'/default.jpg' );
@@ -1176,48 +1302,48 @@ $('#upload_file').on('change', function(){
         type: 'POST',
         url: MyNameSpace.config.base_url + 'settings/upload_img',
         success:  function(response){
-            console.log(response);
+            //console.log(response);
             if( response.substring(0, 6) == 'assets' ){
                 $('.profile_img').attr("src", MyNameSpace.config.base_url+response);
             }else if( response == 'File is not an image.' ){
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text(response);
                 $('#uploadModal').foundation('reveal', 'open');
             }else if( response == 'Sorry, file already exists.' ){
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text(response);
                 $('#uploadModal').foundation('reveal', 'open');
             }else if( response == 'Sorry, your file is too large.' ){
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text(response);
                 $('#uploadModal').foundation('reveal', 'open');
             }else if( response == 'Sorry, only JPG, JPEG, PNG & GIF files are allowed.' ){
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text(response);
                 $('#uploadModal').foundation('reveal', 'open');
             }else if( response == 'Sorry, your file was not uploaded.' ){
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text(response);
                 $('#uploadModal').foundation('reveal', 'open');
             }else if( response == 'Sorry, there was an error uploading your file.' ){
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text(response);
                 $('#uploadModal').foundation('reveal', 'open');
             }else{
                 $("#alert_box_upload").removeClass("success");
-                $("#alert_box_upload").addClass("alert");
+                $("#alert_box_upload").addClass("warning");
                 $('#upload_desc').text('');
                 $('#upload_desc').text('Somethings wrong. Please contact the administrator.');
                 $('#uploadModal').foundation('reveal', 'open');
@@ -1383,7 +1509,7 @@ $('#btn_save_client').on('click', function() {
 			$('#alert_box_client_s').hide();
             if( $.trim( $('#inp_companyname').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
-                $("#alert_box_client_s").addClass("alert");
+                $("#alert_box_client_s").addClass("warning");
                 $('#alert_box_client_s').text();
                 $('#alert_box_client_s').text("Input a company name.");
                 $('#alert_box_client_s').show();
@@ -1391,7 +1517,7 @@ $('#btn_save_client').on('click', function() {
                 return false;
             }else if( $.trim( $('#inp_contactperson').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
-                $("#alert_box_client_s").addClass("alert");
+                $("#alert_box_client_s").addClass("warning");
                 $('#alert_box_client_s').text();
                 $('#alert_box_client_s').text("Input a contact person.");
                 $('#alert_box_client_s').show();
@@ -1399,7 +1525,7 @@ $('#btn_save_client').on('click', function() {
                 return false;
             }else if( $.trim( $('#inp_contactnumber').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
-                $("#alert_box_client_s").addClass("alert");
+                $("#alert_box_client_s").addClass("warning");
                 $('#alert_box_client_s').text();
                 $('#alert_box_client_s').text("Input a contact number/s.");
                 $('#alert_box_client_s').show();
@@ -1407,7 +1533,7 @@ $('#btn_save_client').on('click', function() {
                 return false;
             }else if( $.trim( $('#inp_birthday').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
-                $("#alert_box_client_s").addClass("alert");
+                $("#alert_box_client_s").addClass("warning");
                 $('#alert_box_client_s').text();
                 $('#alert_box_client_s').text("Select a birth date.");
                 $('#alert_box_client_s').show();
@@ -1415,7 +1541,7 @@ $('#btn_save_client').on('click', function() {
                 return false;
             }else if( $.trim( $('#inp_email').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
-                $("#alert_box_client_s").addClass("alert");
+                $("#alert_box_client_s").addClass("warning");
                 $('#alert_box_client_s').text();
                 $('#alert_box_client_s').text("Input an email.");
                 $('#alert_box_client_s').show();
@@ -1424,6 +1550,7 @@ $('#btn_save_client').on('click', function() {
             }
         },
         success: function (response) {
+
             $("#client_table").prepend( response );
 			$('#inp_companyname').val('');
 			$('#inp_contactperson').val('');
@@ -1478,6 +1605,29 @@ $(document).ready(function() {
     });
 
     $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+
+$(document).ready(function() {
+    var max_fields_c      = 10; //maximum input boxes allowed
+    var wrapper_c         = $(".input_fields_wrap_client"); //Fields wrapper
+    var add_button_c      = $(".add_client_button"); //Add button ID
+
+    var x = 1; //initlal text box count
+    $(add_button_c).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields_c){ //max input box allowed
+            x++; //text box increment
+            $(wrapper_c).append('<div><hr>' +
+                '<div class="row"><div class="small-12 columns"><input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_contactnumber" name="inp_contactnumber[]"  placeholder="Contact Number"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birthdate"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address"></div></div>' +
+                '<a href="#" class="remove_field">Remove</a>' +
+                '</div>'); //add input box
+            reload_date_picker();
+        }
+    });
+
+    $(wrapper_c).on("click",".remove_field", function(e){ //user click on remove text
         e.preventDefault(); $(this).parent('div').remove(); x--;
     })
 });

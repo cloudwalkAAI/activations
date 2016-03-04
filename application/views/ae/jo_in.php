@@ -118,6 +118,7 @@
 					<?php
 						$other = json_decode($other_details);
 					?>
+>>>>>>> refs/remotes/origin/Henry-Branch
 
 					<div id="alert_box_oth" data-alert class="alert-box alert radius hide-normal">
 						Special characters are not allowed

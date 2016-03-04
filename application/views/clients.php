@@ -99,6 +99,7 @@
 					$this->load->view('client_listview',$data);
                 }
 			?>
+>>>>>>> refs/remotes/origin/Henry-Branch
 
 		</ul>
 	</div>
@@ -124,12 +125,12 @@
       </div>
       <div class="row">
         <div class="small-12 columns">
-            <textarea name="inp_contactnumber_u" id="inp_contactnumber_u" class="req" cols="15" rows="3" placeholder="Contact Number"></textarea>
+            <textarea id="inp_contactnumber_u" name="inp_contactnumber_u" class="req" cols="15" rows="3" placeholder="Contact Number"></textarea>
         </div>
       </div>
       <div class="row">
         <div class="small-12 columns">
-          <input type="text" id="inp_birthday_u" name="inp_birthday_u" class="req" placeholder="Birthday">
+          <input type="text" id="inp_birthday_u" name="inp_birthday_u" class="req" placeholder="Birthdate">
         </div>
       </div>
       <div class="row">

@@ -46,13 +46,19 @@
                             <div class="input_fields_wrap">
                                 <button class="add_field_button tiny twidth">Add More Contact Details</button>
                                 <?php
+                                    $i = 0;
                                     if( isset($arr_profile[0]->contact_nos) ){
                                         $ctacts = explode(',',$arr_profile[0]->contact_nos);
                                         foreach( $ctacts as $cdetails ){
-                                            echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+                                            $i++;
+                                            if( $i == 1 ){
+                                                echo '<div><input type="text" name="ta_contact[]" placeholder="Main Number" value="'.$cdetails.'"></div>';
+                                            }else{
+                                                echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+                                            }
                                         }
                                     }else{
-                                        echo '<div><input type="text" name="ta_contact[]"></div>';
+                                        echo '<div><input type="text" name="ta_contact[]" placeholder="Main Number"></div>';
                                     }
                                 ?>
                             </div>

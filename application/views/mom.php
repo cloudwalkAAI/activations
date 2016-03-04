@@ -1,6 +1,39 @@
 <?php
+    $str_display = '';
+    $str_disa = '';
     $md = array();
     $md = json_decode($mom_details);
+
+    $shared_array = array();
+    $this->db->select( 'shared_to, emp_id' );
+    $this->db->from( 'job_order_list' );
+    $this->db->where( 'jo_id', $this->input->get( 'a' ));
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+        $row = $query->row();
+        if (isset($row)) {
+            $shared_array = json_decode( $row->shared_to, true );
+            $did = $row->emp_id;
+        }
+    }
+
+    if( isset( $shared_array ) ){
+        if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) ) {
+            $str_display = 'style="display:block;"';
+            $str_disa = '';
+        }else{
+            $str_display = 'style="display:none;"';
+            $str_disa = 'disabled';
+        }
+    }else{
+        if ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+            $str_display = 'style="display:block;"';
+            $str_disa = '';
+        }else{
+            $str_display = 'style="display:none;"';
+            $str_disa = 'disabled';
+        }
+    }
 ?>
 <div class="row motm">
 	<div class="large-11 columns large-centered">

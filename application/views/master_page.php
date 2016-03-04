@@ -106,12 +106,7 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday').datetimepicker({
-        timepicker:false,
-        format:'m/d/Y'
-    });
-
-    jQuery('#datepicker_emp, #inp_birthday_u').datetimepicker({
+    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });
