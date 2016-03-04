@@ -842,4 +842,29 @@ class Get_model extends CI_Model
 
         }
     }
+
+    function getlastinsertdate($a){
+        $str_dat='';
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+
+                $str_dat= '
+                           <tr>
+                                <td>'.$str_name.'</td>
+                                <td>'.$row->date.'</td>
+                                <td>'.$row->endd.'</td>
+                                <td>'.$row->data.'</td>
+                           </tr>
+                           ';
+            }
+        }
+        echo $str_dat;
+
+    }
 }

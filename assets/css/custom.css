@@ -112,12 +112,17 @@ table.calendar{
 }
 .calendar .days td:hover {
     background-color: #f57e20;
+    /*-moz-box-shadow: 0 0 10px #ccc;*/
+    /*-webkit-box-shadow: 0 0 10px #ccc;*/
+    /*box-shadow: 0 0 10px #2a92db;*/
+    /*border-color: #2a92db;*/
 }
 .calendar .highlight {
     font-weight: bold; color: #00f;
 }
 .day_num:hover{
     color: #fff;
+
 }
 .day_num{
     font-size: 20px;
@@ -125,6 +130,9 @@ table.calendar{
 }
 .content{
     color: #a8a9ad;
+}
+.content:hover{
+    color: #fff;
 }
 
 table tr.even, table tr.alt, table tr:nth-of-type(even) {
