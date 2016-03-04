@@ -189,6 +189,38 @@ if( $this->session->userdata('status') == 1 && $this->session->userdata('sess_ro
             <button id="btn_add_emp_u" type="submit" class="button medium right"><i class="fi-save medium"></i> Save</button>
         </form>
 
+            <a href="#" class="button medium left" data-reveal-id="modal_cpass_emp">Change Password</a>
+            <div id="modal_cpass_emp" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+                <h2 id="modalTitle" class="text-center">Change Password</h2>
+
+                <div data-alert id="cpass_alert" class="alert-box warning radius" style="display:none;">
+                    Password Changed.
+                    <a href="#" class="close">&times;</a>
+                </div>
+
+                <form id="cpass_form" action="" method="post">
+                    <input type="hidden" id="user_id" name="user_id">
+                    <input type="hidden" name="user_code" value="activati0ns">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <input id="npass" type="password" name="npass" placeholder="New Password"/>
+                            <small id="sml_pass1" class="error" style="display:none;">Input a minimum of 7 characters.</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <input id="repass" type="password" name="repass" placeholder="Retype Password"/>
+                            <small id="sml_pass2" class="error" style="display:none;">Input a minimum of 7 characters.</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 large-centered columns">
+                            <input id="btn_cpass" type="submit" class="button expand" value="Change Password"/>
+                        </div>
+                    </div>
+                </form>
+                <a class="close-reveal-modal" data-reveal-id="empModalupdate">&#215;</a>
+            </div>
         <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>
 <?php

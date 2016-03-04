@@ -507,6 +507,7 @@ $('#cpass_form').ajaxForm({
         $('#pass_content').empty();
         $('#pass_content').append(response);
         $('#btn_cpass').prop('disabled', false);
+        $('#cpass_alert').show();
     }
 
 });
@@ -557,7 +558,7 @@ $('#cpass_form_profile').ajaxForm({
         $('#sml_pass2').css('display','none');
     },
     success:  function(response){
-        console.log(response);
+        //console.log(response);
         if( response == 'Password Changed' ){
             $('#alert_box_profile_pass').css('display','block');
             setTimeout(
@@ -619,7 +620,7 @@ $('#cpass_form_profile_pv').ajaxForm({
         //$('#sml_pass2').css('display','none');
     },
     success:  function(response){
-        console.log(response);
+        //console.log(response);
         if( response == 'changed' ){
             $("#alert_box_profile_pass").removeClass("alert");
             $("#alert_box_profile_pass").addClass("warning");
@@ -734,7 +735,7 @@ $('#profile_form').ajaxForm({
         var rep1 = response.replace("[","");
         var rep2 = rep1.replace("]","");
         var json = $.parseJSON(rep2);
-        //console.log(json);
+        ////console.log(json);
         //$('#btn_profile_save').prop('disabled', false);
 
         if ( json.length == 0 ) {
@@ -871,7 +872,7 @@ $('#btn_other_submit').on('click',function(){
 
         },
         success:  function(response){
-            // //console.log(response);
+            // ////console.log(response);
             if( response == 'success' ){
                 $("#alert_box_oth").removeClass("alert");
                 $("#alert_box_oth").addClass("warning");
@@ -908,7 +909,7 @@ $('#btn_setup_submit').on('click',function(){
 
         },
         success:  function(response){
-            // //console.log(response);
+            // ////console.log(response);
             if( response == 'success' ){
                 $("#alert_box_set").removeClass("alert");
                 $("#alert_box_set").addClass("warning");
@@ -990,7 +991,7 @@ $('#btn_add_requ').on('click', function(){
             $('#btn_add_requ').prop('disabled', true);
         },
         success:  function(response){
-            ////console.log(response);
+            //////console.log(response);
             if( response == 'fail' ){
 
                 $("#alert_box_requ").removeClass("success");
@@ -1061,7 +1062,7 @@ $('#btn_add_pt').on('click', function(){
             'pt_added' : $('#other_pt').val()
         },
         success: function(data) {
-            //console.log(data);
+            ////console.log(data);
             $('#other_pt').val('')
             $('#pt_list').empty();
             $('#pt_list').append(data);
@@ -1117,7 +1118,7 @@ $('#form_client_u').ajaxForm({
         }
     },
     success:  function(response){
-        ////console.log(response);
+        //////console.log(response);
         if( response > 0 ){
             $("#alert_box_client").removeClass("alert");
             $("#alert_box_client").addClass("warning");
@@ -1274,6 +1275,7 @@ function load_click_emp(){
             },
             success: function(data) {
                 var json = $.parseJSON(data);
+                $('#user_id').val( json.eeid );
                 $('#empid').text( 'ID no. : '+json.eid );
                 $('#uid').val( json.eid );
                 $('#inp_firstname_u').val( json.first_name );
@@ -1285,7 +1287,7 @@ function load_click_emp(){
                 //$('#profile_picture').val( json.img_loc );
 
                 if( !jQuery.isEmptyObject( json.img_loc ) ){
-                    console.log(MyNameSpace.config.base_url_profile +'/'+ json.img_loc);
+                    //console.log(MyNameSpace.config.base_url_profile +'/'+ json.img_loc);
                     $("#profile_img").attr( "src", MyNameSpace.config.base_url_profile +'/'+ json.img_loc );
                 }else{
                     $("#profile_img").attr( "src", MyNameSpace.config.base_url_profile +'/default.jpg' );
@@ -1307,7 +1309,7 @@ $('#upload_file').on('change', function(){
         type: 'POST',
         url: MyNameSpace.config.base_url + 'settings/upload_img',
         success:  function(response){
-            console.log(response);
+            //console.log(response);
             if( response.substring(0, 6) == 'assets' ){
                 $('.profile_img').attr("src", MyNameSpace.config.base_url+response);
             }else if( response == 'File is not an image.' ){
@@ -1555,7 +1557,7 @@ $('#btn_save_client').on('click', function() {
             }
         },
         success: function (response) {
-            console.log(response);
+            //console.log(response);
             if( response == null ){
                 $("#alert_box_client_s").removeClass("success");
                 $("#alert_box_client_s").addClass("warning");

@@ -3,13 +3,16 @@
 class Get_model extends CI_Model
 {
     function get_ae_jo( $empid = '' ){
-        if( $empid == $this->session->userdata('sess_id') ){
+        $query = $this->db->get( 'job_order_list' );
+        return $query->result_array();
+        return false;
+        if( $this->session->userdata('sess_dept') < 2 ){
             $this->db->order_by("jo_id","desc");
             $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
             return $query->result_array();
         }elseif( $this->session->userdata('sess_dept') != '2' ){
             $this->db->order_by("jo_id","desc");
-            $query = $this->db->get_where( 'job_order_list' );
+            $query = $this->db->get( 'job_order_list' );
             return $query->result_array();
         }else{
             return false;
@@ -255,12 +258,13 @@ class Get_model extends CI_Model
 
         $emp_array = array();
 
-        $this->db->select( 'emp_id, role_type, email, middle_name, sur_name, first_name, department, position, birth_date, status, img_loc' );
+        $this->db->select( 'id, emp_id, role_type, email, middle_name, sur_name, first_name, department, position, birth_date, status, img_loc' );
         $this->db->from('employee_list');
         $this->db->where('id =', $id);
         $query = $this->db->get();
 
         foreach ($query->result() as $row) {
+            $emp_array['eeid'] = $row->id;
             $emp_array['eid'] = $row->emp_id;
             $emp_array['role'] = $row->role_type;
             $emp_array['email'] = $row->email;

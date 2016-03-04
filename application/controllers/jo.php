@@ -17,11 +17,11 @@ class Jo extends CI_Controller{
     public function index(){
 		$data['active_menu'] = 'in';
 		$data['active_submenu'] = 'jo';
-        if( $this->session->userdata('sess_dept') == '2' ){
-            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
-        }else{
+//        if( $this->session->userdata('sess_dept') == '2' ){
+//            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
+//        }else{
             $arr = $this->get_model->get_ae_jo();
-        }
+//        }
 
         if( $this->session->userdata('sess_id') ){
 //            if( $arr ){
