@@ -22,7 +22,7 @@
         }
     </script>
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
-    <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>
+    <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>    
     <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
 	<?php
 		if(isset($homepage) && $homepage == true){
@@ -39,7 +39,9 @@
 	?>
 </head>
 <body>
-
+<?php
+	if(isset($homepagess)){
+?>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -47,8 +49,11 @@
         js = d.createElement(s); js.id = id;
         js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
         fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<?php
+	}
+?>
 <div class="off-canvas-wrap" data-offcanvas>
     <div class="inner-wrap">
 
@@ -75,6 +80,7 @@
 <script src="<?=base_url('assets/js/cf77f9273ab747e14102a80d1d5b6d51.js');?>"></script>
 <script src="<?=base_url('assets/js/calendar.js');?>"></script>
 <script src="<?=base_url('assets/js/sorttable.js');?>"></script>
+<script src="<?=base_url('assets/js/script.js');?>"></script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.maskedinput.js');?>"></script>
 <script>
     $(document).foundation({
@@ -101,12 +107,7 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday').datetimepicker({
-        timepicker:false,
-        format:'m/d/Y'
-    });
-
-    jQuery('#datepicker_emp, #inp_birthday_u').datetimepicker({
+    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });

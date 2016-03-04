@@ -46,13 +46,19 @@
                             <div class="input_fields_wrap">
                                 <button class="add_field_button tiny twidth">Add More Contact Details</button>
                                 <?php
+                                    $i = 0;
                                     if( isset($arr_profile[0]->contact_nos) ){
                                         $ctacts = explode(',',$arr_profile[0]->contact_nos);
                                         foreach( $ctacts as $cdetails ){
-                                            echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+                                            $i++;
+                                            if( $i == 1 ){
+                                                echo '<div><input type="text" name="ta_contact[]" placeholder="Main Number" value="'.$cdetails.'"></div>';
+                                            }else{
+                                                echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+                                            }
                                         }
                                     }else{
-                                        echo '<div><input type="text" name="ta_contact[]"></div>';
+                                        echo '<div><input type="text" name="ta_contact[]" placeholder="Main Number"></div>';
                                     }
                                 ?>
                             </div>
@@ -60,7 +66,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4"><a class="vert-mid" href="#" data-reveal-id="modal_account_details">Account Details</a></td>
+                    <td colspan="4"><!--<a class="vert-mid" href="#" data-reveal-id="modal_account_details">Account Details</a>--></td>
                 </tr>
                 <tr>
                     <td colspan="3"><a id="btn_change_pass" data-reveal-id="modal_change_password" class="button small vert-mid">Change Password</a></td>

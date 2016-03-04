@@ -38,16 +38,7 @@ class Home extends CI_Controller {
 
             $this->load->view('master_page', $data);
         }else{
-            $param_get = $this->input->get('inc');
-            if( $param_get ){
-                $data['param_get'] = $param_get;
-            }else{
-                $data['param_get'] = null;
-            }
-
-            $data['homepage']=true;
-            $data['content']=$this->load->view('login_view', $data, TRUE);
-            $this->load->view('master_page', $data);
+			redirect('login');
         }
     }
 

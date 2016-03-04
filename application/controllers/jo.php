@@ -17,11 +17,11 @@ class Jo extends CI_Controller{
     public function index(){
 		$data['active_menu'] = 'in';
 		$data['active_submenu'] = 'jo';
-        if( $this->session->userdata('sess_dept') == '2' ){
-            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
-        }else{
+//        if( $this->session->userdata('sess_dept') == '2' ){
+//            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
+//        }else{
             $arr = $this->get_model->get_ae_jo();
-        }
+//        }
 
         if( $this->session->userdata('sess_id') ){
 //            if( $arr ){
@@ -49,8 +49,8 @@ class Jo extends CI_Controller{
     }
 
     function add_client(){
-        $insid = $this->insert_model->insert_client( $this->input->post() );
-        echo $this->get_model->get_added_client( $insid );
+        return $insid = $this->insert_model->insert_client( json_encode($this->input->post()) );
+//        echo $this->get_model->get_added_client( $insid );
     }
 
     function load_brand(){
@@ -66,7 +66,8 @@ class Jo extends CI_Controller{
 	
 	function get_jo(){
 		$joid = $this->input->post('joid');
-		echo $this->get_model->get_ae_jo_w( $joid );
+		$data["joData"] = $this->get_model->get_ae_jo_w( $joid );
+		$this->load->view("joeditmodal",$data);
 	}
 
     /*for loading a JO*/
@@ -109,19 +110,95 @@ class Jo extends CI_Controller{
         return $this->input->get('jid');
     }
 
+    function mpdf_ajax(){
+
+        if( $this->session->userdata('sess_id') ){
+            $str_req = json_encode( $this->input->post( 'pdf_ex' ) );
+            echo $url = base_url( 'jo/mpdf?a='.$this->input->post('jid').'&b='.$this->input->post('jno').'&c='.$str_req );
+        }else{
+            redirect(base_url());
+        }
+    }
+
     function mpdf(){
-        $data['result_mom'] = $this->get_model->get_last_mom( $this->input->get('jid') );
-        $page = $this->load->view('pdf/mom', $data, TRUE);
 //        print_r( $result_mom );
+        $array_c = json_decode( $this->input->get('c') );
+        $i = 0;
+
         $mpdf=new mPDF();
         $mpdf->SetDefaultFont('montserratr');
-//        $mpdf->SetHeader($data['patient_data']['patient_name'].'| |'.$data['patient_data']['id']);
         $mpdf->defaultfooterline=0;
         $mpdf->SetFooter('{PAGENO}');
-        $mpdf->WriteHTML($page);
-//            $mpdf->AddPage(); //add new page
-//            $mpdf->WriteHTML($page_gallery);
-        $mpdf->Output('filename.pdf','I');
+
+        foreach( $array_c as $row ){
+            $i++;
+            if( $row == "mom" ){
+
+                $data_mom['result_mom'] = $this->get_model->get_last_mom( $this->input->get('a') );
+                $page_mom = $this->load->view('pdf/mom', $data_mom, TRUE);
+                $mpdf->WriteHTML($page_mom);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+
+            }elseif( $row == "ed" ){
+                $data_ed['req_table'] = $this->get_model->get_req_table_v2( $this->input->get('a') );
+                $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
+                $data_ed['result_ed'] = $this->get_model->get_last_ed( $this->input->get('a') );
+                $page_ed = $this->load->view('pdf/ed', $data_ed, TRUE);
+                $mpdf->WriteHTML($page_ed);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+            }elseif( $row == "pjat" ){
+                $data_ed['attachment_list'] = $this->get_model->get_list_attachment( $this->input->get('a') );
+                $page_ed = $this->load->view('pdf/proj_attachments', $data_ed, TRUE);
+                $mpdf->WriteHTML($page_ed);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+            }elseif( $row == "setup" ){
+                $data_ed['setup_details'] = $this->get_model->get_last_setup( $this->input->get('a') );
+                $page_ed = $this->load->view('pdf/setup', $data_ed, TRUE);
+                $mpdf->WriteHTML($page_ed);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+            }elseif( $row == "mvrf" ){
+                $data_ed['mvrf_details'] = $this->get_model->get_last_mvrf( $this->input->get('a') );
+                $page_ed = $this->load->view('pdf/mvrf', $data_ed, TRUE);
+                $mpdf->WriteHTML($page_ed);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+            }elseif( $row == "other" ){
+                $data_ed['other_details'] = $this->get_model->get_last_other( $this->input->get('a') );
+                $page_ed = $this->load->view('pdf/others', $data_ed, TRUE);
+                $mpdf->WriteHTML($page_ed);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+            }elseif( $row == "jo_details" ){
+                $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
+                $page_ed = $this->load->view('pdf/jo_details', $data_ed, TRUE);
+                $mpdf->WriteHTML($page_ed);
+
+                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+                    $mpdf->AddPage(); //add new page
+                }
+            }
+        }
+
+
+
+        $mpdf->Output('job_order_no_'.$this->input->get('b').'.pdf','I');
         exit();
     }
 

