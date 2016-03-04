@@ -601,25 +601,27 @@ class Get_model extends CI_Model
     }
 
     function get_added_client( $client_id ){
-        $this->db->select( 'client_id, company_name, contact_person' );
-        $this->db->from( 'clients' );
+        // $this->db->select( 'client_id, company_name, contact_person' );
+        // $this->db->from( 'clients' );
         $this->db->where( 'client_id', $client_id );
         $this->db->order_by("client_id","desc");
         $this->db->limit(1);
-        $query = $this->db->get();
+        $query = $this->db->get('clients');
         if ($query->num_rows() > 0) {
-            $row = $query->row();
+            $row = $query->row_array();
             if (isset($row)) {
-                echo '<tr><td><a class="load_client" href="#" alt="'.$row->client_id.'">'.str_pad( $row->client_id, 6, "0", STR_PAD_LEFT ).'</a></td><td>'.$row->company_name.'</td><td>'.$row->contact_person.'</td></tr>';
+				$data['row'] = $row;
+				$this->load->view('client_listview',$data);
+                // echo '<tr><td><a class="load_client" href="#" alt="'.$row->client_id.'">'.str_pad( $row->client_id, 6, "0", STR_PAD_LEFT ).'</a></td><td>'.$row->company_name.'</td><td>'.$row->contact_person.'</td></tr>';
             }
         }
     }
 
     function get_load_client_list(){
-        $this->db->select( 'client_id, company_name, contact_person' );
-        $this->db->from( 'clients' );
+        // $this->db->select( 'client_id, company_name, contact_person' );
+        // $this->db->from( 'clients' );
         $this->db->order_by("client_id","desc");
-        $query = $this->db->get();
+        $query = $this->db->get('clients');		
         return $query->result_array();
     }
 

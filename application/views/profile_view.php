@@ -60,7 +60,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="4"><a class="vert-mid" href="#" data-reveal-id="modal_account_details">Account Details</a></td>
+                    <td colspan="4"><!--<a class="vert-mid" href="#" data-reveal-id="modal_account_details">Account Details</a>--></td>
                 </tr>
                 <tr>
                     <td colspan="3"><a id="btn_change_pass" data-reveal-id="modal_change_password" class="button small vert-mid">Change Password</a></td>
