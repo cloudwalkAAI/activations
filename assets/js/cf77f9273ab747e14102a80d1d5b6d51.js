@@ -64,21 +64,14 @@ function getJoId(x){
 	var joid = parent.attr("alt");
 	$("#joid").val(joid);
 	var dataString = "joid="+joid;
-	
+	$('#joEditModal').foundation( 'reveal', 'open' );
 	$.ajax({
 		type: "POST",
 		url: MyNameSpace.config.base_url +'jo/get_jo',
 		data: dataString,
 		success: function (response) {
-			var rep1 = response.replace("[","");
-			var rep2 = rep1.replace("]","");
-			var json = $.parseJSON(rep2);
-			$("#inp_projtype_edit").val(json.project_type);			
-			$("#inp_client_edit").val(json.client_company_name);
-			$("#inp_brand_edit").val(json.brand);
-			$("#hd").show();
-			$("#inp_projname_edit").val(json.project_name);			
-			$('#joEditModal').foundation( 'reveal', 'open' );
+			$("#contentJoEdit").empty();
+			$("#contentJoEdit").html(response);
 		}
 	});
 }
@@ -1420,7 +1413,7 @@ $('#search_account_jo').keyup(function() {
 /*end for account jo table*/
 
 /*for clients table*/
-var $rows_client = $('#client_table tbody tr');
+var $rows_client = $('#client_table li');
 $('#inp_search_client').keyup(function() {
     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
@@ -1557,33 +1550,22 @@ $('#btn_save_client').on('click', function() {
             }
         },
         success: function (response) {
-            //console.log(response);
-            if( response == null ){
-                $("#alert_box_client_s").removeClass("success");
-                $("#alert_box_client_s").addClass("warning");
-                $('#alert_box_client_s').text();
-                $('#alert_box_client_s').text("Input an email.");
-                $('#alert_box_client_s').show();
-            }else{
-                location.reload();
-            }
 
-            //return false;
-            //$("#client_table > tbody").prepend( response );
-            //$('#inp_companyname').val('');
-            //$('#inp_contactperson').val('');
-            //$('#inp_contactnumber').val('');
-            //$('#inp_birthday').val('');
-            //$('#inp_email').val('');
-            //$('#myModal').foundation('reveal', 'close');
-            //client_reload();
-            //$('#inp_companyname').val('');
-            //$('#inp_contactperson').val('');
-            //$('#inp_contactnumber').val('');
-            //$('#inp_birthday').val('');
-            //$('#inp_email').val('');
-            //$('.cls_brand').val('');
-            //$('#myModal').foundation( 'reveal', 'close' );
+            $("#client_table").prepend( response );
+			$('#inp_companyname').val('');
+			$('#inp_contactperson').val('');
+			$('#inp_contactnumber').val('');
+			$('#inp_birthday').val('');
+			$('#inp_email').val('');
+			$('#joModal').foundation('reveal', 'close');
+            client_reload();
+            $('#inp_companyname').val('');
+            $('#inp_contactperson').val('');
+            $('#inp_contactnumber').val('');
+            $('#inp_birthday').val('');
+            $('#inp_email').val('');
+            $('.cls_brand').val('');
+            $('#joModal').foundation( 'reveal', 'close' );
         }
 
     }).submit();

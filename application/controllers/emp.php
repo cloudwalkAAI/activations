@@ -26,6 +26,23 @@ class Emp extends CI_Controller{
             redirect( base_url() );
         }
     }
+	
+	function edit($eid=null){
+		$data['active_menu'] = 'emp';
+		$data['active_submenu'] = 'clients';
+		if( $this->session->userdata('sess_id') ){
+			if(!empty($eid)){
+				$data['eid'] = $eid;
+				$data['navigator'] = $this->load->view('nav', $data, TRUE);
+				$data['content'] = $this->load->view('employee_edit', $data, TRUE);
+				$this->load->view('master_page', $data);
+			}else{
+				redirect('emp');
+			}
+        }else{
+            redirect( base_url() );
+        }
+	}
 
     function add_emp(){
         $insid = $this->insert_model->add_employee( $this->input->post() );
