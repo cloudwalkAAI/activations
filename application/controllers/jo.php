@@ -343,4 +343,15 @@ class Jo extends CI_Controller{
     function reload_req_table(){
         echo $this->get_model->get_req_table( $this->input->post() );
     }
+
+    function submit_date_calendar(){
+        $result = $this->insert_model->creative_update_calendar( $this->input->post() );
+        if( $result != 'exist' ){
+            echo $this->get_model->getlastinsertdate( $result );
+        }else{
+            echo $result;
+        }
+
+    }
+
 }

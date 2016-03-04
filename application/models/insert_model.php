@@ -331,4 +331,34 @@ class Insert_model extends CI_Model
             echo 'fail';
         }
     }
+
+    function creative_update_calendar($calendar){
+//        print_r($calendar);
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['start'] ) );
+        if($query->num_rows() == 0){
+
+            $query = $this->db->get_where( 'calendar', array( 'endd' => $calendar['deadline'] ) );
+            if($query->num_rows() == 0){
+                $data = array(
+                    'date' => $calendar['start'] ,
+                    'endd' => $calendar['deadline'] ,
+                    'data' => $calendar['description'],
+                    'dept_id' => $calendar['dept_id'],
+                    'employee_id' => $calendar['sel_creatives_emp']
+                );
+
+                $this->db->insert('calendar', $data);
+                return $this->db->insert_id();
+            }else{
+                return 'exist';
+            }
+
+        }else{
+            return 'exist';
+        }
+
+
+
+    }
+
 }

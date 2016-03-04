@@ -73,6 +73,7 @@
 <script src="<?=base_url('assets/js/jquery.form.js');?>"></script>
 <script src="<?=base_url('assets/js/jquery-ui.min.js');?>"></script>
 <script src="<?=base_url('assets/js/cf77f9273ab747e14102a80d1d5b6d51.js');?>"></script>
+<script src="<?=base_url('assets/js/calendar.js');?>"></script>
 <script src="<?=base_url('assets/js/sorttable.js');?>"></script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.maskedinput.js');?>"></script>
 <script>
@@ -108,6 +109,11 @@
     jQuery('#datepicker_emp, #inp_birthday_u').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
+    });
+
+    jQuery('#creative_start, #creative_deadline').datetimepicker({
+        timepicker:false,
+        format:'Y-m-j'
     });
 
     jQuery('#inp_mom_date').datetimepicker({
