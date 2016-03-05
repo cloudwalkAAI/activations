@@ -23,7 +23,7 @@
 |
 */
 
-$allowed_domains = array('www.aai2015.com', 'aai.cloudwalkdigital.com');
+$allowed_domains = array('www.aai2015.com', 'aai.cloudwalkdigital.com', 'www.aai2016.com');
 $default_domain  = 'www.aai2015.com';
 
 if (in_array($_SERVER['HTTP_HOST'], $allowed_domains, TRUE))

@@ -56,6 +56,18 @@
                 }
             ?>
 				</h6>
+				<hr>
+				<div id="alert_box_share" data-alert class="alert-box warning radius hide-normal">
+					Shared.
+					<a href="#" class="close">&times;</a>
+				</div>
+				<form id="share_jo_ae" action="" method="post">
+					<input type="hidden" name="share_joid" id="share_joid" value="<?= $info->jo_number ?>">
+					<input type="text" name="inp_ae_id" id="inp_ae_id" placeholder="Input Admin ID">
+					<input type="text" id="temp_name" disabled>
+					<button id="btn_share_jo" class="button radius twidth">Share It</button>
+				</form>
+				<hr>
 			</div>
 		</div>
 	</div>
