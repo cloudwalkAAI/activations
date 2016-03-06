@@ -9,7 +9,7 @@ $query = $this->db->get();
 if ($query->num_rows() > 0) {
     $row = $query->row();
     if (isset($row)) {
-        $shared_array = json_decode( $row->shared_to, true );
+        $shared_array = explode( ',', $row->shared_to );
         $did = $row->emp_id;
     }
 }

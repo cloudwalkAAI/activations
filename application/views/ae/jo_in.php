@@ -56,6 +56,24 @@
                 }
             ?>
 				</h6>
+				<?php
+				if( $this->session->userdata('sess_id') == $info->emp_id ){
+				?>
+				<hr>
+				<div id="alert_box_share" data-alert class="alert-box warning radius hide-normal">
+					Shared.
+					<a href="#" class="close">&times;</a>
+				</div>
+				<form id="share_jo_ae" action="" method="post">
+					<input type="hidden" name="share_joid" id="share_joid" value="<?= $info->jo_number ?>">
+					<input type="text" name="inp_ae_id" id="inp_ae_id" placeholder="Input Admin ID">
+					<input type="text" id="temp_name" disabled>
+					<button id="btn_share_jo" class="button radius twidth">Share It</button>
+				</form>
+				<hr>
+				<?php
+				}
+				?>
 			</div>
 		</div>
 	</div>
@@ -117,17 +135,46 @@
 				<div id="accordion_other" class="content">
 					<?php
 						$other = json_decode($other_details);
-					?>
->>>>>>> refs/remotes/origin/Henry-Branch
 
+						$shared_array = array();
+						$this->db->select( 'shared_to, emp_id' );
+						$this->db->from( 'job_order_list' );
+						$this->db->where( 'jo_id', $this->input->get( 'a' ));
+						$query = $this->db->get();
+						if ($query->num_rows() > 0) {
+							$row = $query->row();
+							if (isset($row)) {
+								$shared_array = explode( ',', $row->shared_to );
+								$did = $row->emp_id;
+							}
+						}
+
+						if( isset( $shared_array ) ){
+							if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) ) {
+								$str_display = 'style="display:block;"';
+								$str_disa = '';
+							}else{
+								$str_display = 'style="display:none;"';
+								$str_disa = 'disabled';
+							}
+						}else{
+							if ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+								$str_display = 'style="display:block;"';
+								$str_disa = '';
+							}else{
+								$str_display = 'style="display:none;"';
+								$str_disa = 'disabled';
+							}
+						}
+					?>
 					<div id="alert_box_oth" data-alert class="alert-box alert radius hide-normal">
 						Special characters are not allowed
 						<a href="#" class="close">&times;</a>
 					</div>
 					<form id="other_form" action="" method="post">
 						<input type="hidden" name="otherid" value="<?=$this->input->get('a')?>">
-						<textarea name="ta_Other" id="ta_Other" cols="30" rows="10" <?=$this->session->userdata('sess_dept') > '2' ? 'disabled' : '';?>><?=isset($other->texts) ? $other->texts : '';?></textarea>
-						<button id="btn_other_submit" type="button" <?=$this->session->userdata('sess_dept') > '2' ? 'style="display:none;"' : '';?>>Save</button>
+						<textarea name="ta_Other" id="ta_Other" cols="30" rows="10" <?=$str_disa?>><?=isset($other->texts) ? $other->texts : '';?></textarea>
+						<button id="btn_other_submit" type="button" <?=$str_display?>>Save</button>
 					</form>
 				</div>
 			</li>

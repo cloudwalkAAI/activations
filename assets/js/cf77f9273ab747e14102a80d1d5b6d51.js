@@ -6,6 +6,42 @@ function reload_date_picker(){
     });
 }
 
+$('#btn_share_jo').on('click',function(){
+    $('#share_jo_ae').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'jo/share_jo',
+        success:  function(response){
+            if( response > 0 ){
+                $('#inp_ae_id').val('');
+                $('#temp_name').val('');
+                $('#alert_box_share').show();
+                setTimeout(function(){
+                    $('#alert_box_share').hide();
+                },3000);
+            }
+        }
+    });
+});
+$('#inp_ae_id').on('keydown',function(){
+    if($('#inp_ae_id').val().length >= 10){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/search_ae',
+            type:'post',
+            data: {
+                'aeid' : $('#inp_ae_id').val()
+            },
+            beforeSubmit: function(arr, jform, option){
+                $('#temp_name').val('Please Wait...');
+            },
+            success: function(data) {
+                if( data != null ){
+                    $('#temp_name').val(data);
+                }
+            }
+        });
+    }
+});
+
 $('#inp_client_edit').on('change',function(){
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/load_brand',

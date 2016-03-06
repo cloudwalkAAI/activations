@@ -61,6 +61,7 @@ class Get_model extends CI_Model
         foreach ($query->result() as $row)
         {
             $jolist_array['jo_id'] = $row->jo_id;
+            $jolist_array['emp_id'] = $row->emp_id;
             $jolist_array['jo_number'] = $row->jo_number;
 
             if( !is_null( $row->do_contract_no )){
