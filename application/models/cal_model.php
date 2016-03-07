@@ -30,10 +30,10 @@ class Cal_model extends CI_Model {
            {cal_cell_start}<td class="day">{/cal_cell_start}
 
            {cal_cell_content}
-               <div class="day_num">{day}</div>
-               <div class="content">{content}</div>
+               <div class="day_num" style="background-color:#f27f22;color:#fff;">{day}</div>
+               <div class="content" style="background-color:#f27f22;height: 75%;color:#fff;">{content}</div>
            {/cal_cell_content}
-           {cal_cell_content_today}
+               {cal_cell_content_today}
                <div class="day_num highlight">{day}</div>
                <div class="content">{content}</div>
            {/cal_cell_content_today}

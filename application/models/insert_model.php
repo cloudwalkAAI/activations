@@ -338,32 +338,55 @@ class Insert_model extends CI_Model
     }
 
     function creative_update_calendar($calendar){
-//        print_r($calendar);
-        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['start'] ) );
-        if($query->num_rows() == 0){
+        $arr = array();
 
-            $query = $this->db->get_where( 'calendar', array( 'endd' => $calendar['deadline'] ) );
-            if($query->num_rows() == 0){
+        $arr = $this->createDateRangeArray( $calendar['start'], $calendar['deadline']);
+        foreach ($arr as $datevalue) {
+
+            $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['start'], 'employee_id' => $calendar['dept_id'] ) );
+            if ($query->num_rows() == 0) {
+
                 $data = array(
-                    'date' => $calendar['start'] ,
-                    'endd' => $calendar['deadline'] ,
+                    'date' => $datevalue,
                     'data' => $calendar['description'],
                     'dept_id' => $calendar['dept_id'],
                     'employee_id' => $calendar['sel_creatives_emp']
                 );
 
                 $this->db->insert('calendar', $data);
-                return $this->db->insert_id();
-            }else{
-                return 'exist';
+            } else {
+//                return 'exist';
             }
-
-        }else{
-            return 'exist';
+//            return false;
         }
 
+//        print_r($calendar);
 
+    }
 
+    function createDateRangeArray($strDateFrom,$strDateTo)
+    {
+        // takes two dates formatted as YYYY-MM-DD and creates an
+        // inclusive array of the dates between the from and to dates.
+
+        // could test validity of dates here but I'm already doing
+        // that in the main script
+
+        $aryRange=array();
+
+        $iDateFrom=mktime(1,0,0,substr($strDateFrom,5,2),substr($strDateFrom,8,2),substr($strDateFrom,0,4));
+        $iDateTo=mktime(1,0,0,substr($strDateTo,5,2),substr($strDateTo,8,2),substr($strDateTo,0,4));
+
+        if ($iDateTo>=$iDateFrom)
+        {
+            array_push($aryRange,date('Y-m-j',$iDateFrom)); // first entry
+            while ($iDateFrom<$iDateTo)
+            {
+                $iDateFrom+=86400; // add 24 hours
+                array_push($aryRange,date('Y-m-j',$iDateFrom));
+            }
+        }
+        return $aryRange;
     }
 
 }
