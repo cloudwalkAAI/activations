@@ -103,7 +103,6 @@
 					$this->load->view('client_listview',$data);
                 }
 			?>
->>>>>>> refs/remotes/origin/Henry-Branch
 
 		</ul>
 	</div>

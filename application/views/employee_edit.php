@@ -19,7 +19,7 @@
 			Please Wait...
 		</div>
 	</div>
-	<div class="large-4 columns">
+	<div class="large-4 columns">	
 	<?php
 		if(isset($eid)){
 	?>
@@ -37,6 +37,7 @@
 		<?php		
 			}
 		?>
+		<h3 style="visibility:hidden;">asd</h3>
 	</div>
 	<?php
 		if(isset($eid)){

@@ -745,7 +745,7 @@ $('#profile_form').ajaxForm({
 
         if ( json.length == 0 ) {
             $("#alert_box_profile").removeClass("success");
-            $("#alert_box_profile").addClass("warning");
+            $("#alert_box_profile").addClass("success");
             $("#alert_box_profile").text('');
             $("#alert_box_profile").text('Json parse error.');
             $("#alert_box_profile").show();
@@ -758,7 +758,7 @@ $('#profile_form').ajaxForm({
             $( '#ta_contact' ).text(json.contact_nos);
 
             $("#alert_box_profile").removeClass("alert");
-            $("#alert_box_profile").addClass("warning");
+            $("#alert_box_profile").addClass("success");
             $("#alert_box_profile").text('');
             $("#alert_box_profile").text('Update Success.');
             $("#alert_box_profile").show();

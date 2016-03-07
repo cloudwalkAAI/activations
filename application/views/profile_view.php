@@ -1,82 +1,101 @@
 <?php
-//    echo $this->session->userdata('sess_status') ;
     $arr_profile = json_decode( $data_prof );
 ?>
-
-<h1 class="text-center">Settings</h1>
-
-<div class="column large-offset-2 large-8 medium-offset-2 medium-8 small-12">
-    <h4 class="text-center">Account</h4>
-    <div class="column large-4 medium-4 small-12 text-center">
-        <img class="profile_img" src="<?=isset($arr_profile[0]->img_loc) ? base_url( 'assets/img/profile/'.$arr_profile[0]->img_loc ) : 'assets/img/profile/default.jpg';?>" alt="">
-        <form id="uploading_form">
-            <input id="upload_file" name="upload_file" type="file" accept="image/*" style="display: none;">
-        </form>
-
-        <button id="upload_file_button" class="small">Upload Profile</button>
-        <div id="uploadModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-            <div id="alert_box_upload" data-alert class="alert-box alert radius">
+<div class="row fullwidth bar_color1 text-center">
+	<div class="large-12 columns" style="padding: 20px 0px;">
+		<h5>Settings</h5>
+	</div>
+</div>
+<div class="row fullwidth settingspage" style="padding-top: 39px;">
+	<div class="large-12 columns">
+		<div id="uploadModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+				<div id="alert_box_upload" data-alert class="alert-box alert radius">
                 <p id="upload_desc"></p>
             </div>
             <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
-    </div>
-    <div class="column large-8 medium-8 small-12">
-
-        <div id="alert_box_profile" data-alert class="alert-box alert radius hide-normal">
-            Special characters are not allowed
-            <a href="#" class="close">&times;</a>
-        </div>
-
-        <form id="profile_form" action="" method="post">
-            <table class="twidth">
-                <tr>
-                    <td width="100">Name:</td>
-                    <td width="100"><input class="vert-mid" type="text" id="prof_fname" name="prof_fname" value="<?=isset($arr_profile[0]->first_name) ? $arr_profile[0]->first_name : '';?>"></td>
-                    <td width="100"><input class="vert-mid" type="text" id="prof_mname" name="prof_mname" value="<?=isset($arr_profile[0]->middle_name) ? $arr_profile[0]->middle_name : '';?>"></td>
-                    <td width="100"><input class="vert-mid" type="text" id="prof_lname" name="prof_lname" value="<?=isset($arr_profile[0]->sur_name) ? $arr_profile[0]->sur_name : '';?>"></td>
-                </tr>
-                <tr>
-                    <td colspan="4">Email : <?= $arr_profile[0]->email ?></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Contact No/s.</td>
-                    <td colspan="2">
-                        <div class="contact_append_text">
-                            <div class="input_fields_wrap">
-                                <button class="add_field_button tiny twidth">Add More Contact Details</button>
-                                <?php
-                                    $i = 0;
-                                    if( isset($arr_profile[0]->contact_nos) ){
-                                        $ctacts = explode(',',$arr_profile[0]->contact_nos);
-                                        foreach( $ctacts as $cdetails ){
-                                            $i++;
-                                            if( $i == 1 ){
-                                                echo '<div><input type="text" name="ta_contact[]" placeholder="Main Number" value="'.$cdetails.'"></div>';
-                                            }else{
-                                                echo '<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
-                                            }
-                                        }
-                                    }else{
-                                        echo '<div><input type="text" name="ta_contact[]" placeholder="Main Number"></div>';
-                                    }
-                                ?>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="4"><!--<a class="vert-mid" href="#" data-reveal-id="modal_account_details">Account Details</a>--></td>
-                </tr>
-                <tr>
-                    <td colspan="3"><a id="btn_change_pass" data-reveal-id="modal_change_password" class="button small vert-mid">Change Password</a></td>
-                    <td><button id="btn_profile_save" class="button small right vert-mid" type="submit">Save</button></td>
-                </tr>
-            </table>
+		<div id="alert_box_profile" data-alert class="alert-box success radius hide-normal">
+			Special characters are not allowed
+			<a href="#" class="close">&times;</a>
+		</div>	
+	</div>
+	<div class="large-4 columns">
+		<div class="img-cropper" style="width: 200px;height: 200px;position: relative;z-index: 0;">		
+			<img class="img-responsive" id="profile_img" src="<?php echo base_url( 'assets/img/profile/'.$arr_profile[0]->img_loc ); ?>" onError="this.onerror=null;this.src='<?= base_url( 'assets/img/profile/default.jpg' ) ?>';" alt="">		
+			<div class="uploadArea"><button id="upload_file_button" type="button" class="small_up_btn" style="background: transparent;"><img style="width: 81px;" src="<?= base_url( 'assets/img/logos/up.png' ) ?>" /></button></div>
+		</div>
+		<form id="uploading_form">
+            <input id="upload_file" name="upload_file" type="file" accept="image/*" style="display: none;">
         </form>
-    </div>
+	</div>
+	<form id="profile_form" action="" method="post">
+	<div class="large-4 columns">
+		<div class="large-12 columns">
+			<label>First Name
+			<input type="text" name="prof_fname" id="prof_fname" placeholder="First Name" required value="<?=isset($arr_profile[0]->first_name) ? $arr_profile[0]->first_name : '';?>" />
+			</label>
+		</div>
+		<div class="large-12 columns">
+			<label>Middle Name
+			<input type="text" name="prof_mname" id="prof_mname" placeholder="Middle Name" required value="<?=isset($arr_profile[0]->middle_name) ? $arr_profile[0]->middle_name : '';?>" />
+			</label>
+		</div>
+		<div class="large-12 columns">
+			<label>Last Name
+			<input type="text" name="prof_lname" id="prof_lname" placeholder="Last Name" required value="<?=isset($arr_profile[0]->sur_name) ? $arr_profile[0]->sur_name : '';?>" />
+			</label>
+		</div>
+		<div class="large-12 columns">
+			<label>Email
+			<p><?= $arr_profile[0]->email ?></p>
+			</label>
+		</div>
+	</div>
+	<div class="large-4 columns">
+	<?php
+		$i = 0;
+		$main_cnum = '';
+		$cnums_list = '';
+		if( isset($arr_profile[0]->contact_nos) ){
+			$ctacts = explode(',',$arr_profile[0]->contact_nos);
+			foreach( $ctacts as $cdetails ){
+				$i++;
+				if( $i == 1 ){
+					$main_cnum .='<div><input type="text" name="ta_contact[]" placeholder="Main Number" value="'.$cdetails.'"></div>';
+				}else{
+					$cnums_list .='<div><input type="text" name="ta_contact[]" value="'.$cdetails.'"></div>';
+				}
+			}
+		}else{
+			$main_cnum .='<div><input type="text" name="ta_contact[]" placeholder="Main Number"></div>';
+		}
+	?>
+		<div class="large-12 columns">
+			<label>Contact Number
+				<?php echo $main_cnum; ?>
+			</label>
+		</div>
+		<div class="large-12 columns input_fields_wrap">
+			<?php echo $cnums_list; ?>
+		</div>
+		<div class="large-12 columns">
+			<button class="add_field_button success twidth radius">Add More Contact Details</button>
+		</div>
+	</div>
+	<div class="large-12 columns">
+		<div class="large-4 large-offset-4 columns">
+			<div class="large-12 columns">
+				<a id="btn_change_pass" data-reveal-id="modal_change_password" class="button success expand radius">Change Password</a>
+			</div>	
+		</div>
+		<div class="large-4 columns">
+			<div class="large-12 columns">
+				<button type="submit" id="btn_profile_save" class="button warning expand radius">Save</button>
+			</div>	
+		</div>
+	</div>
+	</form>
 </div>
-
 <div id="modal_change_password" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
     <h2 id="modalTitle">Change Password</h2>
     <div id="alert_box_profile_pass" data-alert class="alert-box alert radius hide-normal">
@@ -109,54 +128,4 @@
             </div>
         </div>
     </form>
-</div>
-
-<div id="modal_account_details" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-    <h2 id="modalTitle">Account Details</h2>
-    <span>JO Added : <?= $jo_counts ?></span><br>
-    <span>Task Currently Executing : <?= $current_task ?></span><br>
-    <span>Last JO Done : <?= $last_task ?></span><br>
-    <input id="search_account_jo" type="text" placeholder="Search">
-    <table class="twidth">
-        <thead>
-            <tr>
-                <td>Job Order No.</td>
-                <td>Project Type</td>
-                <td>Client</td>
-                <td>Brand</td>
-                <td>Project Name</td>
-            </tr>
-        </thead>
-        <tbody id="tbody_account_jo">
-        <?php
-        $c = '';
-        $b = '';
-
-        //                foreach( $toc->result_array() as $row){
-        if( isset($jolist) ){
-
-            foreach( $jolist as $row){
-                $query_company = $this->db->get_where( 'clients', array( 'client_id' => $row['client_company_name'] ) );
-                $row_company = $query_company->row();
-                if (isset($row_company))
-                {
-                    $c = $row_company->company_name;
-                }
-
-                echo '
-                    <tr>
-                    <td><a href="'.base_url('jo/in?a=').$row['jo_id'].'">'.$row['jo_number'].'</a></tdtr>
-                    <td>'.$row['project_type'].'</td>
-                    <td>'.$c.'</td>
-                    <td>'.$row['brand'].'</td>
-                    <td>'.$row['project_name'].'</td>
-                    </tr>
-                ';
-            }
-        }
-        ?>
-        </tbody>
-    </table>
-
-    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
