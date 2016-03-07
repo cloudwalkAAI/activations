@@ -62,7 +62,7 @@
 						</div>
 						<div class="row" style="padding-top: 20px;">
 							<div class="large-6 columns large-centered">
-								<a href="#" class="button warning expand radius" id="btn_save_client">Create New Client</a>
+								<a href="#" class="button warning expand radius" id="btn_save_client">Save</a>
 							</div>
 						</div>
 					</form>
