@@ -56,19 +56,47 @@
                 }
             ?>
 				</h6>
+				<?php
+				if( $this->session->userdata('sess_id') == $info->emp_id ){
+				?>
+				<hr>
+				<div id="alert_box_share" data-alert class="alert-box warning radius hide-normal">
+					Shared.
+					<a href="#" class="close">&times;</a>
+				</div>
+				<form id="share_jo_ae" action="" method="post">
+					<input type="hidden" name="share_joid" id="share_joid" value="<?= $info->jo_number ?>">
+					<input type="text" name="inp_ae_id" id="inp_ae_id" placeholder="Tag AE">
+					<input type="text" id="temp_name" disabled>
+					<button id="btn_share_jo" class="button radius twidth">Share It</button>
+				</form>
+				<hr>
+				<?php
+				}
+				?>
 			</div>
 		</div>
 	</div>
 	<div class="large-9 columns jo-maincontent">
-		<div class="row">
-			<div class="large-12 columns">
-				<a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
-			</div>
-		</div>
-		<div id="modal_pdf_selector" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-			<input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
-			<a href="<?=base_url('jo/mpdf?jid='.$this->input->get('a'))?>" id="pdf-btn" target="_blank" href="">Save and Print PDF</a>
-		</div>
+        <div class="row">
+            <a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
+        </div>
+        <div id="modal_pdf_selector" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+            <h2 id="modalTitle">Select Document to Archive</h2>
+            <form id="form_archive" action="" method="post">
+                <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
+                <input type="hidden" id="jno" name="jno" value="<?= $info->jo_number ?>">
+                <label for="pdf_ex_jo"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
+                <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom"> Minutes of the Meeting</label>
+                <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed"> Event Details</label>
+                <label for="pdf_ex_proj_att"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_proj_att" value="pjat"> Project Attachments</label>
+                <label for="pdf_ex_setup"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_setup" value="setup"> Setup Details</label>
+                <label for="pdf_ex_mvrf"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mvrf" value="mvrf"> Manpower and vehicle request form</label>
+                <label for="pdf_ex_oth"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_oth" value="other"> Others</label>
+                <input type="button" class="button tiny" value="Export" id="btn_export">
+            </form>
+
+        </div>
 		<ul class="accordion" data-accordion>
 			<li class="accordion-navigation acd">
 				<a href="#panel1a">Minutes of the Meeting<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
@@ -117,17 +145,46 @@
 				<div id="accordion_other" class="content">
 					<?php
 						$other = json_decode($other_details);
-					?>
->>>>>>> refs/remotes/origin/Henry-Branch
 
+						$shared_array = array();
+						$this->db->select( 'shared_to, emp_id' );
+						$this->db->from( 'job_order_list' );
+						$this->db->where( 'jo_id', $this->input->get( 'a' ));
+						$query = $this->db->get();
+						if ($query->num_rows() > 0) {
+							$row = $query->row();
+							if (isset($row)) {
+								$shared_array = explode( ',', $row->shared_to );
+								$did = $row->emp_id;
+							}
+						}
+
+						if( isset( $shared_array ) ){
+							if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) ) {
+								$str_display = 'style="display:block;"';
+								$str_disa = '';
+							}else{
+								$str_display = 'style="display:none;"';
+								$str_disa = 'disabled';
+							}
+						}else{
+							if ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+								$str_display = 'style="display:block;"';
+								$str_disa = '';
+							}else{
+								$str_display = 'style="display:none;"';
+								$str_disa = 'disabled';
+							}
+						}
+					?>
 					<div id="alert_box_oth" data-alert class="alert-box alert radius hide-normal">
 						Special characters are not allowed
 						<a href="#" class="close">&times;</a>
 					</div>
 					<form id="other_form" action="" method="post">
 						<input type="hidden" name="otherid" value="<?=$this->input->get('a')?>">
-						<textarea name="ta_Other" id="ta_Other" cols="30" rows="10" <?=$this->session->userdata('sess_dept') > '2' ? 'disabled' : '';?>><?=isset($other->texts) ? $other->texts : '';?></textarea>
-						<button id="btn_other_submit" type="button" <?=$this->session->userdata('sess_dept') > '2' ? 'style="display:none;"' : '';?>>Save</button>
+						<textarea name="ta_Other" id="ta_Other" cols="30" rows="10" <?=$str_disa?>><?=isset($other->texts) ? $other->texts : '';?></textarea>
+						<button id="btn_other_submit" type="button" <?=$str_display?>>Save</button>
 					</form>
 				</div>
 			</li>

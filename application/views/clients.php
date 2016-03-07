@@ -27,24 +27,28 @@
 								</div>
 								<div class="large-12 columns">
 									<label for="inp_contactperson">Contact Person
-										<input type="text" id="inp_contactperson" name="inp_contactperson" placeholder="Contact Person" />
+										<input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person" />
 									</label>
 								</div>
 								<div class="large-12 columns">
 									<label for="inp_contactnumber">Contact Number
-										<input type="text" id="inp_contactnumber" name="inp_contactnumber" placeholder="Contact Number" />
+										<input type="text" id="inp_contactnumber" name="inp_contactnumber[]" placeholder="Contact Number" />
 									</label>
 								</div>
 								<div class="large-12 columns">
 									<label for="inp_birthday">Birth Date
-										<input type="text" id="inp_birthday" name="inp_birthday" placeholder="Birth Date" />
+										<input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birth Date" />
 									</label>
 								</div>
 								<div class="large-12 columns">
 									<label for="inp_email">Email Address
-										<input type="text" id="inp_email" name="inp_email" placeholder="Email Address" />
+										<input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address" />
 									</label>
 								</div>
+                                <div class="input_fields_wrap_client">
+
+                                </div>
+                                <a href="#" class="add_client_button tiny twidth button">Add Client</a>
 							</div>
 							<div class="large-6 columns rightside">
 								<div class="large-12 columns" style="height: 283px;overflow: auto;">
