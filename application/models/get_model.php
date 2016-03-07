@@ -226,7 +226,7 @@ class Get_model extends CI_Model
     function get_employee_full_info( $id ){
 
         $emp_array = array();
-        $this->db->select( 'emp_id, sur_name, first_name, department, position, birth_date, status' );
+        $this->db->select( 'emp_id, sur_name, first_name, department, position, birth_date, status, email, middle_name, role_type, img_loc' );
         $this->db->from('employee_list');
         $this->db->where('id =', $id);
         $query = $this->db->get();
@@ -239,6 +239,10 @@ class Get_model extends CI_Model
             $emp_array['department'] = $this->get_where_departments( $row->department );
             $emp_array['position'] = $this->get_where_positions( $row->position );
             $emp_array['birth_date'] = $row->birth_date;
+            $emp_array['email'] = $row->email;
+            $emp_array['middle_name'] = $row->middle_name;
+            $emp_array['role_type'] = $row->role_type;
+            $emp_array['img_loc'] = $row->img_loc;
 
             $birthDate = explode("/", $row->birth_date);
 

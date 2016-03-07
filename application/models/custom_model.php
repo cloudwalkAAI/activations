@@ -77,15 +77,15 @@ class Custom_model extends CI_Model
     function update_info( $a ){
 
         $data_update = array(
-            'role_type'     => $a['sel_role_u'],
-            'first_name'    => $a['inp_firstname_u'],
-            'middle_name'   => $a['inp_midname_u'],
-            'sur_name'      => $a['inp_lastname_u'],
-            'email'         => $a['inp_email_u'],
-            'birth_date'    => $a['datepicker_emp_u'],
-            'department'    => $a['sel_dept_u'],
-            'position'      => $a['sel_pos_u'],
-            'status'        => $a['sel_status_u']
+            'role_type'     => $a['sel_role'],
+            'first_name'    => $a['inp_firstname'],
+            'middle_name'   => $a['inp_midname'],
+            'sur_name'      => $a['inp_lastname'],
+            'email'         => $a['inp_email'],
+            'birth_date'    => $a['datepicker_emp'],
+            'department'    => $a['sel_dept'],
+            'position'      => $a['sel_pos'],
+            'status'        => $a['sel_status']
         );
         $this->db->where('emp_id', $a['uid']);
         $this->db->update('employee_list', $data_update);

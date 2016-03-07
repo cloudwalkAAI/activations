@@ -1,5 +1,9 @@
 $(document).ready(function(){
-	
+	$('#upload_img_btn').on('click', function(e){
+		// e.preventDefault();
+		$('#upload_files2').trigger('click');  
+		// return false;
+	});
 });
 function incorrect(){
 	var duration = 80;
@@ -18,4 +22,16 @@ function incorrect(){
 	   });
 	});
 	// alert();
+}
+
+function readURL(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		
+		reader.onload = function (e) {
+			$('#profile_img').attr('src', e.target.result);
+		}
+		
+		reader.readAsDataURL(input.files[0]);
+	}
 }
