@@ -32,6 +32,7 @@ if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('ses
                         ?>
 <!--                        <option value="employee">Employee</option>-->
                     </select>
+                    <input id="joid_task" type="hidden" name="joid_task" value="<?=$this->input->get('a');?>">
                     <input id="creative_start" type="text" name="start" class="req" placeholder="Start">
                     <input id="creative_deadline" type="text" name="deadline" class="req" placeholder="Deadline">
                     <input id="creative_description" type="text" name="description" class="req" placeholder="Description">
@@ -58,7 +59,7 @@ if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('ses
                     <tbody id="creatives_tbd">
                         <?php
                         $str_name = '';//test
-                        $query = $this->db->get_where('calendar', array('dept_id' => 10));
+                        $query = $this->db->get_where('tasks', array('dept_id' => 10));
                         foreach($query->result() as $row){
 
                             $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
@@ -69,9 +70,9 @@ if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('ses
                             echo '
                             <tr>
                                 <td>'.$str_name.'</td>
-                                <td>'.$row->date.'</td>
-                                <td>'.$row->date.'</td>
-                                <td>'.$row->data.'</td>
+                                <td>'.$row->assigned.'</td>
+                                <td>'.$row->deadline.'</td>
+                                <td>'.$row->description.'</td>
                             </tr>
                             ';
                         }

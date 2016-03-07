@@ -1,7 +1,7 @@
 <li class="jolist jo-item-<?php echo $row['id']; ?>" alt="<?php echo $row['id']; ?>">
 	<div class="small-1 medium-2 large-2 columns text-center" style="padding-top: 35px;">
 		<div class="img-cropper">
-			<img class="img-responsive" src="<?= base_url( 'assets/img/profile/default.jpg' ) ?>" onError="this.onerror=null;this.src='<?= base_url( 'assets/img/profile/default.jpg' ) ?>';" alt="">		
+			<img class="img-responsive" src="<?= base_url( 'assets/img/profile/'.$row['img_loc'] ) ?>" onError="this.onerror=null;this.src='<?= base_url( 'assets/img/profile/default.jpg' ) ?>';" alt="">		
 		</div>
 	</div>
 	<div class="small-7 medium-6 large-6 columns" style="padding: 50px;padding-left: 0px;">

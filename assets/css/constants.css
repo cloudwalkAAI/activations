@@ -454,15 +454,15 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	margin-bottom: 30px;
 }
 
-.jopart .sjo::-moz-placeholder{
+.jopart .sjo::-moz-placeholder,.settingspage label input::-moz-placeholder{
 	color: #96aeba;
 }
 
-.jopart .sjo:-moz-placeholder{
+.jopart .sjo:-moz-placeholder,.settingspage label input:-moz-placeholder{
 	color: #96aeba;
 }
 
-.jopart .sjo::-webkit-input-placeholder{
+.jopart .sjo::-webkit-input-placeholder,.settingspage label input::-webkit-input-placeholder{
 	color: #96aeba;
 }
 
@@ -475,6 +475,7 @@ thead tr > th { cursor: pointer; cursor: hand; }
     padding: 33px 8px;
     margin: 0;
 	background: #fff;
+	height: auto;
 }
 
 .bar_color1{
@@ -519,4 +520,42 @@ thead tr > th { cursor: pointer; cursor: hand; }
     color: #aaaaaa;
 	border-bottom: 0px solid #2a92db;
 	padding-left: 28px;
+}
+
+.img-cropper .uploadArea{
+	position: absolute;
+    bottom: 1px;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.4);
+    z-index: 1;
+    height: 31%;
+}
+
+.enumstyle.sub{
+	margin-top: -8px;
+}
+
+.enumstyle{
+	color:#9cc2d5;
+	font-family: montserratLight;
+}
+
+.settingspage label p{
+	color:#a7a8aa;
+	font-family: montserratSemiBold;
+}
+
+.settingspage label input{
+	color:#a7a8aa;
+	font-family: montserratSemiBold;
+	border:2px solid #d7d7d7;
+	padding: 15px 9px;
+	height:auto;
+}
+
+.settingspage label{
+	color:#696969;
+	font-family: montserratLight;
+	font-size: 0.7em;
 }

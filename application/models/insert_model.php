@@ -364,6 +364,22 @@ class Insert_model extends CI_Model
 
     }
 
+    function insert_task($calendar){
+        $data = array(
+            'jo_id'         => $calendar['joid_task'],
+            'assigned'      => $calendar['start'],
+            'assigned_by'   => $this->session->userdata('sur_name').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('middle_name'),
+            'deadline'      => $calendar['deadline'],
+            'description'   => $calendar['description'],
+            'dept_id'       => $calendar['dept_id'],
+            'employee_id'   => $calendar['sel_creatives_emp']
+        );
+
+        $this->db->insert('tasks', $data);
+
+        return $this->db->insert_id();
+    }
+
     function createDateRangeArray($strDateFrom,$strDateTo)
     {
         // takes two dates formatted as YYYY-MM-DD and creates an

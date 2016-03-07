@@ -3,20 +3,21 @@
 class Get_model extends CI_Model
 {
     function get_ae_jo( $empid = '' ){
+        $this->db->order_by("jo_id","desc"); 
         $query = $this->db->get( 'job_order_list' );
         return $query->result_array();
-        return false;
-        if( $this->session->userdata('sess_dept') < 2 ){
-            $this->db->order_by("jo_id","desc");
-            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
-            return $query->result_array();
-        }elseif( $this->session->userdata('sess_dept') != '2' ){
-            $this->db->order_by("jo_id","desc");
-            $query = $this->db->get( 'job_order_list' );
-            return $query->result_array();
-        }else{
-            return false;
-        }
+//        return false;
+//        if( $this->session->userdata('sess_dept') < 2 ){
+//            $this->db->order_by("jo_id","desc");
+//            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
+//            return $query->result_array();
+//        }elseif( $this->session->userdata('sess_dept') != '2' ){
+//            $this->db->order_by("jo_id","desc");
+//            $query = $this->db->get( 'job_order_list' );
+//            return $query->result_array();
+//        }else{
+//            return false;
+//        }
     }
 
     function get_ae_jo_query( $empid, $a, $b){
@@ -227,7 +228,7 @@ class Get_model extends CI_Model
     function get_employee_full_info( $id ){
 
         $emp_array = array();
-        $this->db->select( 'emp_id, sur_name, first_name, department, position, birth_date, status' );
+        $this->db->select( 'emp_id, sur_name, first_name, department, position, birth_date, status, email, middle_name, role_type, img_loc' );
         $this->db->from('employee_list');
         $this->db->where('id =', $id);
         $query = $this->db->get();
@@ -240,6 +241,10 @@ class Get_model extends CI_Model
             $emp_array['department'] = $this->get_where_departments( $row->department );
             $emp_array['position'] = $this->get_where_positions( $row->position );
             $emp_array['birth_date'] = $row->birth_date;
+            $emp_array['email'] = $row->email;
+            $emp_array['middle_name'] = $row->middle_name;
+            $emp_array['role_type'] = $row->role_type;
+            $emp_array['img_loc'] = $row->img_loc;
 
             $birthDate = explode("/", $row->birth_date);
 
@@ -846,7 +851,7 @@ class Get_model extends CI_Model
 
     function getlastinsertdate($a){
         $str_dat='';
-        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
+        $query = $this->db->get_where( 'tasks', array( 'task_id' => $a ) );
         if($query->num_rows() > 0){
             foreach ($query->result() as $row)
             {
@@ -858,9 +863,9 @@ class Get_model extends CI_Model
                 $str_dat= '
                            <tr>
                                 <td>'.$str_name.'</td>
-                                <td>'.$row->date.'</td>
-                                <td>'.$row->endd.'</td>
-                                <td>'.$row->data.'</td>
+                                <td>'.$row->assigned.'</td>
+                                <td>'.$row->deadline.'</td>
+                                <td>'.$row->description.'</td>
                            </tr>
                            ';
             }

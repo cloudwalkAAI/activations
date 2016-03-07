@@ -32,7 +32,7 @@
 								</div>
 								<div class="large-12 columns">
 									<label for="inp_contactnumber">Contact Number
-										<input type="text" id="inp_contactnumber" name="inp_contactnumber[]" placeholder="Contact Number" />
+										<input type="text" id="inp_contactnumber" class="inp_contactnumber" name="inp_contactnumber[]" placeholder="Contact Number" />
 									</label>
 								</div>
 								<div class="large-12 columns">
@@ -66,7 +66,7 @@
 						</div>
 						<div class="row" style="padding-top: 20px;">
 							<div class="large-6 columns large-centered">
-								<a href="#" class="button warning expand radius" id="btn_save_client">Create New Client</a>
+								<a href="#" class="button warning expand radius" id="btn_save_client">Save</a>
 							</div>
 						</div>
 					</form>
@@ -103,7 +103,6 @@
 					$this->load->view('client_listview',$data);
                 }
 			?>
->>>>>>> refs/remotes/origin/Henry-Branch
 
 		</ul>
 	</div>
