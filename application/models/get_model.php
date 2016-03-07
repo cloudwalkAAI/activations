@@ -6,18 +6,18 @@ class Get_model extends CI_Model
         $this->db->order_by("jo_id","desc"); 
         $query = $this->db->get( 'job_order_list' );
         return $query->result_array();
-        return false;
-        if( $this->session->userdata('sess_dept') < 2 ){
-            $this->db->order_by("jo_id","desc");
-            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
-            return $query->result_array();
-        }elseif( $this->session->userdata('sess_dept') != '2' ){
-            $this->db->order_by("jo_id","desc");
-            $query = $this->db->get( 'job_order_list' );
-            return $query->result_array();
-        }else{
-            return false;
-        }
+//        return false;
+//        if( $this->session->userdata('sess_dept') < 2 ){
+//            $this->db->order_by("jo_id","desc");
+//            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
+//            return $query->result_array();
+//        }elseif( $this->session->userdata('sess_dept') != '2' ){
+//            $this->db->order_by("jo_id","desc");
+//            $query = $this->db->get( 'job_order_list' );
+//            return $query->result_array();
+//        }else{
+//            return false;
+//        }
     }
 
     function get_ae_jo_query( $empid, $a, $b){
@@ -851,7 +851,7 @@ class Get_model extends CI_Model
 
     function getlastinsertdate($a){
         $str_dat='';
-        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
+        $query = $this->db->get_where( 'tasks', array( 'task_id' => $a ) );
         if($query->num_rows() > 0){
             foreach ($query->result() as $row)
             {
@@ -863,9 +863,9 @@ class Get_model extends CI_Model
                 $str_dat= '
                            <tr>
                                 <td>'.$str_name.'</td>
-                                <td>'.$row->date.'</td>
-                                <td>'.$row->endd.'</td>
-                                <td>'.$row->data.'</td>
+                                <td>'.$row->assigned.'</td>
+                                <td>'.$row->deadline.'</td>
+                                <td>'.$row->description.'</td>
                            </tr>
                            ';
             }
