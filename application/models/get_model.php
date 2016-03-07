@@ -3,6 +3,7 @@
 class Get_model extends CI_Model
 {
     function get_ae_jo( $empid = '' ){
+        $this->db->order_by("jo_id","desc"); 
         $query = $this->db->get( 'job_order_list' );
         return $query->result_array();
         return false;
