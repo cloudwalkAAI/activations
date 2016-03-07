@@ -10,7 +10,7 @@
             $('#btn_update_client').prop('disabled',true);
         },
         success:  function(response){
-            console.log(response);
+            //console.log(response);
             if(response != 'exist'){
                 $('#sel_creatives_emp').val(0);
                 $('#creative_start').val('');
@@ -18,9 +18,9 @@
                 $('#creative_description').val('');
 
                 $('#creatives_box').hide();
-            $('tbody#creatives_tbd').append(response);
-            $('#modal_creatives_tasks').foundation( 'reveal', 'close' );
-            $('#btn_update_client').prop('disabled',false);
+                $('tbody#creatives_tbd').append(response);
+                $('#modal_creatives_tasks').foundation( 'reveal', 'close' );
+                $('#btn_update_client').prop('disabled',false);
             }else{
                 $('#creatives_box').show();
 
