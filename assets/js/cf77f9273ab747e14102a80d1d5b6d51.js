@@ -299,8 +299,9 @@ $('#emp_form').ajaxForm({
             $('#alert_box_progress').show();
         }
     },
-    complete: function() { $('#alert_box_progress').hide(); },
+    complete: function() { $('#alert_box_progress').hide();},
     success:  function(response){
+		
         if( response == 'exist' ){
 
             $("#alert_box_emp_box").removeClass("success");
@@ -311,33 +312,8 @@ $('#emp_form').ajaxForm({
             $('#alert_box_emp_box').show();
 
         }else{
-            var json = $.parseJSON(response);
-            $("<tr><td><a class='load_emp' href='javascript:void(0)' data-id='" + json.id + "'>" + json.eid + "</td><td>" + json.sur_name + "</td><td>" + json.first_name +
-                "</td><td>" + json.department + "</td><td>" + json.position + "</td><td>" + json.birth_date +
-                "</td><td>" + json.age + "</td><td>" + json.status + "</td>").prependTo("#emp_table > tbody");
-
-            $('#sel_dept option').prop('selected', function() {
-                return this.defaultSelected;
-            });
-            $('#sel_pos option').prop('selected', function() {
-                return this.defaultSelected;
-            });
-            $('#sel_role option').prop('selected', function() {
-                return this.defaultSelected;
-            });
-            $('#sel_status option').prop('selected', function() {
-                return this.defaultSelected;
-            });
-            $('#inp_firstname').val('');
-            $('#inp_email').val('');
-            $('#inp_lastname').val('');
-            $('#inp_midname').val('');
-            $('#datepicker_emp').val('');
-
-            $('#btn_add_emp').prop('disabled', false);
-
-            $('#empModal').foundation( 'reveal', 'close' );
-            load_click_emp();
+            window.location.href = MyNameSpace.config.base_url+'emp';
+			// alert(MyNameSpace.config.base_url+'emp');
         }
     }
 });
@@ -348,115 +324,115 @@ $('#emp_form_up').ajaxForm({
     beforeSubmit: function(arr, jform, option){
         $('#btn_add_emp_u').prop('disabled', true);
 
-        if($('#sel_dept_u').val() == 0){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("Choose a department!");
-            $('#alert_box_emp_u').show();
+        if($('#sel_dept').val() == 0){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("Choose a department!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if( $("#sel_pos_u").val() == 0 ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("Choose a position!");
-            $('#alert_box_emp_u').show();
+        }else if( $("#sel_pos").val() == 0 ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("Choose a position!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if( $("#sel_role_u").val() == 0 ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("Choose a role!");
-            $('#alert_box_emp_u').show();
+        }else if( $("#sel_role").val() == 0 ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("Choose a role!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if( $("#sel_status_u").val() == 0 ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("Choose a status!");
-            $('#alert_box_emp_u').show();
+        }else if( $("#sel_status").val() == 0 ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("Choose a status!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if($.trim( $('#inp_firstname_u').val() ) == '' ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("You haven't input the first name!");
-            $('#alert_box_emp_u').show();
+        }else if($.trim( $('#inp_firstname').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("You haven't input the first name!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if($.trim( $('#inp_email_u').val() ) == '' ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("You haven't input the email!");
-            $('#alert_box_emp_u').show();
+        }else if($.trim( $('#inp_email').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("You haven't input the email!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if( $.trim( $('#inp_lastname_u').val() ) == '' ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("You haven't input the last name!");
-            $('#alert_box_emp_u').show();
+        }else if( $.trim( $('#inp_lastname').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("You haven't input the last name!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if( $.trim( $('#inp_midname_u').val() ) == '' ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("You haven't input the middle name!");
-            $('#alert_box_emp_u').show();
+        }else if( $.trim( $('#inp_midname').val() ) == '' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("You haven't input the middle name!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
-        }else if( $.trim( $('#datepicker_emp_u').val() ) == '' || $('#datepicker_emp_u').val() == '00-00-0000' ){
-            $("#alert_box_emp_u").removeClass("success");
-            $("#alert_box_emp_u").removeClass("alert");
-            $("#alert_box_emp_u").addClass("warning");
-            $('#alert_box_emp_u').text();
-            $('#alert_box_emp_u').text("You haven't input the date!");
-            $('#alert_box_emp_u').show();
+        }else if( $.trim( $('#datepicker_emp').val() ) == '' || $('#datepicker_emp').val() == '00-00-0000' ){
+            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("alert");
+            $("#alert_box_emp").addClass("warning");
+            $('#alert_box_emp').text();
+            $('#alert_box_emp').text("You haven't input the date!");
+            $('#alert_box_emp').show();
             $('#btn_add_emp_u').prop('disabled', false);
             return false;
         }else{
-            $('#alert_box_emp_u').hide();
+            $('#alert_box_emp').hide();
         }
     },
     success:  function(response){
-        var json = $.parseJSON(response);
+        // var json = $.parseJSON(response);
 
-        $("#tbdy_emp").empty();
+        // $("#tbdy_emp").empty();
 
-        $.each( json, function( key, value ) {
-            $(value).appendTo("#emp_table > tbody");
-        });
+        // $.each( json, function( key, value ) {
+            // // $(value).appendTo("#emp_table > tbody");
+        // });
         //alert_box_emp_success
-        $("#alert_box_emp_success").removeClass("success");
-        $("#alert_box_emp_success").removeClass("alert");
-        $("#alert_box_emp_success").addClass("warning");
-        $('#alert_box_emp_success').text();
-        $('#alert_box_emp_success').text("Update success!");
-        $('#alert_box_emp_success').show();
+        // $("#alert_box_emp_success").removeClass("success");
+        // $("#alert_box_emp_success").removeClass("alert");
+        // $("#alert_box_emp_success").addClass("warning");
+        // $('#alert_box_emp_success').text();
+        // $('#alert_box_emp_success').text("Update success!");
+        // $('#alert_box_emp_success').show();
 
-        setTimeout(function(){
-            $('#alert_box_emp_success').hide();
-        },3000);
+        // setTimeout(function(){
+            // $('#alert_box_emp_success').hide();
+        // },3000);
 
-        $('#alert_box_emp_success').val();
-
-        $('#empModalupdate').foundation( 'reveal', 'open' );
-        $('#btn_add_emp_u').prop('disabled', false);
+        // $('#alert_box_emp_success').val();
+		window.location.href = MyNameSpace.config.base_url+'emp';
+        // $('#empModalupdate').foundation( 'reveal', 'open' );
+        // $('#btn_add_emp_u').prop('disabled', false);
     }
 
 });
@@ -1334,6 +1310,7 @@ function load_click_emp(){
 load_click_emp();
 
 $('#upload_file').on('change', function(){
+	readURL(this);
     $('#uploading_form').ajaxForm({
         type: 'POST',
         url: MyNameSpace.config.base_url + 'settings/upload_img',

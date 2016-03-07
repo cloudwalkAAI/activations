@@ -520,3 +520,22 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	border-bottom: 0px solid #2a92db;
 	padding-left: 28px;
 }
+
+.img-cropper .uploadArea{
+	position: absolute;
+    bottom: 1px;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.4);
+    z-index: 1;
+    height: 31%;
+}
+
+.enumstyle.sub{
+	margin-top: -8px;
+}
+
+.enumstyle{
+	color:#9cc2d5;
+	font-family: montserratLight;
+}
