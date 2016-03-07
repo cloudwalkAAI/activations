@@ -70,7 +70,7 @@ if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('ses
                             <tr>
                                 <td>'.$str_name.'</td>
                                 <td>'.$row->date.'</td>
-                                <td>'.$row->date.'</td>
+                                <td>'.$row->endd.'</td>
                                 <td>'.$row->data.'</td>
                             </tr>
                             ';

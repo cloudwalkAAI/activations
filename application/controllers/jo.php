@@ -422,12 +422,18 @@ class Jo extends CI_Controller{
     }
 
     function submit_date_calendar(){
-        $result = $this->insert_model->creative_update_calendar( $this->input->post() );
-        if( $result != 'exist' ){
-            echo $this->get_model->getlastinsertdate( $result );
+        // $result = $this->insert_model->creative_update_calendar( $this->input->post() );
+        $result = $this->get_model->check_date( $this->input->post( 'creative_start' ) );
+        if ($result == 'notTaken' ) {
+            echo $this->insert_model->creative_update_calendar( $this->input->post() );
         }else{
             echo $result;
         }
+        // if( $result != 'exist' ){
+        //     echo $this->get_model->getlastinsertdate( $result );
+        // }else{
+        //     echo $result;
+        // }
     }
 
     function search_ae(){
