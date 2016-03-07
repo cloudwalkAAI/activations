@@ -1630,14 +1630,16 @@ $(document).ready(function() {
     var x = 1; //initlal text box count
     $(add_button_c).click(function(e){ //on add input button click
         e.preventDefault();
-        if(x < max_fields_c){ //max input box allowed
-            x++; //text box increment
-            $(wrapper_c).append('<div><hr>' +
-                '<div class="row"><div class="small-12 columns"><input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_contactnumber" name="inp_contactnumber[]"  placeholder="Contact Number"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birthdate"></div></div><div class="row"><div class="small-12 columns"><input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address"></div></div>' +
-                '<a href="#" class="remove_field">Remove</a>' +
-                '</div>'); //add input box
-            reload_date_picker();
-        }
+		if(x < max_fields_c){ //max input box allowed
+			x++; //text box increment
+			$(wrapper_c).append('<div><hr>' +
+				'<div class=""><div class="small-12 columns"><label for="inp_contactperson">Contact Person<input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_contactnumber">Contact Number<input type="text" id="inp_contactnumber" class="inp_contactnumber" name="inp_contactnumber[]"  placeholder="Contact Number"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_birthday">Birth Date<input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birth Date"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_email">Email Address<input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address"></label></div></div>' +
+				'<a href="#" class="remove_field">Remove</a>' +
+				'</div>'); //add input box
+			reload_date_picker();
+		}
+	   $(".inp_contactnumber").mask("(0999) 999-9999");
+        
     });
 
     $(wrapper_c).on("click",".remove_field", function(e){ //user click on remove text

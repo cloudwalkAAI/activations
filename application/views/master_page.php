@@ -103,7 +103,7 @@
 <script src="<?=base_url('assets/js/datepicker/jquery.datetimepicker.full.min.js');?>"></script>
 <script>
 	jQuery(function($){
-	   $("#inp_contactnumber").mask("(0999) 999-9999");
+	   $(".inp_contactnumber").mask("(0999) 999-9999");
 	});
     jQuery.datetimepicker.setLocale('en');
 

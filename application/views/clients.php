@@ -32,7 +32,7 @@
 								</div>
 								<div class="large-12 columns">
 									<label for="inp_contactnumber">Contact Number
-										<input type="text" id="inp_contactnumber" name="inp_contactnumber[]" placeholder="Contact Number" />
+										<input type="text" id="inp_contactnumber" class="inp_contactnumber" name="inp_contactnumber[]" placeholder="Contact Number" />
 									</label>
 								</div>
 								<div class="large-12 columns">

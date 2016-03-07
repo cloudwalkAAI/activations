@@ -475,6 +475,7 @@ thead tr > th { cursor: pointer; cursor: hand; }
     padding: 33px 8px;
     margin: 0;
 	background: #fff;
+	height: auto;
 }
 
 .bar_color1{
