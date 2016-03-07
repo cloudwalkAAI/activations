@@ -66,7 +66,7 @@
 				</div>
 				<form id="share_jo_ae" action="" method="post">
 					<input type="hidden" name="share_joid" id="share_joid" value="<?= $info->jo_number ?>">
-					<input type="text" name="inp_ae_id" id="inp_ae_id" placeholder="Input Admin ID">
+					<input type="text" name="inp_ae_id" id="inp_ae_id" placeholder="Tag AE">
 					<input type="text" id="temp_name" disabled>
 					<button id="btn_share_jo" class="button radius twidth">Share It</button>
 				</form>
@@ -78,15 +78,25 @@
 		</div>
 	</div>
 	<div class="large-9 columns jo-maincontent">
-		<div class="row">
-			<div class="large-12 columns">
-				<a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
-			</div>
-		</div>
-		<div id="modal_pdf_selector" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-			<input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
-			<a href="<?=base_url('jo/mpdf?jid='.$this->input->get('a'))?>" id="pdf-btn" target="_blank" href="">Save and Print PDF</a>
-		</div>
+        <div class="row">
+            <a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
+        </div>
+        <div id="modal_pdf_selector" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+            <h2 id="modalTitle">Select Document to Archive</h2>
+            <form id="form_archive" action="" method="post">
+                <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
+                <input type="hidden" id="jno" name="jno" value="<?= $info->jo_number ?>">
+                <label for="pdf_ex_jo"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
+                <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom"> Minutes of the Meeting</label>
+                <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed"> Event Details</label>
+                <label for="pdf_ex_proj_att"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_proj_att" value="pjat"> Project Attachments</label>
+                <label for="pdf_ex_setup"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_setup" value="setup"> Setup Details</label>
+                <label for="pdf_ex_mvrf"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mvrf" value="mvrf"> Manpower and vehicle request form</label>
+                <label for="pdf_ex_oth"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_oth" value="other"> Others</label>
+                <input type="button" class="button tiny" value="Export" id="btn_export">
+            </form>
+
+        </div>
 		<ul class="accordion" data-accordion>
 			<li class="accordion-navigation acd">
 				<a href="#panel1a">Minutes of the Meeting<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>

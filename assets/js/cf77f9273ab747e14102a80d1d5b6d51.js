@@ -1586,22 +1586,22 @@ $('#btn_save_client').on('click', function() {
             }
         },
         success: function (response) {
-
-            $("#client_table").prepend( response );
-			$('#inp_companyname').val('');
-			$('#inp_contactperson').val('');
-			$('#inp_contactnumber').val('');
-			$('#inp_birthday').val('');
-			$('#inp_email').val('');
-			$('#joModal').foundation('reveal', 'close');
-            client_reload();
-            $('#inp_companyname').val('');
-            $('#inp_contactperson').val('');
-            $('#inp_contactnumber').val('');
-            $('#inp_birthday').val('');
-            $('#inp_email').val('');
-            $('.cls_brand').val('');
-            $('#joModal').foundation( 'reveal', 'close' );
+            location.reload();
+            //$("#client_table").prepend( response );
+            //$('#inp_companyname').val('');
+            //$('#inp_contactperson').val('');
+            //$('#inp_contactnumber').val('');
+            //$('#inp_birthday').val('');
+            //$('#inp_email').val('');
+            //$('#joModal').foundation('reveal', 'close');
+            //client_reload();
+            //$('#inp_companyname').val('');
+            //$('#inp_contactperson').val('');
+            //$('#inp_contactnumber').val('');
+            //$('#inp_birthday').val('');
+            //$('#inp_email').val('');
+            //$('.cls_brand').val('');
+            //$('#joModal').foundation( 'reveal', 'close' );
         }
 
     }).submit();
