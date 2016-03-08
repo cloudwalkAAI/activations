@@ -14,7 +14,7 @@
             </div>
             <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
-		<div id="alert_box_profile" data-alert class="alert-box success radius hide-normal">
+		<div id="alert_box_profile" data-alert class="alert-box warning radius hide-normal">
 			Special characters are not allowed
 			<a href="#" class="close">&times;</a>
 		</div>	
