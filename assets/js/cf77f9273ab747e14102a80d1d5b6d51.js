@@ -259,7 +259,7 @@ $('#emp_form').ajaxForm({
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if($.trim( $('#inp_email').val() ) == '' ){
-            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("warning");
             $("#alert_box_emp").removeClass("alert");
             $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
@@ -268,7 +268,7 @@ $('#emp_form').ajaxForm({
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_lastname').val() ) == '' ){
-            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("warning");
             $("#alert_box_emp").removeClass("alert");
             $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
@@ -277,7 +277,7 @@ $('#emp_form').ajaxForm({
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $.trim( $('#inp_midname').val() ) == '' ){
-            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("warning");
             $("#alert_box_emp").removeClass("alert");
             $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
@@ -286,7 +286,7 @@ $('#emp_form').ajaxForm({
             $('#btn_add_emp').prop('disabled', false);
             return false;
         }else if( $.trim( $('#datepicker_emp').val() ) == '' || $('#datepicker_emp').val() == '00-00-0000' ){
-            $("#alert_box_emp").removeClass("success");
+            $("#alert_box_emp").removeClass("warning");
             $("#alert_box_emp").removeClass("alert");
             $("#alert_box_emp").addClass("warning");
             $('#alert_box_emp').text();
@@ -312,7 +312,12 @@ $('#emp_form').ajaxForm({
             $('#alert_box_emp_box').show();
 
         }else{
-            window.location.href = MyNameSpace.config.base_url+'emp';
+			$('#alert_box_progress').html('Successfully Saved');
+			$('#alert_box_progress').show();
+			setTimeout(function(){
+				$('#alert_box_progress').hide();
+				window.location.href = MyNameSpace.config.base_url+'emp';
+			},3000);
 			// alert(MyNameSpace.config.base_url+'emp');
         }
     }
@@ -1123,7 +1128,7 @@ $('#form_client_u').ajaxForm({
         }
     },
     success:  function(response){
-        //////console.log(response);
+        //console.log(response);
         if( response > 0 ){
             $("#alert_box_client").removeClass("alert");
             $("#alert_box_client").addClass("warning");

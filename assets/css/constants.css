@@ -412,8 +412,11 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	max-width: 15px;
 }
 
-.jorightlist li a{
-	
+.jorightlist li a.edit-btn{
+	width:15px;
+	height:15px;
+	background:url(../img/logos/Edit.png);
+	background-size: cover;
 }
 
 .jorightlist li{
@@ -446,6 +449,15 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	font-family:montserratSemiBold;
 	color:#2a91dc;
 	margin: 0;
+}
+
+.jolist:hover h3, .jolist:hover p,.jolist:hover h6, .jolist:hover h5 a{
+	color:#fff;
+}
+
+.jolist:hover{
+	background: #F57E20;
+	cursor:pointer;
 }
 
 .jolist{
@@ -558,4 +570,48 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	color:#696969;
 	font-family: montserratLight;
 	font-size: 0.7em;
+}
+
+.ref-page ul li p span a img{
+	width: 30px;
+    margin-top: -8px;
+    margin-right: 7px;
+}
+
+.ref-page ul li p span a{
+	font-size: 1.4em;
+	font-family: montserratLight;
+    color: #9cc1d3;
+}
+
+.ref-page ul li p span.ref-name{
+	width: 160px;
+    overflow: hidden;
+    display: inline-block;
+    margin: 0px;
+}
+
+.ref-page ul li p span{
+	margin-left: 13px;
+}
+
+.ref-page ul li p{
+	font-family: montserratLight;
+	color:#696969;
+	font-size: 1.2em;
+	margin-bottom: 12px;
+}
+
+.ref-page ul li{
+	border-bottom: 1px solid #e1e1e1;
+	margin-bottom: 20px;
+}
+
+.ref-page ul{
+	
+}
+
+.ref-page h3{
+	font-family: montserratSemiBold;
+	color:#2a92db;
 }

@@ -104,7 +104,7 @@
                         $c = $row_company->company_name;
                     }
             ?>
-                    <li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>">
+                    <li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" onclick="window.location.href='<?= base_url('jo/in?a=').$row['jo_id']; ?>';">
                         <div class="small-7 medium-8 large-8 columns" style="padding: 50px;">
                             <h3><?php echo $row['project_name']; ?></h3>
                             <h5><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h5>

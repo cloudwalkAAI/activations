@@ -19,6 +19,7 @@ class Insert_model extends CI_Model
         $config['smtp_user'] = 'roel.r@cloudwalkdigital.com';
         // SMTP Password like (abc***##)
         $config['smtp_pass'] = 'cloud@2468';
+        $config['mailtype'] = 'html';
         // Load email library and passing configured values to email library
         $this->load->library('email', $config);
     }
@@ -368,7 +369,7 @@ class Insert_model extends CI_Model
         $data = array(
             'jo_id'         => $calendar['joid_task'],
             'assigned'      => $calendar['start'],
-            'assigned_by'   => $this->session->userdata('sur_name').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('middle_name'),
+            'assigned_by'   => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('sess_middlename'),
             'deadline'      => $calendar['deadline'],
             'description'   => $calendar['description'],
             'dept_id'       => $calendar['dept_id'],

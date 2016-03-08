@@ -1,4 +1,4 @@
-<li class="jolist jo-item-<?php echo $row['id']; ?>" alt="<?php echo $row['id']; ?>">
+<li class="jolist jo-item-<?php echo $row['id']; ?>" alt="<?php echo $row['id']; ?>" onclick="window.location.href='<?= base_url('emp/edit/'.$row['id']) ?>';">
 	<div class="small-1 medium-2 large-2 columns text-center" style="padding-top: 35px;">
 		<div class="img-cropper">
 			<img class="img-responsive" src="<?= base_url( 'assets/img/profile/'.$row['img_loc'] ) ?>" onError="this.onerror=null;this.src='<?= base_url( 'assets/img/profile/default.jpg' ) ?>';" alt="">		
@@ -12,7 +12,7 @@
 	</div>
 	<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">
 		<ul class="inline-list jorightlist right">
-			<li><a href="<?= base_url('emp/edit/'.$row['id']) ?>"><img src="<?php echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
+			<li><a class="edit-btn" href="<?= base_url('emp/edit/'.$row['id']) ?>"></a></li>
 			<!--<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Delete.png');?>"/></a></li>-->
 		</ul>
 		<div class="large-12 columns text-right" style="padding-right: 30px;">
