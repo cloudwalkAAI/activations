@@ -312,13 +312,12 @@ $('#emp_form').ajaxForm({
             $('#alert_box_emp_box').show();
 
         }else{
-            $('#alert_box_progress').html('Saved Successfully.');
-            $('#alert_box_progress').show();
-            setTimeout(function(){
-                $('#alert_box_progress').hide();
-                window.location.href = MyNameSpace.config.base_url+'emp';
-            },3000);
-            // alert(MyNameSpace.config.base_url+'emp');
+			$('#alert_box_progress').html('Saved Successfully.');
+			$('#alert_box_progress').show();
+			setTimeout(function(){
+				$('#alert_box_progress').hide();
+				window.location.href = MyNameSpace.config.base_url+'emp';
+			},3000);
         }
     }
 });
@@ -432,7 +431,11 @@ $('#emp_form_up').ajaxForm({
 
         setTimeout(function(){
             $('#alert_box_emp_success').hide();
+<<<<<<< HEAD
             window.location.href = MyNameSpace.config.base_url+'emp';
+=======
+			window.location.href = MyNameSpace.config.base_url+'emp';
+>>>>>>> refs/remotes/origin/Henry-Branch
         },3000);
 
         // $('#alert_box_emp_success').val();		
