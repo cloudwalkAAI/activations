@@ -1128,7 +1128,7 @@ $('#form_client_u').ajaxForm({
         }
     },
     success:  function(response){
-        //////console.log(response);
+        //console.log(response);
         if( response > 0 ){
             $("#alert_box_client").removeClass("alert");
             $("#alert_box_client").addClass("warning");
