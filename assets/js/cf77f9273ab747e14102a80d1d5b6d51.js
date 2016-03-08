@@ -431,11 +431,7 @@ $('#emp_form_up').ajaxForm({
 
         setTimeout(function(){
             $('#alert_box_emp_success').hide();
-<<<<<<< HEAD
-            window.location.href = MyNameSpace.config.base_url+'emp';
-=======
 			window.location.href = MyNameSpace.config.base_url+'emp';
->>>>>>> refs/remotes/origin/Henry-Branch
         },3000);
 
         // $('#alert_box_emp_success').val();		
