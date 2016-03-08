@@ -23,15 +23,15 @@ class Cal_model extends CI_Model {
            {heading_row_end}</tr>{/heading_row_end}
 
            {week_row_start}<tr>{/week_row_start}
-           {week_day_cell}<td>{week_day}</td>{/week_day_cell}
+           {week_day_cell}<td style="color: #a8a9ad;">{week_day}</td>{/week_day_cell}
            {week_row_end}</tr>{/week_row_end}
 
            {cal_row_start}<tr class="days">{/cal_row_start}
            {cal_cell_start}<td class="day">{/cal_cell_start}
 
            {cal_cell_content}
-               <div class="day_num" style="background-color:#f27f22;color:#fff;">{day}</div>
-               <div class="content" style="background-color:#f27f22;height: 75%;color:#fff;">{content}</div>
+               <div class="day_num" >{day}</div>
+               <div class="content" style="height: 75%;color:#f27f22;">{content}</div>
            {/cal_cell_content}
                {cal_cell_content_today}
                <div class="day_num highlight">{day}</div>
@@ -49,7 +49,6 @@ class Cal_model extends CI_Model {
 
            {table_close}</table>{/table_close}
            ';
-
 
     }
 
