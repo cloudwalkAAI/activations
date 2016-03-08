@@ -4,6 +4,8 @@
     $md = array();
     $md = json_decode($mom_details);
 
+    $info = json_decode($jo_details);
+
     $shared_array = array();
     $this->db->select( 'shared_to, emp_id' );
     $this->db->from( 'job_order_list' );
