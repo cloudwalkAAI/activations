@@ -19,6 +19,7 @@ class Insert_model extends CI_Model
         $config['smtp_user'] = 'roel.r@cloudwalkdigital.com';
         // SMTP Password like (abc***##)
         $config['smtp_pass'] = 'cloud@2468';
+        $config['mailtype'] = 'html';
         // Load email library and passing configured values to email library
         $this->load->library('email', $config);
     }
