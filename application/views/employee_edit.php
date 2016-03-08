@@ -5,18 +5,18 @@
 ?>
 <div class="large-11 columns large-centered emp_edit" style="box-shadow: 0px 0px 8px 1px #d7d7d7;margin-top: 16px;border-radius: 20px;padding-top: 19px;">
 	<div class="large-12 columns">
-		<div id="alert_box_emp" data-alert class="alert-box success radius hide-normal">
+		<div id="alert_box_emp" data-alert class="alert-box warning radius hide-normal">
 			Special characters are not allowed
 			<a href="#" class="close">&times;</a>
 		</div>
 
-		<div id="alert_box_emp_box" data-alert class="alert-box success radius hide-normal">
+		<div id="alert_box_emp_box" data-alert class="alert-box warning radius hide-normal">
 			Special characters are not allowed
 			<a href="#" class="close">&times;</a>
 		</div>
 
-		<div id="alert_box_progress" data-alert class="alert-box success radius hide-normal">
-			Please Wait...
+		<div id="alert_box_progress" data-alert class="alert-box warning radius hide-normal">
+			Successfully Saved
 		</div>
 	</div>
 	<div class="large-4 columns">	
@@ -159,7 +159,7 @@
 						}
 					?>
 					<option value="hired">Hired</option>
-					<option value="evaluation">Evaluation</option>
+					<option value="evaluation">On-Probation</option>
 				</select>
 			</label>			
 		</div>	
