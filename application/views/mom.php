@@ -22,22 +22,15 @@
     $empid = $this->session->userdata('sess_id');
 
     if( isset( $shared_array ) ){
-//        foreach($shared_array as $empid){
-//            $str_sess_id = ;
-//            if ( $empid == $this->session->userdata('sess_id') ) {
-            if ( in_array($empid, $shared_array, true) ) {
-                print_r($shared_array);
-                print_r($this->session->userdata('sess_id'));
-                $str_display = 'style="display:block;"';
-                $str_disa = '';
-                return false;
-            }else{
-                $str_display = 'style="display:none;"';
-                $str_disa = 'disabled';
-            }
-//        }
+        if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( $this->session->userdata('sess_id') == $did ) ) {
+            $str_display = 'style="display:block;"';
+            $str_disa = '';
+        }else{
+            $str_display = 'style="display:none;"';
+            $str_disa = 'disabled';
+        }
     }else{
-        if ( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+        if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) ) {
             $str_display = 'style="display:block;"';
             $str_disa = '';
         }else{
