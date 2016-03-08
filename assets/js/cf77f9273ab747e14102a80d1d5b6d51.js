@@ -312,7 +312,7 @@ $('#emp_form').ajaxForm({
             $('#alert_box_emp_box').show();
 
         }else{
-			$('#alert_box_progress').html('Successfully Saved');
+			$('#alert_box_progress').html('Saved Successfully.');
 			$('#alert_box_progress').show();
 			setTimeout(function(){
 				$('#alert_box_progress').hide();
@@ -423,19 +423,19 @@ $('#emp_form_up').ajaxForm({
             // // $(value).appendTo("#emp_table > tbody");
         // });
         //alert_box_emp_success
-        // $("#alert_box_emp_success").removeClass("success");
-        // $("#alert_box_emp_success").removeClass("alert");
-        // $("#alert_box_emp_success").addClass("warning");
-        // $('#alert_box_emp_success').text();
-        // $('#alert_box_emp_success').text("Update success!");
-        // $('#alert_box_emp_success').show();
+        $("#alert_box_emp_success").removeClass("success");
+        $("#alert_box_emp_success").removeClass("alert");
+        $("#alert_box_emp_success").addClass("warning");
+        $('#alert_box_emp_success').text();
+        $('#alert_box_emp_success').text("Saved Successfully.");
+        $('#alert_box_emp_success').show();
 
-        // setTimeout(function(){
-            // $('#alert_box_emp_success').hide();
-        // },3000);
+        setTimeout(function(){
+            $('#alert_box_emp_success').hide();
+			window.location.href = MyNameSpace.config.base_url+'emp';
+        },3000);
 
-        // $('#alert_box_emp_success').val();
-		window.location.href = MyNameSpace.config.base_url+'emp';
+        // $('#alert_box_emp_success').val();		
         // $('#empModalupdate').foundation( 'reveal', 'open' );
         // $('#btn_add_emp_u').prop('disabled', false);
     }
