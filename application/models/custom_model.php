@@ -54,6 +54,8 @@ class Custom_model extends CI_Model
     }
 
     function upd_client( $a ){
+        $int_rows = 0;
+
         $data = array(
             'company_name'      => $a['inp_companyname_u'],
             'contact_person'    => $a['inp_contactperson_u'],
@@ -65,13 +67,15 @@ class Custom_model extends CI_Model
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update( 'clients', $data );
 
+        $int_rows = $this->db->affected_rows();
+
         $data = array(
-            'brand_name'             => implode(',',$a['ta_brand']),
+            'brand_name' => implode(',',$a['ta_brand']),
         );
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update('brand', $data);
 
-        return $this->db->affected_rows();
+        return $int_rows;
     }
 
     function update_info( $a ){

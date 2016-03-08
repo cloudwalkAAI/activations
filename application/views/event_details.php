@@ -16,23 +16,23 @@
         }
     }
 
-    if( isset( $shared_array ) ){
-        if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) ) {
-            $str_display = 'style="display:block;"';
-            $str_disa = '';
-        }else{
-            $str_display = 'style="display:none;"';
-            $str_disa = 'disabled';
-        }
+if( isset( $shared_array ) ){
+    if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( $this->session->userdata('sess_id') == $did ) ) {
+        $str_display = 'style="display:block;"';
+        $str_disa = '';
     }else{
-        if ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) {
-            $str_display = 'style="display:block;"';
-            $str_disa = '';
-        }else{
-            $str_display = 'style="display:none;"';
-            $str_disa = 'disabled';
-        }
+        $str_display = 'style="display:none;"';
+        $str_disa = 'disabled';
     }
+}else{
+    if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+        $str_display = 'style="display:block;"';
+        $str_disa = '';
+    }else{
+        $str_display = 'style="display:none;"';
+        $str_disa = 'disabled';
+    }
+}
 ?>
 
 <form id="event_details_form" action="" method="post" data-abide>
