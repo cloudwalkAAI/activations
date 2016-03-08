@@ -122,11 +122,14 @@
         format:'Y/d/m h:i:s'
     });
 
-    $(document).ready(function(){
-        $('.calendar .day').click(function(){
+    <?php
+    if( $this->session->userdata('sess_dept')== 10 && $this->session->userdata('sess_post')== 1 ) {
+    ?>
+    $(document).ready(function () {
+        $('.calendar .day').click(function () {
             var day_num = $(this).find('.day_num').html();
             var day_data = prompt('Enter details');
-            if (day_data != null){
+            if (day_data != null) {
 
                 $.ajax({
                     url: window.location,
@@ -135,13 +138,18 @@
                         day: day_num,
                         data: day_data
                     },
-                    success: function(msg){
+                    success: function (msg) {
                         location.reload();
                     }
                 });
             }
         });
     });
+
+    <?php
+   }
+ ?>
+    
 
 </script>
 
