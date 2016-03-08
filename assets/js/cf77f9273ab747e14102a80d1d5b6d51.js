@@ -57,8 +57,8 @@ $('#inp_client_edit').on('change',function(){
             $.each( json, function( key, value ) {
                 $('#inp_brand_edit')
                     .append($("<option></option>")
-                    .attr("value", value)
-                    .text(value));
+                        .attr("value", value)
+                        .text(value));
             });
         }
     });
@@ -78,38 +78,38 @@ $('#inp_client').on('change',function(){
             $.each( arr, function( key, value ) {
                 $('#inp_brand')
                     .append($("<option></option>")
-                    .attr("value", value)
-                    .text(value));
+                        .attr("value", value)
+                        .text(value));
             });
         }
     });
 });
 $('#btn_save_jo_edit').on('click',function(){
-	var dataString = "joid="+$();
-	$.ajax({
-		type: "POST",
-		url: MyNameSpace.config.base_url +'jo/get_jo',
-		data: dataString,
-		success: function (response) {		
-			$('#joEditModal').foundation( 'reveal', 'close' );
-		}
-	});
+    var dataString = "joid="+$();
+    $.ajax({
+        type: "POST",
+        url: MyNameSpace.config.base_url +'jo/get_jo',
+        data: dataString,
+        success: function (response) {
+            $('#joEditModal').foundation( 'reveal', 'close' );
+        }
+    });
 });
 function getJoId(x){
-	var parent = $(x).parents(".jolist");
-	var joid = parent.attr("alt");
-	$("#joid").val(joid);
-	var dataString = "joid="+joid;
-	$('#joEditModal').foundation( 'reveal', 'open' );
-	$.ajax({
-		type: "POST",
-		url: MyNameSpace.config.base_url +'jo/get_jo',
-		data: dataString,
-		success: function (response) {
-			$("#contentJoEdit").empty();
-			$("#contentJoEdit").html(response);
-		}
-	});
+    var parent = $(x).parents(".jolist");
+    var joid = parent.attr("alt");
+    $("#joid").val(joid);
+    var dataString = "joid="+joid;
+    $('#joEditModal').foundation( 'reveal', 'open' );
+    $.ajax({
+        type: "POST",
+        url: MyNameSpace.config.base_url +'jo/get_jo',
+        data: dataString,
+        success: function (response) {
+            $("#contentJoEdit").empty();
+            $("#contentJoEdit").html(response);
+        }
+    });
 }
 
 $('#form_jo').ajaxForm({
@@ -167,30 +167,30 @@ $('#form_jo').ajaxForm({
         $('#inp_client').val('0');
         $('label#hd').hide();
         $('#btn_save_jo').prop('disabled', false);
-		var lidata = '<li class="jolist">'+
-				'<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">' +
-					'<h3>'+json.project_name+'</h3>' +
-					'<h5><a href="'+MyNameSpace.config.base_url+'jo/in?a='+json.jo_id+'">JO NO.'+json.jo_number+'</a></h5>'+
-					'<h6>'+json.date_created+'</h6>'+					
-				'</div>'+
-				'<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">'+
-					'<ul class="inline-list jorightlist right">'+
-						'<li><a href="#"><img src="'+MyNameSpace.config.base_url+'assets/img/logos/Edit.png" /></a></li>'+						
-					'</ul>'+
-					'<div class="large-12 columns text-right" style="padding-right: 30px;">'+
-						'<p style="margin-top: 10px;">'+json.project_type+'</p>'+
-						'<p>'+json.client_company_name+'</p>'+
-						'<p>'+json.brand+'</p>'+
-						'<p>DO: '+json.do_contract_no+'</p>'+
-						'<p>Billed: '+json.billed_date+'</p>'+
-						'<p>Paid: '+json.paid_date+'</p>'+
-					'</div>'+
-				'</div>'+
-				'<div class="clearfix"></div>'+
-			'</li>';
-		
-		$(lidata).appendTo("#jo_table_list");
-		window.location.href = MyNameSpace.config.base_url + "jo";
+        var lidata = '<li class="jolist">'+
+            '<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">' +
+            '<h3>'+json.project_name+'</h3>' +
+            '<h5><a href="'+MyNameSpace.config.base_url+'jo/in?a='+json.jo_id+'">JO NO.'+json.jo_number+'</a></h5>'+
+            '<h6>'+json.date_created+'</h6>'+
+            '</div>'+
+            '<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">'+
+            '<ul class="inline-list jorightlist right">'+
+            '<li><a href="#"><img src="'+MyNameSpace.config.base_url+'assets/img/logos/Edit.png" /></a></li>'+
+            '</ul>'+
+            '<div class="large-12 columns text-right" style="padding-right: 30px;">'+
+            '<p style="margin-top: 10px;">'+json.project_type+'</p>'+
+            '<p>'+json.client_company_name+'</p>'+
+            '<p>'+json.brand+'</p>'+
+            '<p>DO: '+json.do_contract_no+'</p>'+
+            '<p>Billed: '+json.billed_date+'</p>'+
+            '<p>Paid: '+json.paid_date+'</p>'+
+            '</div>'+
+            '</div>'+
+            '<div class="clearfix"></div>'+
+            '</li>';
+
+        $(lidata).appendTo("#jo_table_list");
+        window.location.href = MyNameSpace.config.base_url + "jo";
     }
 
 });
@@ -301,7 +301,7 @@ $('#emp_form').ajaxForm({
     },
     complete: function() { $('#alert_box_progress').hide();},
     success:  function(response){
-		
+
         if( response == 'exist' ){
 
             $("#alert_box_emp_box").removeClass("success");
@@ -312,13 +312,13 @@ $('#emp_form').ajaxForm({
             $('#alert_box_emp_box').show();
 
         }else{
-			$('#alert_box_progress').html('Successfully Saved');
-			$('#alert_box_progress').show();
-			setTimeout(function(){
-				$('#alert_box_progress').hide();
-				window.location.href = MyNameSpace.config.base_url+'emp';
-			},3000);
-			// alert(MyNameSpace.config.base_url+'emp');
+            $('#alert_box_progress').html('Saved Successfully.');
+            $('#alert_box_progress').show();
+            setTimeout(function(){
+                $('#alert_box_progress').hide();
+                window.location.href = MyNameSpace.config.base_url+'emp';
+            },3000);
+            // alert(MyNameSpace.config.base_url+'emp');
         }
     }
 });
@@ -420,22 +420,22 @@ $('#emp_form_up').ajaxForm({
         // $("#tbdy_emp").empty();
 
         // $.each( json, function( key, value ) {
-            // // $(value).appendTo("#emp_table > tbody");
+        // // $(value).appendTo("#emp_table > tbody");
         // });
         //alert_box_emp_success
-        // $("#alert_box_emp_success").removeClass("success");
-        // $("#alert_box_emp_success").removeClass("alert");
-        // $("#alert_box_emp_success").addClass("warning");
-        // $('#alert_box_emp_success').text();
-        // $('#alert_box_emp_success').text("Update success!");
-        // $('#alert_box_emp_success').show();
+        $("#alert_box_emp_success").removeClass("success");
+        $("#alert_box_emp_success").removeClass("alert");
+        $("#alert_box_emp_success").addClass("warning");
+        $('#alert_box_emp_success').text();
+        $('#alert_box_emp_success').text("Saved Successfully.");
+        $('#alert_box_emp_success').show();
 
-        // setTimeout(function(){
-            // $('#alert_box_emp_success').hide();
-        // },3000);
+        setTimeout(function(){
+            $('#alert_box_emp_success').hide();
+            window.location.href = MyNameSpace.config.base_url+'emp';
+        },3000);
 
-        // $('#alert_box_emp_success').val();
-		window.location.href = MyNameSpace.config.base_url+'emp';
+        // $('#alert_box_emp_success').val();		
         // $('#empModalupdate').foundation( 'reveal', 'open' );
         // $('#btn_add_emp_u').prop('disabled', false);
     }
@@ -703,8 +703,14 @@ $('#attach_form').ajaxForm({
     url: MyNameSpace.config.base_url+'jo/attached',
     beforeSubmit: function(arr, jform, option){
         $('#btn_add_attach').prop('disabled', true);
+        if( $('#sel_reference').val() == 0 ){
+            $('#ref_al').show();
+            $('#btn_add_attach').prop('disabled', false);
+            return false;
+        }
     },
     uploadProgress: function (event, position, total, percentComplete){
+        $('#ref_al').hide();
         $("#progress-bar").width(percentComplete + '%');
         $("#progress-bar").html('<div id="progress-status">' + percentComplete +' %</div>')
     },
@@ -717,17 +723,17 @@ $('#attach_form').ajaxForm({
             $("#alert_box_attach").addClass("warning");
             $('#alert_box_attach').hide();
             $('#alert_box_attach_ok').show();
-			
-			$('#inp_file_attachments').val('');
-			$("#sel_reference").prop('selectedIndex', 0);
-			
-			setTimeout(function(){
-				$('#attachModal').foundation('reveal', 'close');
-				$('#alert_box_attach_ok').hide();
+
+            $('#inp_file_attachments').val('');
+            $("#sel_reference").prop('selectedIndex', 0);
+
+            setTimeout(function(){
+                $('#attachModal').foundation('reveal', 'close');
+                $('#alert_box_attach_ok').hide();
                 setTimeout(function(){
                     location.reload();
                 }, 2000);
-			}, 3000);
+            }, 3000);
         }else{
             $('#alert_box_attach_ok').hide();
             $('#alert_box_attach').show();
@@ -1315,7 +1321,7 @@ function load_click_emp(){
 load_click_emp();
 
 $('#upload_file').on('change', function(){
-	readURL(this);
+    readURL(this);
     $('#uploading_form').ajaxForm({
         type: 'POST',
         url: MyNameSpace.config.base_url + 'settings/upload_img',
@@ -1446,7 +1452,7 @@ $('#inp_search_client').keyup(function() {
 var $rows_jolist = $('#jo_table_list li');
 $('#search_jolist').keyup(function() {
     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-	
+
     $rows_jolist.show().filter(function() {
         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
         return !~text.indexOf(val);
@@ -1524,7 +1530,7 @@ $('#btn_save_client').on('click', function() {
         url: MyNameSpace.config.base_url + 'jo/add_client',
         beforeSubmit: function (arr, jform, option) {
             $('#btn_save_client').prop('disabled', true);
-			$('#alert_box_client_s').hide();
+            $('#alert_box_client_s').hide();
             if( $.trim( $('#inp_companyname').val() ) == '' ){
                 $("#alert_box_client_s").removeClass("success");
                 $("#alert_box_client_s").addClass("warning");
@@ -1635,16 +1641,16 @@ $(document).ready(function() {
     var x = 1; //initlal text box count
     $(add_button_c).click(function(e){ //on add input button click
         e.preventDefault();
-		if(x < max_fields_c){ //max input box allowed
-			x++; //text box increment
-			$(wrapper_c).append('<div><hr>' +
-				'<div class=""><div class="small-12 columns"><label for="inp_contactperson">Contact Person<input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_contactnumber">Contact Number<input type="text" id="inp_contactnumber" class="inp_contactnumber" name="inp_contactnumber[]"  placeholder="Contact Number"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_birthday">Birth Date<input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birth Date"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_email">Email Address<input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address"></label></div></div>' +
-				'<a href="#" class="remove_field">Remove</a>' +
-				'</div>'); //add input box
-			reload_date_picker();
-		}
-	   $(".inp_contactnumber").mask("(0999) 999-9999");
-        
+        if(x < max_fields_c){ //max input box allowed
+            x++; //text box increment
+            $(wrapper_c).append('<div><hr>' +
+                '<div class=""><div class="small-12 columns"><label for="inp_contactperson">Contact Person<input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_contactnumber">Contact Number<input type="text" id="inp_contactnumber" class="inp_contactnumber" name="inp_contactnumber[]"  placeholder="Contact Number"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_birthday">Birth Date<input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birth Date"></label></div></div><div class=""><div class="small-12 columns"><label for="inp_email">Email Address<input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address"></label></div></div>' +
+                '<a href="#" class="remove_field">Remove</a>' +
+                '</div>'); //add input box
+            reload_date_picker();
+        }
+        $(".inp_contactnumber").mask("(0999) 999-9999");
+
     });
 
     $(wrapper_c).on("click",".remove_field", function(e){ //user click on remove text
