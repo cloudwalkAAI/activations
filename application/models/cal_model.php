@@ -8,6 +8,7 @@ class Cal_model extends CI_Model {
         $this->conf = array(
             'start_day' => 'monday',
             'show_next_prev' => true,
+            'day_type'     => 'short',
             'next_prev_url' => base_url() . 'home/index'
         );
 
