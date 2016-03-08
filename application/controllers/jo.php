@@ -432,7 +432,7 @@ class Jo extends CI_Controller{
     }
 
     function search_ae(){
-        $query = $this->db->get_where( 'employee_list', array( 'emp_id' => $this->input->post('aeid'), 'department' => 1 ), 1, 0 );
+        $query = $this->db->get_where( 'employee_list', array( 'emp_id' => $this->input->post('aeid'), 'department' => 2 ), 1, 0 );
         if ($query->num_rows() > 0){
             foreach( $query->result() as $row ){
                 echo $row->sur_name.', '.$row->first_name.' '.$row->middle_name;

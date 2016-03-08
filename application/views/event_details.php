@@ -17,7 +17,7 @@
     }
 
     if( isset( $shared_array ) ){
-        if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) ) {
+        if ( in_array( $this->session->userdata('sess_id'), $shared_array ) && ( ( $this->session->userdata('sess_dept') <= 2 ) ) ) {
             $str_display = 'style="display:block;"';
             $str_disa = '';
         }else{
@@ -25,7 +25,7 @@
             $str_disa = 'disabled';
         }
     }else{
-        if ( ( $this->session->userdata('sess_dept') == 1 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+        if ( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) ) {
             $str_display = 'style="display:block;"';
             $str_disa = '';
         }else{
