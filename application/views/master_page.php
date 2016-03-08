@@ -22,7 +22,7 @@
         }
     </script>
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
-    <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>
+    <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>    
     <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
 	<?php
 		if(isset($homepage) && $homepage == true){
@@ -39,7 +39,9 @@
 	?>
 </head>
 <body>
-
+<?php
+	if(isset($homepagess)){
+?>
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -47,8 +49,11 @@
         js = d.createElement(s); js.id = id;
         js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
         fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<?php
+	}
+?>
 <div class="off-canvas-wrap" data-offcanvas>
     <div class="inner-wrap">
 
@@ -73,7 +78,9 @@
 <script src="<?=base_url('assets/js/jquery.form.js');?>"></script>
 <script src="<?=base_url('assets/js/jquery-ui.min.js');?>"></script>
 <script src="<?=base_url('assets/js/cf77f9273ab747e14102a80d1d5b6d51.js');?>"></script>
+<script src="<?=base_url('assets/js/calendar.js');?>"></script>
 <script src="<?=base_url('assets/js/sorttable.js');?>"></script>
+<script src="<?=base_url('assets/js/script.js');?>"></script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.maskedinput.js');?>"></script>
 <script>
     $(document).foundation({
@@ -96,7 +103,7 @@
 <script src="<?=base_url('assets/js/datepicker/jquery.datetimepicker.full.min.js');?>"></script>
 <script>
 	jQuery(function($){
-	   $("#inp_contactnumber").mask("(0999) 999-9999");
+	   $(".inp_contactnumber").mask("(0999) 999-9999");
 	});
     jQuery.datetimepicker.setLocale('en');
 
@@ -105,16 +112,24 @@
         format:'m/d/Y'
     });
 
+    jQuery('#creative_start, #creative_deadline').datetimepicker({
+        timepicker:false,
+        format:'Y-m-j'
+    });
+
     jQuery('#inp_mom_date').datetimepicker({
         timepicker:true,
         format:'Y/d/m h:i:s'
     });
 
-    $(document).ready(function(){
-        $('.calendar .day').click(function(){
+    <?php
+    if( $this->session->userdata('sess_dept')== 10 && $this->session->userdata('sess_post')== 1 ) {
+    ?>
+    $(document).ready(function () {
+        $('.calendar .day').click(function () {
             var day_num = $(this).find('.day_num').html();
             var day_data = prompt('Enter details');
-            if (day_data != null){
+            if (day_data != null) {
 
                 $.ajax({
                     url: window.location,
@@ -123,13 +138,18 @@
                         day: day_num,
                         data: day_data
                     },
-                    success: function(msg){
+                    success: function (msg) {
                         location.reload();
                     }
                 });
             }
         });
     });
+
+    <?php
+   }
+ ?>
+    
 
 </script>
 

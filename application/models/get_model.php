@@ -3,17 +3,21 @@
 class Get_model extends CI_Model
 {
     function get_ae_jo( $empid = '' ){
-        if( $empid == $this->session->userdata('sess_id') ){
-            $this->db->order_by("jo_id","desc");
-            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
-            return $query->result_array();
-        }elseif( $this->session->userdata('sess_dept') != '2' ){
-            $this->db->order_by("jo_id","desc");
-            $query = $this->db->get_where( 'job_order_list' );
-            return $query->result_array();
-        }else{
-            return false;
-        }
+        $this->db->order_by("jo_id","desc"); 
+        $query = $this->db->get( 'job_order_list' );
+        return $query->result_array();
+//        return false;
+//        if( $this->session->userdata('sess_dept') < 2 ){
+//            $this->db->order_by("jo_id","desc");
+//            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
+//            return $query->result_array();
+//        }elseif( $this->session->userdata('sess_dept') != '2' ){
+//            $this->db->order_by("jo_id","desc");
+//            $query = $this->db->get( 'job_order_list' );
+//            return $query->result_array();
+//        }else{
+//            return false;
+//        }
     }
 
     function get_ae_jo_query( $empid, $a, $b){
@@ -58,6 +62,7 @@ class Get_model extends CI_Model
         foreach ($query->result() as $row)
         {
             $jolist_array['jo_id'] = $row->jo_id;
+            $jolist_array['emp_id'] = $row->emp_id;
             $jolist_array['jo_number'] = $row->jo_number;
 
             if( !is_null( $row->do_contract_no )){
@@ -223,7 +228,7 @@ class Get_model extends CI_Model
     function get_employee_full_info( $id ){
 
         $emp_array = array();
-        $this->db->select( 'emp_id, sur_name, first_name, department, position, birth_date, status' );
+        $this->db->select( 'emp_id, sur_name, first_name, department, position, birth_date, status, email, middle_name, role_type, img_loc' );
         $this->db->from('employee_list');
         $this->db->where('id =', $id);
         $query = $this->db->get();
@@ -236,6 +241,10 @@ class Get_model extends CI_Model
             $emp_array['department'] = $this->get_where_departments( $row->department );
             $emp_array['position'] = $this->get_where_positions( $row->position );
             $emp_array['birth_date'] = $row->birth_date;
+            $emp_array['email'] = $row->email;
+            $emp_array['middle_name'] = $row->middle_name;
+            $emp_array['role_type'] = $row->role_type;
+            $emp_array['img_loc'] = $row->img_loc;
 
             $birthDate = explode("/", $row->birth_date);
 
@@ -255,12 +264,13 @@ class Get_model extends CI_Model
 
         $emp_array = array();
 
-        $this->db->select( 'emp_id, role_type, email, middle_name, sur_name, first_name, department, position, birth_date, status, img_loc' );
+        $this->db->select( 'id, emp_id, role_type, email, middle_name, sur_name, first_name, department, position, birth_date, status, img_loc' );
         $this->db->from('employee_list');
         $this->db->where('id =', $id);
         $query = $this->db->get();
 
         foreach ($query->result() as $row) {
+            $emp_array['eeid'] = $row->id;
             $emp_array['eid'] = $row->emp_id;
             $emp_array['role'] = $row->role_type;
             $emp_array['email'] = $row->email;
@@ -602,25 +612,27 @@ class Get_model extends CI_Model
     }
 
     function get_added_client( $client_id ){
-        $this->db->select( 'client_id, company_name, contact_person' );
-        $this->db->from( 'clients' );
+        // $this->db->select( 'client_id, company_name, contact_person' );
+        // $this->db->from( 'clients' );
         $this->db->where( 'client_id', $client_id );
         $this->db->order_by("client_id","desc");
         $this->db->limit(1);
-        $query = $this->db->get();
+        $query = $this->db->get('clients');
         if ($query->num_rows() > 0) {
-            $row = $query->row();
+            $row = $query->row_array();
             if (isset($row)) {
-                echo '<tr><td><a class="load_client" href="#" alt="'.$row->client_id.'">'.str_pad( $row->client_id, 6, "0", STR_PAD_LEFT ).'</a></td><td>'.$row->company_name.'</td><td>'.$row->contact_person.'</td></tr>';
+				$data['row'] = $row;
+				$this->load->view('client_listview',$data);
+                // echo '<tr><td><a class="load_client" href="#" alt="'.$row->client_id.'">'.str_pad( $row->client_id, 6, "0", STR_PAD_LEFT ).'</a></td><td>'.$row->company_name.'</td><td>'.$row->contact_person.'</td></tr>';
             }
         }
     }
 
     function get_load_client_list(){
-        $this->db->select( 'client_id, company_name, contact_person' );
-        $this->db->from( 'clients' );
+        // $this->db->select( 'client_id, company_name, contact_person' );
+        // $this->db->from( 'clients' );
         $this->db->order_by("client_id","desc");
-        $query = $this->db->get();
+        $query = $this->db->get('clients');		
         return $query->result_array();
     }
 
@@ -835,5 +847,30 @@ class Get_model extends CI_Model
             }
 
         }
+    }
+
+    function getlastinsertdate($a){
+        $str_dat='';
+        $query = $this->db->get_where( 'tasks', array( 'task_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+
+                $str_dat= '
+                           <tr>
+                                <td>'.$str_name.'</td>
+                                <td>'.$row->assigned.'</td>
+                                <td>'.$row->deadline.'</td>
+                                <td>'.$row->description.'</td>
+                           </tr>
+                           ';
+            }
+        }
+        echo $str_dat;
+
     }
 }

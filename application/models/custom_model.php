@@ -54,6 +54,8 @@ class Custom_model extends CI_Model
     }
 
     function upd_client( $a ){
+        $int_rows = 0;
+
         $data = array(
             'company_name'      => $a['inp_companyname_u'],
             'contact_person'    => $a['inp_contactperson_u'],
@@ -65,27 +67,29 @@ class Custom_model extends CI_Model
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update( 'clients', $data );
 
+        $int_rows = $this->db->affected_rows();
+
         $data = array(
-            'brand_name'             => implode(',',$a['ta_brand']),
+            'brand_name' => implode(',',$a['ta_brand']),
         );
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update('brand', $data);
 
-        return $this->db->affected_rows();
+        return $int_rows;
     }
 
     function update_info( $a ){
 
         $data_update = array(
-            'role_type'     => $a['sel_role_u'],
-            'first_name'    => $a['inp_firstname_u'],
-            'middle_name'   => $a['inp_midname_u'],
-            'sur_name'      => $a['inp_lastname_u'],
-            'email'         => $a['inp_email_u'],
-            'birth_date'    => $a['datepicker_emp_u'],
-            'department'    => $a['sel_dept_u'],
-            'position'      => $a['sel_pos_u'],
-            'status'        => $a['sel_status_u']
+            'role_type'     => $a['sel_role'],
+            'first_name'    => $a['inp_firstname'],
+            'middle_name'   => $a['inp_midname'],
+            'sur_name'      => $a['inp_lastname'],
+            'email'         => $a['inp_email'],
+            'birth_date'    => $a['datepicker_emp'],
+            'department'    => $a['sel_dept'],
+            'position'      => $a['sel_pos'],
+            'status'        => $a['sel_status']
         );
         $this->db->where('emp_id', $a['uid']);
         $this->db->update('employee_list', $data_update);

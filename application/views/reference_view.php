@@ -1,7 +1,7 @@
 <table class="twidth">
     <tr>
-        <td>Templates</td>
-        <td>References</td>
+        <td><h4>Templates</h4></td>
+        <td><h4>References</h4></td>
     </tr>
     <tr>
         <th>

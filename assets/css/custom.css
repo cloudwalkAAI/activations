@@ -1,3 +1,27 @@
+@font-face {
+    font-family: montserratRegular;
+    src: url(../montserrat/Montserrat-Regular.otf);
+}
+
+@font-face {
+    font-family: montserratBold;
+    src: url(../montserrat/Montserrat-Bold.otf);
+}
+
+@font-face {
+    font-family: montserratSemiBold;
+    src: url(../montserrat/Montserrat-SemiBold.otf);
+}
+
+@font-face {
+    font-family: montserratHairline;
+    src: url(../montserrat/Montserrat-Hairline.otf);
+}
+
+@font-face {
+    font-family: montserratLight;
+    src: url(../montserrat/Montserrat-Light.otf);
+}
 html, body {
     /*background: #6f93a6; /!* For browsers that do not support gradients *!/
     background: -webkit-linear-gradient(right top, #6f93a6, #0f4c83,#bf5c34) !important; /!* For Safari 5.1 to 6.0 *!/
@@ -99,10 +123,11 @@ ul.off-canvas-list li a:hover {
 
 /*calendar*/
 .calendar {
-    font-family: Arial;
+    font-family: montserratRegular;
 }
 table.calendar{
-    margin: auto; border-collapse: collapse;
+    margin: auto;
+    /*border-collapse: collapse;*/
 }
 .calendar .days td {
     width: 80px; height: 80px; padding: 4px;
@@ -111,20 +136,33 @@ table.calendar{
     /*background-color: #def;*/
 }
 .calendar .days td:hover {
-    background-color: #f57e20;
+
+    border-color: #f57e20;
+    /*background-color: #f57e20; */
+    /*-moz-box-shadow: 0 0 10px #ccc;*/
+    /*-webkit-box-shadow: 0 0 10px #ccc;*/
+    /*box-shadow: 0 0 10px #2a92db;*/
+    /*border-color: #2a92db;*/
 }
+
+
 .calendar .highlight {
     font-weight: bold; color: #00f;
 }
 .day_num:hover{
-    color: #fff;
+    /*color: #fff;*/
+
 }
 .day_num{
     font-size: 20px;
     color: #a8a9ad;
 }
 .content{
-    color: #a8a9ad;
+    color: #f57e20;
+
+}
+.content:hover{
+    /*color: #fff;*/
 }
 
 table tr.even, table tr.alt, table tr:nth-of-type(even) {

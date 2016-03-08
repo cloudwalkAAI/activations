@@ -29,7 +29,7 @@
 }
 
 body{
-	overflow:scroll;
+	overflow-y:scroll;
 }
 
 .aaidashboard .tabs-content section ul li{
@@ -80,7 +80,25 @@ body{
 	border: 2px solid #fff;
 }
 
-#joModal #modalTitle,#joEditModal #modalTitle{
+form#form_client .rightside input.cls_brand{
+	margin-bottom: 0px;
+	margin-top: 5px;
+}
+
+form#form_client .rightside label a.remove_field{
+	background: transparent;
+    color: red;
+    float: right;
+	font-size: 0.9em;
+    margin-bottom: 18px;
+}
+
+form#form_client .rightside label a,form#form_client a#btn_save_client{	
+	font-family: montserratSemiBold;
+	font-size: 1.6em;
+}
+
+#joModal #modalTitle,#joEditModal #modalTitle, #myModalClient #modalTitle{
 	font-family: montserratSemiBold;
 	color:#696969;
 	font-size: 1.9em;
@@ -96,23 +114,29 @@ body{
 	border-radius:6px;
 }
 
-#joModal label,#joEditModal label{
+#joModal label,#joEditModal label,.emp_edit label{
 	font-family: montserratLight;
 	color:#696969;
 	font-size: 0.7em;
 }
 
-#joModal input::-moz-placeholder,#joEditModal input::-moz-placeholder{
+#joModal input::-moz-placeholder,#joEditModal input::-moz-placeholder,.emp_edit input::-moz-placeholder,.emp_edit input[type="email"]::-moz-placeholder{
 	color: #a8a9ad;
 	font-family: montserratLight;
 }
 
-#joModal input:-moz-placeholder,#joEditModal input:-moz-placeholder{
+#joModal input:-moz-placeholder,#joEditModal input:-moz-placeholder,.emp_edit input:-moz-placeholder,.emp_edit input[type="email"]:-moz-placeholder{
 	color: #a8a9ad;
 	font-family: montserratLight;
 }
 
-#joModal input::-webkit-input-placeholder,#joModal select,#joEditModal input::-webkit-input-placeholder,#joEditModal select{
+.emp_edit input[type="text"],.emp_edit input[type="email"]{
+	border: 2px solid #d9d9d9;
+	color:#a8a9ad;
+	font-family: montserratLight;
+}
+
+#joModal input::-webkit-input-placeholder,#joModal select,#joEditModal input::-webkit-input-placeholder,#joEditModal select,.emp_edit input[type="text"]::-webkit-input-placeholder,.emp_edit input[type="email"]::-webkit-input-placeholder{
 	color: #a8a9ad;
 	font-family: montserratLight;
 }
@@ -167,12 +191,89 @@ body{
 
 .logbox{
 	background: #fff;
-    margin-top: 8%;
     border-radius: 12px;
 	padding-top: 35px;
     padding-right: 40px;
     padding-left: 40px;
     padding-bottom: 50px;
+	-webkit-box-shadow: 5px 6px 8px -1px rgba(0,0,0,0.3);
+	-moz-box-shadow: 5px 6px 8px -1px rgba(0,0,0,0.3);
+	box-shadow: 5px 6px 8px -1px rgba(0,0,0,0.3);
+}
+
+.jo-sidebar h6{
+	font-family:montserratLight;
+	color:#2a92db;
+	margin-top: -6px;
+}
+
+.jo-sidebar h3{
+	font-family:montserratSemiBold;
+	color:#2a92db;
+	margin: 0;
+}
+
+.jo-sidebar .details div h6{
+	font-family:montserratSemiBold;
+	color:#2893db;
+}
+
+.jo-sidebar .details div h5{
+	font-family:montserratSemiBold;
+	color:#6a6a6a;
+	margin-bottom: 2px;
+}
+
+.jo-sidebar .details h4{
+	font-family:montserratSemiBold;
+	color:#aaaaaa;
+	font-size: 1.1em;
+    margin: 21px 0px;
+}
+
+.jo-sidebar .details{
+    background: #f4f8f9;
+    box-shadow: inset -5px 1px 8px -5px #e1e1e1;
+	padding-bottom: 100px;
+}
+
+.jo-in .jo-maincontent ul.accordion li.acd a img{
+	max-width: 30px;
+    margin-top: 13px;
+}
+
+.jo-in .jo-maincontent ul.accordion li.acd .content{
+	box-shadow: inset 0px 3px 11px -4px #e1e1e1;
+}
+
+.jo-in .jo-maincontent ul.accordion li.acd a{
+	background: #fff;
+    color: #2993dd;
+	font-family:montserratSemiBold;
+	padding-left: 0;
+    font-size: 1.5em;
+    border-bottom: 1px solid #e1e1e1;
+    border-radius: 0px;
+}
+
+.jo-sidebar{
+	padding: 0;
+	padding-top: 2%;
+	box-shadow: inset -5px 1px 8px -5px #e1e1e1;
+}
+
+.img-cropper img{
+	height: auto;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.img-cropper{
+	width: 130px;
+    height: 130px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 0 auto;
 }
 
 .twidth{
@@ -254,6 +355,7 @@ span{
 
 .off-canvas-wrap, .inner-wrap, .main-section {
     min-height: 100%;
+	/* height: 100%; */
 }
 
 thead tr > th { cursor: pointer; cursor: hand; }
@@ -310,8 +412,11 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	max-width: 15px;
 }
 
-.jorightlist li a{
-	
+.jorightlist li a.edit-btn{
+	width:15px;
+	height:15px;
+	background:url(../img/logos/Edit.png);
+	background-size: cover;
 }
 
 .jorightlist li{
@@ -346,21 +451,30 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	margin: 0;
 }
 
+.jolist:hover h3, .jolist:hover p,.jolist:hover h6, .jolist:hover h5 a{
+	color:#fff;
+}
+
+.jolist:hover{
+	background: #F57E20;
+	cursor:pointer;
+}
+
 .jolist{
 	box-shadow: 1px 1px 1px 1px #e1e1e1;
 	border-radius: 4px;
 	margin-bottom: 30px;
 }
 
-.jopart .sjo::-moz-placeholder{
+.jopart .sjo::-moz-placeholder,.settingspage label input::-moz-placeholder{
 	color: #96aeba;
 }
 
-.jopart .sjo:-moz-placeholder{
+.jopart .sjo:-moz-placeholder,.settingspage label input:-moz-placeholder{
 	color: #96aeba;
 }
 
-.jopart .sjo::-webkit-input-placeholder{
+.jopart .sjo::-webkit-input-placeholder,.settingspage label input::-webkit-input-placeholder{
 	color: #96aeba;
 }
 
@@ -373,6 +487,7 @@ thead tr > th { cursor: pointer; cursor: hand; }
     padding: 33px 8px;
     margin: 0;
 	background: #fff;
+	height: auto;
 }
 
 .bar_color1{
@@ -384,4 +499,119 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	border: none;
     margin-left: 5px;
     margin-top: 5px;
+}
+
+.motm label{
+	color:#6b6b6b;
+	font-family: montserratSemiBold;
+}
+.jo-in .jo-maincontent ul.accordion li #accordion_references table tr td a{
+	font-size: 1em;
+}
+
+.jo-in .jo-maincontent #accordion_emp_task ul.accordion li a{
+	color:#aaaaaa;
+	font-size: 1em;
+}
+.motm h4,#accordion_emp_task h4{
+	font-family: montserratSemiBold;
+	color:#aaaaaa;
+}
+
+.motm form .motm-notes ul.tabs li.tab-title.active a,.motm form .motm-notes ul.tabs li.tab-title a:hover,.motm form .motm-notes ul.tabs li.tab-title a:focus,.motm form .motm-notes ul.tabs li.tab-title a:active{
+	color: #2a92db;
+	border-bottom: 3px solid #2a92db;
+}
+
+.motm form .motm-notes .tabs-content section.content.tabarea{
+	box-shadow:none;
+}
+
+.motm form .motm-notes ul.tabs li.tab-title a{
+	font-size: 1.3em;
+    color: #aaaaaa;
+	border-bottom: 0px solid #2a92db;
+	padding-left: 28px;
+}
+
+.img-cropper .uploadArea{
+	position: absolute;
+    bottom: 1px;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.4);
+    z-index: 1;
+    height: 31%;
+}
+
+.enumstyle.sub{
+	margin-top: -8px;
+}
+
+.enumstyle{
+	color:#9cc2d5;
+	font-family: montserratLight;
+}
+
+.settingspage label p{
+	color:#a7a8aa;
+	font-family: montserratSemiBold;
+}
+
+.settingspage label input{
+	color:#a7a8aa;
+	font-family: montserratSemiBold;
+	border:2px solid #d7d7d7;
+	padding: 15px 9px;
+	height:auto;
+}
+
+.settingspage label{
+	color:#696969;
+	font-family: montserratLight;
+	font-size: 0.7em;
+}
+
+.ref-page ul li p span a img{
+	width: 30px;
+    margin-top: -8px;
+    margin-right: 7px;
+}
+
+.ref-page ul li p span a{
+	font-size: 1.4em;
+	font-family: montserratLight;
+    color: #9cc1d3;
+}
+
+.ref-page ul li p span.ref-name{
+	width: 160px;
+    overflow: hidden;
+    display: inline-block;
+    margin: 0px;
+}
+
+.ref-page ul li p span{
+	margin-left: 13px;
+}
+
+.ref-page ul li p{
+	font-family: montserratLight;
+	color:#696969;
+	font-size: 1.2em;
+	margin-bottom: 12px;
+}
+
+.ref-page ul li{
+	border-bottom: 1px solid #e1e1e1;
+	margin-bottom: 20px;
+}
+
+.ref-page ul{
+	
+}
+
+.ref-page h3{
+	font-family: montserratSemiBold;
+	color:#2a92db;
 }

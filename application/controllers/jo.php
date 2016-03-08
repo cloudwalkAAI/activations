@@ -17,11 +17,11 @@ class Jo extends CI_Controller{
     public function index(){
 		$data['active_menu'] = 'in';
 		$data['active_submenu'] = 'jo';
-        if( $this->session->userdata('sess_dept') == '2' ){
-            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
-        }else{
+//        if( $this->session->userdata('sess_dept') == '2' ){
+//            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
+//        }else{
             $arr = $this->get_model->get_ae_jo();
-        }
+//        }
 
         if( $this->session->userdata('sess_id') ){
 //            if( $arr ){
@@ -66,7 +66,8 @@ class Jo extends CI_Controller{
 	
 	function get_jo(){
 		$joid = $this->input->post('joid');
-		echo $this->get_model->get_ae_jo_w( $joid );
+		$data["joData"] = $this->get_model->get_ae_jo_w( $joid );
+		$this->load->view("joeditmodal",$data);
 	}
 
     /*for loading a JO*/
@@ -419,4 +420,50 @@ class Jo extends CI_Controller{
     function reload_req_table(){
         echo $this->get_model->get_req_table( $this->input->post() );
     }
+
+    function submit_date_calendar(){
+        $this->insert_model->creative_update_calendar( $this->input->post() );
+        $result = $this->insert_model->insert_task( $this->input->post() );
+        if( $result != 'exist' ){
+            echo $this->get_model->getlastinsertdate( $result );
+        }else{
+            echo $result;
+        }
+    }
+
+    function search_ae(){
+        $query = $this->db->get_where( 'employee_list', array( 'emp_id' => $this->input->post('aeid'), 'department' => 2 ), 1, 0 );
+        if ($query->num_rows() > 0){
+            foreach( $query->result() as $row ){
+                echo $row->sur_name.', '.$row->first_name.' '.$row->middle_name;
+            }
+        }
+    }
+
+    function share_jo(){
+        $share_explode = array();
+        $query = $this->db->get_where( 'job_order_list', array( 'jo_number' => $this->input->post('share_joid') ) );
+        if ($query->num_rows() > 0){
+            foreach( $query->result() as $row ){
+                if( $row->shared_to == null ){
+                    $data = array(
+                        'shared_to' => $this->input->post( 'inp_ae_id' )
+                    );
+                }else{
+                    $share_explode = explode( ',', $row->shared_to );
+                    array_push($share_explode, $this->input->post( 'inp_ae_id' ) );
+                    $data = array(
+                        'shared_to' => implode(',',$share_explode)
+                    );
+                }
+                $this->db->where( 'jo_number', $this->input->post( 'share_joid' ) );
+                $this->db->update( 'job_order_list', $data );
+
+                if( $this->db->affected_rows() > 0 ) {
+                    echo $this->db->affected_rows();
+                }
+            }
+        }
+    }
+
 }
