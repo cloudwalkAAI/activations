@@ -77,7 +77,7 @@ $info = json_decode($jo_details);
             </div>
         </div>
     </div>
-    <div class="large-9 columns jo-maincontent">z
+    <div class="large-9 columns jo-maincontent">
         <div class="row">
             <a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
         </div>
@@ -86,7 +86,7 @@ $info = json_decode($jo_details);
             <form id="form_archive" action="" method="post">
                 <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
                 <input type="hidden" id="jno" name="jno" value="<?= $info->jo_number ?>">
-                <label for="pdf_ex_jo"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
+                <label for="pdf_ex_jo" style="display: none;"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
                 <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom"> Minutes of the Meeting</label>
                 <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed"> Event Details</label>
                 <label for="pdf_ex_proj_att"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_proj_att" value="pjat"> Project Attachments</label>
