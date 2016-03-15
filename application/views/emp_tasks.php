@@ -7,7 +7,7 @@
             if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('sess_post') == 1 ){
                 ?>
                 <div class="row force_right_align">
-                    <button class="small" data-reveal-id="modal_creatives_tasks">Add assignment</button>
+                    <button class="small" data-reveal-id="modal_creatives_tasks">Add Assignment</button>
                 </div>
 
 
@@ -69,10 +69,10 @@
 
                         echo '
                             <tr>
-                                <td>'.$str_name.'</td>
-                                <td>'.$row->assigned.'</td>
+                                <td>'.ucfirst($str_name).'</td>
+                                <td>'.ucfirst($row->assigned).'</td>
                                 <td>'.$row->deadline.'</td>
-                                <td>'.$row->description.'</td>
+                                <td>'.ucfirst($row->description).'</td>
                             </tr>
                             ';
                     }
