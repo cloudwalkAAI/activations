@@ -421,8 +421,8 @@ class Jo extends CI_Controller{
     }
 
     function submit_date_calendar(){
-        $this->insert_model->creative_update_calendar( $this->input->post() );
-        $result = $this->insert_model->insert_task( $this->input->post() );
+        $result = $this->insert_model->creative_update_calendar( $this->input->post() );
+//        $result = $this->insert_model->insert_task( $this->input->post() );
         if( $result != 'exist' ){
             echo $this->get_model->getlastinsertdate( $result );
         }else{
