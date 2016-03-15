@@ -50,8 +50,8 @@
 			<a href="#" class="close">&times;</a>
 		</div>
 
-		<div id="alert_box_mom_form_success" data-alert class="alert-box success radius hide-normal">
-			Saved successfully.
+		<div id="alert_box_mom_form_success" data-alert class="alert-box warning radius hide-normal">
+			Saved Successfully.
 			<a href="#" class="close">&times;</a>
 		</div>
 		<form id="mom_form" action="" data-abide>

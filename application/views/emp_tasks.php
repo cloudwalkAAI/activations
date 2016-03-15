@@ -7,7 +7,7 @@
             if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('sess_post') == 1 ){
                 ?>
                 <div class="row force_right_align">
-                    <button class="small" data-reveal-id="modal_creatives_tasks">Add assignment</button>
+                    <button class="small" data-reveal-id="modal_creatives_tasks">Add Assignment</button>
                 </div>
 
 
@@ -33,7 +33,6 @@
                             <!--                        <option value="employee">Employee</option>-->
                         </select>
                         <input id="joid_task" type="hidden" name="joid_task" value="<?=$this->input->get('a');?>">
-<!--                        <input id="creative_start" type="text" name="start" class="req" placeholder="Start">-->
                         <input id="creative_deadline" type="text" name="deadline" class="req" placeholder="Deadline">
                         <input id="creative_description" type="text" name="description" class="req" placeholder="Description">
 
