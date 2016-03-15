@@ -851,7 +851,7 @@ class Get_model extends CI_Model
 
     function getlastinsertdate($a){
         $str_dat='';
-        $query = $this->db->get_where( 'tasks', array( 'task_id' => $a ) );
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
         if($query->num_rows() > 0){
             foreach ($query->result() as $row)
             {
@@ -863,9 +863,8 @@ class Get_model extends CI_Model
                 $str_dat= '
                            <tr>
                                 <td>'.$str_name.'</td>
-                                <td>'.$row->assigned.'</td>
-                                <td>'.$row->deadline.'</td>
-                                <td>'.$row->description.'</td>
+                                <td>'.$row->date.'</td>
+                                <td>'.$row->data.'</td>
                            </tr>
                            ';
             }
