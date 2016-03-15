@@ -74,10 +74,117 @@ $info = json_decode($jo_details);
                     <?php
                 }
                 ?>
+				<div class="row">
+					<table id="tbl_mom" class="hide large-12 columns">
+						<tr>
+							<th>Minutes of the Meeting</th>
+						</tr>
+						<tr>
+							<td>Date of revision</td>
+						</tr>
+						<?php
+							$get_date_mom = json_decode( $mom_dates );
+							if( isset( $get_date_mom ) ){
+								foreach( $get_date_mom as $id => $ddates ){
+									echo '
+										<tr>
+											<td><a class="loadmombydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
+										</tr>
+									';
+								}
+							}
+						?>
+					</table>
+
+					<table id="tbl_event_details" class="hide large-12 columns">
+						<tr>
+							<th>Event Details</th>
+						</tr>
+						<tr>
+							<td>Dates of Revision</td>
+						</tr>
+						<?php
+						$get_date_ed = json_decode( $detail_dates );
+						if( isset( $get_date_ed ) ){
+							foreach( $get_date_ed as $ided => $ddatesed ){
+								echo '
+										<tr>
+											<td><a class="loadedbydate" href="#" alt="' . $ided . '">' . $ddatesed . '</a></td>
+										</tr>
+									';
+							}
+						}
+						?>
+					</table>
+
+					<table id="tbl_setup" class="hide large-12 columns">
+						<tr>
+							<th>Setup Details</th>
+						</tr>
+						<tr>
+							<td>Dates of Revision</td>
+						</tr>
+						<?php
+						$get_date_setup = json_decode( $setup_dates );
+						if( isset( $get_date_setup ) ){
+							foreach( $get_date_setup as $id => $ddates ){
+								echo '
+										<tr>
+											<td><a class="loadsetupbydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
+										</tr>
+									';
+							}
+						}
+						?>
+					</table>
+
+					<table id="tbl_mvrf" class="hide large-12 columns">
+						<tr>
+							<th>MVRF</th>
+						</tr>
+						<tr>
+							<td>Dates of Revision</td>
+						</tr>
+						<?php
+						$get_date_mvrf = json_decode( $mvrf_dates );
+						if( isset( $get_date_mvrf ) ){
+							foreach( $get_date_mvrf as $id => $ddates ){
+								echo '
+										<tr>
+											<td><a class="loadmvrfbydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
+										</tr>
+									';
+							}
+						}
+						?>
+					</table>
+
+					<table id="tbl_other" class="hide large-12 columns">
+						<tr>
+							<th>Other</th>
+						</tr>
+						<tr>
+							<td>Dates of Revision</td>
+						</tr>
+						<?php
+						$get_date_other = json_decode( $other_dates );
+						if( isset( $get_date_other ) ){
+							foreach( $get_date_other as $id => $ddates ){
+								echo '
+										<tr>
+											<td><a class="loadotherbydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
+										</tr>
+									';
+							}
+						}
+						?>
+					</table>
+
+				</div>
             </div>
         </div>
     </div>
-    <div class="large-9 columns jo-maincontent">z
+    <div class="large-9 columns jo-maincontent">
         <div class="row">
             <a href="#" style="margin-top: 9px;" id="pdf_selector" data-reveal-id="modal_pdf_selector" class="button tiny right">Print</a>
         </div>
@@ -98,37 +205,37 @@ $info = json_decode($jo_details);
         </div>
         <ul class="accordion" data-accordion>
             <li class="accordion-navigation acd">
-                <a href="#panel1a">Minutes of the Meeting<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_mom" href="#panel1a">Minutes of the Meeting<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel1a" class="content">
                     <?= $mom ?>
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a href="#panel2a">Event Details<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_details" href="#panel2a">Event Details<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel2a" class="content">
                     <?= $event_details ?>
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a href="#accordion_emp_task">Tasks assignment<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_emp_tasks" href="#accordion_emp_task">Tasks assignment<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="accordion_emp_task" class="content">
                     <?= $emp_task ?>
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a href="#panel3a">Project Attachments<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_projects" href="#panel3a">Project Attachments<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel3a" class="content">
                     <?= $project_attachments ?>
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a href="#panel4a">Set Up Details<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_setup" href="#panel4a">Set Up Details<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel4a" class="content">
                     <?= $setup_details ?>
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a href="#panel5a">Man Power and Vehicle Request Form<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_mvrf" href="#panel5a">Man Power and Vehicle Request Form<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel5a" class="content">
                     <?= $mvrf_view ?>
                 </div>

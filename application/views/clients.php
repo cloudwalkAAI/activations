@@ -48,7 +48,7 @@
                                 <div class="input_fields_wrap_client">
 
                                 </div>
-                                <a href="#" class="add_client_button tiny twidth button">Add Client</a>
+                                <a href="#" class="add_client_button tiny bar_color1 twidth button">Add Client</a>
 							</div>
 							<div class="large-6 columns rightside">
 								<div class="large-12 columns" style="height: 283px;overflow: auto;">
@@ -59,7 +59,7 @@
 								</div>
 								<div class="large-12 columns">
 									<label>
-										<a href="#" class="add_brand_button tiny success twidth button radius">+ Add Brands</a>
+										<a href="#" class="add_brand_button tiny bar_color1 twidth button radius">+ Add Brands</a>
 									</label>
 								</div>
 							</div>
