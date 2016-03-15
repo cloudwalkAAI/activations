@@ -110,7 +110,7 @@ $info = json_decode($jo_details);
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a href="#accordion_emp_task">Tasks assignment<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a href="#accordion_emp_task">Tasks Assignment<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="accordion_emp_task" class="content">
                     <?= $emp_task ?>
                 </div>

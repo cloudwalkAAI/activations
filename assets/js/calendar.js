@@ -23,7 +23,6 @@
                 $('#btn_update_client').prop('disabled',false);
             }else{
                 $('#creatives_box').show();
-
             }
 
         }

@@ -872,4 +872,13 @@ class Get_model extends CI_Model
         echo $str_dat;
 
     }
+
+    function check_date($a){
+        $query = $this->db->get_where( 'calendar', array( 'date' => $a ) );
+        if ( $query->num_rows() > 0 ) {
+            return 'Taken';
+        }else{
+            return 'notTaken';
+        }
+    }
 }
