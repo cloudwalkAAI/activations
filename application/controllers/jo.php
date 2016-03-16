@@ -346,6 +346,14 @@ class Jo extends CI_Controller{
         $this->load->view('master_page', $data);
     }
 
+    function accounts(){
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'accounts';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
+        $this->load->view('master_page', $data);
+    }
+
     function clients(){
 		$data['active_menu'] = 'clients';
 		$data['active_submenu'] = 'clients';
@@ -421,10 +429,14 @@ class Jo extends CI_Controller{
     }
 
     function submit_date_calendar(){
-        $this->insert_model->creative_update_calendar( $this->input->post() );
-        $result = $this->insert_model->insert_task( $this->input->post() );
-        if( $result != 'exist' ){
-            echo $this->get_model->getlastinsertdate( $result );
+        $result = $this->get_model->check_date( $this->input->post( 'deadline' ) );
+        if ($result == 'notTaken' ) {
+            $res = $this->insert_model->creative_update_calendar( $this->input->post() );
+            if( $res > 0 ){
+                echo $this->get_model->getlastinsertdate( $res );
+            }else{
+                echo $result;
+            }
         }else{
             echo $result;
         }

@@ -37,6 +37,19 @@ class Insert_model extends CI_Model
         $this->email->send();
     }
 
+    function email_calendar( $email_a = null, $fullname = null){
+        // Sender email address
+        $this->email->from( 'roel.r@cloudwalkdigital.com' );
+        // Receiver email address.for single email
+        $this->email->to( $email_a, $fullname);
+        // Subject of email
+        $this->email->subject('Email Notification!');
+        // Message in email
+        $this->email->message('Please click the link to enter your password '.base_url('/c?p='.md5($email_a)));
+        // It returns boolean TRUE or FALSE based on success or failure
+        $this->email->send();
+    }
+
     function sms_compiler( $reciever_number = null, $message = null, $insid = null ){
 
         $text_array = array(
@@ -339,47 +352,65 @@ class Insert_model extends CI_Model
     }
 
     function creative_update_calendar($calendar){
-        $arr = array();
+//        $arr = array();
+//
+//        $arr = $this->createDateRangeArray( $calendar['start'], $calendar['deadline']);
+//        foreach ($arr as $datevalue) {
+        $insid = 0;
 
-        $arr = $this->createDateRangeArray( $calendar['start'], $calendar['deadline']);
-        foreach ($arr as $datevalue) {
-
-            $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['start'], 'employee_id' => $calendar['dept_id'] ) );
+            $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
             if ($query->num_rows() == 0) {
 
                 $data = array(
-                    'date' => $datevalue,
+                    'date' => $calendar['deadline'],
                     'data' => $calendar['description'],
                     'dept_id' => $calendar['dept_id'],
                     'employee_id' => $calendar['sel_creatives_emp']
                 );
 
                 $this->db->insert('calendar', $data);
+
+                $insid = $this->db->insert_id();
+
+                $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+                if($query->num_rows() > 0){
+                    foreach ($query->result() as $row)
+                    {
+                        $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                        foreach($query_emp->result() as $row_emp){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+//                            $this->email_calendar($row_emp->email, $str_name);
+                            $this->email_calendar('chabi050613@gmail.com', $str_name);
+                        }
+
+                    }
+                }
+                return $insid;
             } else {
-//                return 'exist';
+                return 'exist';
             }
 //            return false;
-        }
+//        }
 
 //        print_r($calendar);
 
     }
 
-    function insert_task($calendar){
-        $data = array(
-            'jo_id'         => $calendar['joid_task'],
-            'assigned'      => $calendar['start'],
-            'assigned_by'   => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('sess_middlename'),
-            'deadline'      => $calendar['deadline'],
-            'description'   => $calendar['description'],
-            'dept_id'       => $calendar['dept_id'],
-            'employee_id'   => $calendar['sel_creatives_emp']
-        );
-
-        $this->db->insert('tasks', $data);
-
-        return $this->db->insert_id();
-    }
+//    function insert_task($calendar){
+//        $data = array(
+//            'jo_id'         => $calendar['joid_task'],
+////            'assigned'      => $calendar['start'],
+//            'assigned_by'   => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('sess_middlename'),
+//            'deadline'      => $calendar['deadline'],
+//            'description'   => $calendar['description'],
+//            'dept_id'       => $calendar['dept_id'],
+//            'employee_id'   => $calendar['sel_creatives_emp']
+//        );
+//
+//        $this->db->insert('tasks', $data);
+//
+//        return $this->db->insert_id();
+//    }
 
     function createDateRangeArray($strDateFrom,$strDateTo)
     {

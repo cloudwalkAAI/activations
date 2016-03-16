@@ -97,8 +97,8 @@ if( isset( $shared_array ) ){
         <a href="#" class="close">&times;</a>
     </div>
 
-    <div id="alert_box_ed_form_success" data-alert class="alert-box success radius hide-normal">
-        Saved successfully.
+    <div id="alert_box_ed_form_success" data-alert class="alert-box warning radius hide-normal">
+        Saved Successfully.
         <a href="#" class="close">&times;</a>
     </div>
 

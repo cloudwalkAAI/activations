@@ -193,7 +193,7 @@ $info = json_decode($jo_details);
             <form id="form_archive" action="" method="post">
                 <input type="hidden" id="jid" name="jid" value="<?=$this->input->get('a');?>">
                 <input type="hidden" id="jno" name="jno" value="<?= $info->jo_number ?>">
-                <label for="pdf_ex_jo"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
+                <label for="pdf_ex_jo" style="display: none;"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_jo" value="jo_details"> Job Order</label>
                 <label for="pdf_ex_mom"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_mom" value="mom"> Minutes of the Meeting</label>
                 <label for="pdf_ex_ed"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_ed" value="ed"> Event Details</label>
                 <label for="pdf_ex_proj_att"><input type="checkbox" name="pdf_ex[]" id="pdf_ex_proj_att" value="pjat"> Project Attachments</label>
@@ -217,7 +217,7 @@ $info = json_decode($jo_details);
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a id="show_emp_tasks" href="#accordion_emp_task">Tasks assignment<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a href="#accordion_emp_task">Tasks Assignment<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="accordion_emp_task" class="content">
                     <?= $emp_task ?>
                 </div>
