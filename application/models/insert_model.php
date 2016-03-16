@@ -19,6 +19,7 @@ class Insert_model extends CI_Model
         $config['smtp_user'] = 'roel.r@cloudwalkdigital.com';
         // SMTP Password like (abc***##)
         $config['smtp_pass'] = 'cloud@2468';
+        $config['mailtype'] = 'html';
         // Load email library and passing configured values to email library
         $this->load->library('email', $config);
     }
@@ -32,6 +33,19 @@ class Insert_model extends CI_Model
         $this->email->subject('Activations registration!');
         // Message in email
         $this->email->message('Please click the link to enter your password '.base_url('/c?p='.md5($email_a).'&i='.$uid));
+        // It returns boolean TRUE or FALSE based on success or failure
+        $this->email->send();
+    }
+
+    function email_calendar( $email_a = null, $fullname = null){
+        // Sender email address
+        $this->email->from( 'roel.r@cloudwalkdigital.com' );
+        // Receiver email address.for single email
+        $this->email->to( $email_a, $fullname);
+        // Subject of email
+        $this->email->subject('Email Notification!');
+        // Message in email
+        $this->email->message('Please click the link to enter your password '.base_url('/c?p='.md5($email_a)));
         // It returns boolean TRUE or FALSE based on success or failure
         $this->email->send();
     }
@@ -338,32 +352,89 @@ class Insert_model extends CI_Model
     }
 
     function creative_update_calendar($calendar){
-//        print_r($calendar);
-        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['start'] ) );
-        if($query->num_rows() == 0){
+//        $arr = array();
+//
+//        $arr = $this->createDateRangeArray( $calendar['start'], $calendar['deadline']);
+//        foreach ($arr as $datevalue) {
+        $insid = 0;
 
-            $query = $this->db->get_where( 'calendar', array( 'endd' => $calendar['deadline'] ) );
-            if($query->num_rows() == 0){
+            $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
+            if ($query->num_rows() == 0) {
+
                 $data = array(
-                    'date' => $calendar['start'] ,
-                    'endd' => $calendar['deadline'] ,
+                    'date' => $calendar['deadline'],
                     'data' => $calendar['description'],
                     'dept_id' => $calendar['dept_id'],
                     'employee_id' => $calendar['sel_creatives_emp']
                 );
 
                 $this->db->insert('calendar', $data);
-                return $this->db->insert_id();
-            }else{
+
+                $insid = $this->db->insert_id();
+
+                $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+                if($query->num_rows() > 0){
+                    foreach ($query->result() as $row)
+                    {
+                        $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                        foreach($query_emp->result() as $row_emp){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+//                            $this->email_calendar($row_emp->email, $str_name);
+                            $this->email_calendar('chabi050613@gmail.com', $str_name);
+                        }
+
+                    }
+                }
+                return $insid;
+            } else {
                 return 'exist';
             }
+//            return false;
+//        }
 
-        }else{
-            return 'exist';
+//        print_r($calendar);
+
+    }
+
+//    function insert_task($calendar){
+//        $data = array(
+//            'jo_id'         => $calendar['joid_task'],
+////            'assigned'      => $calendar['start'],
+//            'assigned_by'   => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('sess_middlename'),
+//            'deadline'      => $calendar['deadline'],
+//            'description'   => $calendar['description'],
+//            'dept_id'       => $calendar['dept_id'],
+//            'employee_id'   => $calendar['sel_creatives_emp']
+//        );
+//
+//        $this->db->insert('tasks', $data);
+//
+//        return $this->db->insert_id();
+//    }
+
+    function createDateRangeArray($strDateFrom,$strDateTo)
+    {
+        // takes two dates formatted as YYYY-MM-DD and creates an
+        // inclusive array of the dates between the from and to dates.
+
+        // could test validity of dates here but I'm already doing
+        // that in the main script
+
+        $aryRange=array();
+
+        $iDateFrom=mktime(1,0,0,substr($strDateFrom,5,2),substr($strDateFrom,8,2),substr($strDateFrom,0,4));
+        $iDateTo=mktime(1,0,0,substr($strDateTo,5,2),substr($strDateTo,8,2),substr($strDateTo,0,4));
+
+        if ($iDateTo>=$iDateFrom)
+        {
+            array_push($aryRange,date('Y-m-j',$iDateFrom)); // first entry
+            while ($iDateFrom<$iDateTo)
+            {
+                $iDateFrom+=86400; // add 24 hours
+                array_push($aryRange,date('Y-m-j',$iDateFrom));
+            }
         }
-
-
-
+        return $aryRange;
     }
 
 }

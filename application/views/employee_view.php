@@ -15,8 +15,27 @@
 			}
 		?>		
 	</div>
+	<div class="large-12 columns">
+		<div class="row collapse prefix-round" style="border-bottom: 2px solid #96adb5;">
+			<div class="small-1 columns text-right">
+				<img src="<?=base_url('assets/img/logos/Search.png');?>" class="img-responsive show-for-medium-up" style="max-width: 58px;margin-right: 6px;" />
+			</div>
+			<div class="small-11 columns">
+				<input type="text" class="sjo" id="search_emp" placeholder="Search For A Employee...">
+			</div>
+		</div>
+	</div>
 </div>
-
+<div class="large-12 columns">
+    <div class="row collapse prefix-round" style="border-bottom: 2px solid #96adb5;">
+        <div class="small-1 columns text-right">
+            <img src="<?=base_url('assets/img/logos/Search.png');?>" class="img-responsive show-for-medium-up" style="max-width: 58px;margin-right: 6px;" />
+        </div>
+        <div class="small-11 columns">
+            <input type="text" class="sjo" id="search_jolist" placeholder="Search For A Job Order...">
+        </div>
+    </div>
+</div>
 <div class="row">
 	<div class="large-12 columns" style="padding-top: 22px;">
 		<ul class="no-bullet" id="tbdy_emp">

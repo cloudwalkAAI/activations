@@ -19,6 +19,7 @@ if( $this->session->userdata('sess_dept') <= 2 ) {
         <li <?php echo $active_submenu == 'setup' ? 'class="active"':''; ?>><a href="<?= base_url('jo/setup') ?>">Set Up</a></li>
         <li <?php echo $active_submenu == 'activations' ? 'class="active"':''; ?>><a href="<?= base_url('jo/activations') ?>">Activations</a></li>
         <li <?php echo $active_submenu == 'instore' ? 'class="active"':''; ?>><a href="<?= base_url('jo/instore') ?>">In-store</a></li>
+        <li <?php echo $active_submenu == 'accounts' ? 'class="active"':''; ?>><a href="<?= base_url('jo/accounts_n') ?>">accounts</a></li>
     </ul>
     <li <?php echo $active_menu == 'ex' ? 'class="active"':''; ?>><a href="#" class="off-canvas-submenu-call">External <span class="right"> + </span></a></li>
     <ul class="off-canvas-submenu no-bullet">
