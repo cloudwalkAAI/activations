@@ -617,3 +617,12 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	font-family: montserratSemiBold;
 	color:#2a92db;
 }
+
+.mpvrForm textarea{
+	min-height: 171px;
+    resize: none;
+}
+
+.mpvrForm table{
+	width:100%;
+}

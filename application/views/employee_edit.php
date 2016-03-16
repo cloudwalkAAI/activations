@@ -109,7 +109,7 @@
 			</label>
 		</div>	
 		<div class="large-12 columns">
-			<a href="<?= base_url('emp') ?>" class="button alert expand radius">Cancel</a>
+			<a href="<?= base_url('emp') ?>" class="button default expand radius">Cancel</a>
 		</div>	
 	</div>
 	<div class="large-4 columns">

@@ -356,6 +356,7 @@ class Insert_model extends CI_Model
 //
 //        $arr = $this->createDateRangeArray( $calendar['start'], $calendar['deadline']);
 //        foreach ($arr as $datevalue) {
+        $insid = 0;
 
             $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
             if ($query->num_rows() == 0) {
@@ -369,7 +370,9 @@ class Insert_model extends CI_Model
 
                 $this->db->insert('calendar', $data);
 
-                $query = $this->db->get_where( 'calendar', array( 'cal_id' => $this->db->insert_id() ) );
+                $insid = $this->db->insert_id();
+
+                $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
                 if($query->num_rows() > 0){
                     foreach ($query->result() as $row)
                     {
@@ -382,10 +385,7 @@ class Insert_model extends CI_Model
 
                     }
                 }
-
-
-
-                return $this->db->insert_id();
+                return $insid;
             } else {
                 return 'exist';
             }
