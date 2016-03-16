@@ -10,7 +10,6 @@
             $('#btn_update_client').prop('disabled',true);
         },
         success:  function(response){
-            //console.log(response);
             if(response != 'exist'){
                 $('#sel_creatives_emp').val(0);
                 $('#creative_start').val('');
@@ -24,7 +23,6 @@
             }else{
                 $('#creatives_box').show();
             }
-
         }
     });
 //});
