@@ -133,7 +133,7 @@ class Jo extends CI_Controller{
         foreach( $array_c as $row ){
             $i++;
             if( $row == "mom" ){
-
+                $data_mom['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_mom['result_mom'] = $this->get_model->get_last_mom( $this->input->get('a') );
                 $page_mom = $this->load->view('pdf/mom', $data_mom, TRUE);
                 $mpdf->WriteHTML($page_mom);
@@ -184,19 +184,18 @@ class Jo extends CI_Controller{
                 if( ( count($array_c) > 1 ) && count($array_c) != $i ){
                     $mpdf->AddPage(); //add new page
                 }
-            }elseif( $row == "jo_details" ){
-                $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
-                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
-                $page_ed = $this->load->view('pdf/jo_details', $data_ed, TRUE);
-                $mpdf->WriteHTML($page_ed);
-
-                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
-                    $mpdf->AddPage(); //add new page
-                }
             }
+//            elseif( $row == "jo_details" ){
+//                $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
+//                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
+//                $page_ed = $this->load->view('pdf/jo_details', $data_ed, TRUE);
+//                $mpdf->WriteHTML($page_ed);
+//
+//                if( ( count($array_c) > 1 ) && count($array_c) != $i ){
+//                    $mpdf->AddPage(); //add new page
+//                }
+//            }
         }
-
-
 
         $mpdf->Output('job_order_no_'.$this->input->get('b').'.pdf','I');
         exit();
@@ -347,6 +346,14 @@ class Jo extends CI_Controller{
         $this->load->view('master_page', $data);
     }
 
+    function accounts(){
+		$data['active_menu'] = 'ex';
+		$data['active_submenu'] = 'accounts';
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
+        $this->load->view('master_page', $data);
+    }
+
     function clients(){
 		$data['active_menu'] = 'clients';
 		$data['active_submenu'] = 'clients';
@@ -422,10 +429,14 @@ class Jo extends CI_Controller{
     }
 
     function submit_date_calendar(){
-        $this->insert_model->creative_update_calendar( $this->input->post() );
-        $result = $this->insert_model->insert_task( $this->input->post() );
-        if( $result != 'exist' ){
-            echo $this->get_model->getlastinsertdate( $result );
+        $result = $this->get_model->check_date( $this->input->post( 'deadline' ) );
+        if ($result == 'notTaken' ) {
+            $res = $this->insert_model->creative_update_calendar( $this->input->post() );
+            if( $res > 0 ){
+                echo $this->get_model->getlastinsertdate( $res );
+            }else{
+                echo $result;
+            }
         }else{
             echo $result;
         }

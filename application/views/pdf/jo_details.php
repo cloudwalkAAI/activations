@@ -15,39 +15,3 @@ Project : <span style="color:#2a92db;"><?= $info->project_name ?></span><br>
 Account Handler : <span style="color:#2a92db;"><?= $info->emp_info[0]->sur_name.', '.$info->emp_info[0]->first_name.' '.$info->emp_info[0]->middle_name ?></span>
 <br>
 <hr>
-<h2>Animation Details</h2>
-<table style="width:100%;" border="1">
-    <thead>
-    <tr>
-        <th>Particulars</th>
-        <th>Target Activity</th>
-        <th colspan="5" style="text-align: center;">Target Schedule</th>
-        <th>Target Schedule</th>
-        <th>Target Duration</th>
-    </tr>
-
-    <tr>
-        <th colspan="2"> </th>
-        <th>Selling</th>
-        <th>Flyering</th>
-        <th>Survey</th>
-        <th>Experiment</th>
-        <th>Other</th>
-        <th colspan="2"> </th>
-    </tr>
-    </thead>
-    <tbody id="tbody_animation">
-
-    <?php
-    if( isset($eda_table) ){
-        echo $eda_table;
-    }else{
-        echo '
-            <tr>
-                <td rowspan="10" style="text-align: center"> No details saved</td>
-            </tr>
-        ';
-    }
-    ?>
-    </tbody>
-</table>

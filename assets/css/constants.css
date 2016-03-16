@@ -452,18 +452,20 @@ thead tr > th { cursor: pointer; cursor: hand; }
 }
 
 .jolist:hover h3, .jolist:hover p,.jolist:hover h6, .jolist:hover h5 a{
-	color:#fff;
+	/* color:#fff; */
 }
 
 .jolist:hover{
-	background: #F57E20;
+	/* background: #F57E20; */
 	cursor:pointer;
+	border: 3px solid #F57E20;
 }
 
 .jolist{
 	box-shadow: 1px 1px 1px 1px #e1e1e1;
 	border-radius: 4px;
 	margin-bottom: 30px;
+	border: 3px solid #FFF;
 }
 
 .jopart .sjo::-moz-placeholder,.settingspage label input::-moz-placeholder{
@@ -614,4 +616,13 @@ thead tr > th { cursor: pointer; cursor: hand; }
 .ref-page h3{
 	font-family: montserratSemiBold;
 	color:#2a92db;
+}
+
+.mpvrForm textarea{
+	min-height: 171px;
+    resize: none;
+}
+
+.mpvrForm table{
+	width:100%;
 }

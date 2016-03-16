@@ -28,7 +28,7 @@
         <div>
             <label for="inp_file_attachments">
                 <select name="sel_reference" id="sel_reference" required>
-                    <option value="">Reference for</option>
+                    <option value="0">Reference for</option>
                     <option value="activations">Activations</option>
                     <option value="bid_deck">Bid Deck</option>
                     <option value="checklist">Checklist</option>
@@ -43,7 +43,7 @@
                     <option value="weekly-report">Weekly Report</option>
                 </select>
             </label>
-            <small class="error">Select a reference.</small>
+            <small id="ref_al" class="error">Select a reference.</small>
         </div>
 
         <button id="btn_add_attach" type="submit" class="button medium right"><i class="fi-upload"></i> Upload</button>
@@ -55,19 +55,19 @@
 
 <table class="twidth">
     <thead>
-        <tr>
-            <th>Date Uploaded</th>
-            <th>File Name</th>
-            <th>Reference for</th>
-            <th>Download Link</th>
-        </tr>
+    <tr>
+        <th>Date Uploaded</th>
+        <th>File Name</th>
+        <th>Reference for</th>
+        <th>Download Link</th>
+    </tr>
     </thead>
     <tbody>
 
-        <?php
-            $proattach = json_decode( $attachment_list );
-            foreach( $proattach as $row){
-                echo '
+    <?php
+    $proattach = json_decode( $attachment_list );
+    foreach( $proattach as $row){
+        echo '
                     <tr>
                         <td>'.$row->date_uploaded.'</td>
                         <td>'.$row->file_name.'</td>
@@ -75,8 +75,8 @@
                         <td><a href="'.base_url( $row->file_location ).'" target="_blank">Download</td>
                     </tr>
                 ';
-            }
-        ?>
+    }
+    ?>
 
     </tbody>
 </table>
