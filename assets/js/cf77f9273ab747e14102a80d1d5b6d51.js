@@ -1397,7 +1397,7 @@ reload_table_animation();
 /*end for jo table*/
 
 /*for employee table*/
-var $rows_emp = $('#tbdy_emp tr');
+var $rows_emp = $('#tbdy_emp li');
 $('#search_emp').keyup(function() {
     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
