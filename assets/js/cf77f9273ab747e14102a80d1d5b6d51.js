@@ -1483,6 +1483,18 @@ $('#search_requirements').keyup(function() {
 });
 /*end for JO-AD list table*/
 
+/*for accounts list table*/
+var $rows_accounts = $('#tbody_accounts tr');
+$('#search_accounts').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    $rows_accounts.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+/*end for JO-AD list table*/
+
 $('#show_table_mom').on('click', function(){
     $('#tbl_mom').toggle( "slide" );
     $('#tbl_other').hide( "slide" );
@@ -1680,6 +1692,185 @@ function reload_brand_u(){
 }
 
 reload_brand_u();
+
+//do
+$('.btn_do').on('click', function(){
+    $('#do_joid').val( $(this).attr('alt') );
+    $('#do_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_do').on('click', function(){
+    $('#form_up_do').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_do',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_do').prop('disabled', true);
+        },
+        success:  function(response){
+            //console.log(response);
+            //$('#bton_do').prop('disabled', false);
+            location.reload();
+        }
+    });
+});
+
+$('#delete_do').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_do',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+//total
+$("#inp_tp").keyup(function(event){
+    var check_string = $(this).val();
+    var new_string = '';
+
+    if(event.keyCode == 13){
+        //$("#id_of_button").click();
+        //alert('test');
+        $.ajax({
+            url: MyNameSpace.config.base_url+'admin/check_price',
+            type:'post',
+            data: {
+                'total_value' : check_string,
+                'jo_id' : $(this).attr('alt')
+            },
+            beforeSubmit: function(arr, jform, option){
+                //$('#temp_name').val('Please Wait...');
+            },
+            success: function(data) {
+                //console.log(data);
+                location.reload();
+            }
+        });
+    }else{
+        if( isNaN( check_string ) ){
+            new_string = check_string.replace(/\D/g,'');
+            $(this).val( new_string );
+        }
+    }
+});
+
+//bill
+$('.btn_bd').on('click', function(){
+    $('#bill_joid').val( $(this).attr('alt') );
+    $('#bill_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_bill').on('click', function(){
+    $('#form_up_bill').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_bill',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_bill').prop('disabled', true);
+        },
+        success:  function(response){
+            //console.log(response);
+            //$('#bton_do').prop('disabled', false);
+            location.reload();
+        }
+    });
+});
+
+$('#delete_bd').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_bd',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+//CE
+$('.btn_ce').on('click', function(){
+    $('#ce_joid').val( $(this).attr('alt') );
+    $('#ce_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_ce').on('click', function(){
+    $('#form_up_ce').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_ce',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_ce').prop('disabled', true);
+        },
+        success:  function(response){
+            location.reload();
+        }
+    });
+});
+
+$('#delete_ce').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_ce',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+//paid
+$('.btn_pd').on('click', function(){
+    $('#paid_joid').val( $(this).attr('alt') );
+    $('#paid_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_paid').on('click', function(){
+    $('#form_up_paid').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_paid',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_paid').prop('disabled', true);
+        },
+        success:  function(response){
+            location.reload();
+        }
+    });
+});
+
+$('#delete_paid').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_paid',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
 
 if($('textarea').length > 1) {
     CKEDITOR.replace( 'editor_campaign_overview' );

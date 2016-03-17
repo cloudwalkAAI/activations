@@ -881,4 +881,110 @@ class Get_model extends CI_Model
             return 'notTaken';
         }
     }
+
+    function accounts_get_emp($emp_id){
+        $query_ae = $this->db->get_where( 'employee_list', array( 'emp_id' => $emp_id ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return '<li>'.$row_ae->sur_name.', '.$row_ae->first_name.' '.$row_ae->middle_name.'</li>';
+            }else{
+                return false;
+            }
+        }
+    }
+
+    function accounts_get_client( $client_id ){
+        $query_ae = $this->db->get_where( 'clients', array( 'client_id' => $client_id ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return $row_ae->contact_person;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    function accounts_jo(){
+        $str_td_jo = '';
+        $str_ae = '';
+        $str_do = '';
+        $str_bd = '';
+        $str_ce = '';
+        $str_tp = 0;
+        $shared_arr = array();
+
+        $this->db->select( 'jo_id, 	jo_number, emp_id, do_contract_no, do_location, project_name, client_company_name, brand, billed_date, bill_location, paid_date, paid_location, shared_to, total_price, ce_number, ce_location' );
+        $this->db->from( 'job_order_list' );
+        $this->db->order_by("jo_id", "desc");
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row)
+            {
+                $str_ae .= $this->accounts_get_emp($row->emp_id);
+
+                $shared_arr = explode(",",$row->shared_to);
+                foreach ( $shared_arr as $row_share )
+                {
+                    if( $this->accounts_get_emp($row_share) ){
+                        $str_ae .= $this->accounts_get_emp($row_share);
+                    }
+                }
+
+                if($row->do_contract_no){
+                    $str_do = '<a href="'.base_url($row->do_location).'" target="_blank">'.$row->do_contract_no.'</a><a href="#" id="delete_do" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                }else{
+                    $str_do = '<button class="button tiny btn_do twidth" alt="'.$row->jo_id.'" >Do</button>';
+                }
+
+                if($row->billed_date){
+                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><a href="#" id="delete_bd" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                }else{
+                    $str_bd = '<button class="button tiny btn_bd twidth" alt="'.$row->jo_id.'" >Bill</button>';
+                }
+
+                if($row->ce_number){
+                    $str_ce = '<a href="'.base_url($row->ce_location).'" target="_blank">'.$row->ce_number.'</a><a href="#" id="delete_ce" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                }else{
+                    $str_ce = '<button class="button tiny btn_ce twidth" alt="'.$row->jo_id.'" >CE</button>';
+                }
+
+                if($row->paid_date){
+                    $str_pd = '<a href="'.base_url($row->paid_location).'" target="_blank">'.$row->paid_date.'</a><a href="#" id="delete_paid" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                }else{
+                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" >Paid</button>';
+                }
+
+                if($row->total_price){
+                    $str_tp = '<input type="text" alt="'.$row->jo_id.'" id="inp_tp" class="inp_tp" value="'.$row->total_price.'">';
+                }else{
+                    $str_tp = '<input type="text" alt="'.$row->jo_id.'" id="inp_tp" class="inp_tp" >';
+                }
+
+
+
+                $str_td_jo .= '
+                    <tr>
+                        <td style="color:'.$row->jo_color.';">'.$row->jo_number.'</td>
+                        <td>
+                            <ul class="no-bullet">
+                                '.$str_ae.'
+                            </ul>
+                        </td>
+                        <td>'.$row->project_name.'</td>
+                        <td>'.$this->accounts_get_client($row->client_company_name).'</td>
+                        <td>'.$row->brand.'</td>
+                        <td>'.$str_do.'</td>
+                        <td>'.$str_bd.'</td>
+                        <td>'.$str_ce.'</td>
+                        <td>'.$str_pd.'</td>
+                        <td>'.$str_tp.'</td>
+                    </tr>
+                ';
+            }
+        }
+
+        return $str_td_jo;
+    }
 }

@@ -349,6 +349,7 @@ class Jo extends CI_Controller{
     function accounts(){
 		$data['active_menu'] = 'ex';
 		$data['active_submenu'] = 'accounts';
+		$data['jolist'] = $this->get_model->accounts_jo();
         $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
         $this->load->view('master_page', $data);

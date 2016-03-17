@@ -352,10 +352,6 @@ class Insert_model extends CI_Model
     }
 
     function creative_update_calendar($calendar){
-//        $arr = array();
-//
-//        $arr = $this->createDateRangeArray( $calendar['start'], $calendar['deadline']);
-//        foreach ($arr as $datevalue) {
         $insid = 0;
 
             $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
@@ -389,28 +385,8 @@ class Insert_model extends CI_Model
             } else {
                 return 'exist';
             }
-//            return false;
-//        }
-
-//        print_r($calendar);
 
     }
-
-//    function insert_task($calendar){
-//        $data = array(
-//            'jo_id'         => $calendar['joid_task'],
-////            'assigned'      => $calendar['start'],
-//            'assigned_by'   => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').''.$this->session->userdata('sess_middlename'),
-//            'deadline'      => $calendar['deadline'],
-//            'description'   => $calendar['description'],
-//            'dept_id'       => $calendar['dept_id'],
-//            'employee_id'   => $calendar['sel_creatives_emp']
-//        );
-//
-//        $this->db->insert('tasks', $data);
-//
-//        return $this->db->insert_id();
-//    }
 
     function createDateRangeArray($strDateFrom,$strDateTo)
     {
@@ -436,5 +412,4 @@ class Insert_model extends CI_Model
         }
         return $aryRange;
     }
-
 }

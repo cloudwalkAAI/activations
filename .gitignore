@@ -12,3 +12,5 @@ application/config/config.php
 *.xml
 *.xml
 *.xml
+assets/uploads/bill/core.pdf
+assets/uploads/paid/core.pdf
