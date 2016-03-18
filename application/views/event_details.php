@@ -172,8 +172,7 @@ if( isset( $shared_array ) ){
         <tr>
             <th>Particulars</th>
             <th>Target Activity</th>
-            <th colspan="5" class="text-center">Target Schedule</th>
-            <th>Target Schedule</th>
+            <th colspan="5" class="text-center">Target Hits</th>
             <th>Target Duration</th>
             <th>Areas</th>
         </tr>
@@ -230,7 +229,7 @@ if( isset( $shared_array ) ){
                 <option value="0">Department</option>
                 <?php
                     foreach( $departments as $dept ){
-                        echo '<option value="' . $dept['department_name'] . '">'. $dept['department_name'] .'</option>';
+                        echo '<option value="' . $dept['department_name'] . '">'. ucfirst($dept['department_name']) .'</option>';
                     }
                 ?>
             </select>

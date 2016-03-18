@@ -23,7 +23,8 @@
     </script>
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
     <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>    
-    <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
+<!--    <script src="--><?//=base_url('assets/js/ckeditorjs/ckeditor.js');?><!--"></script>-->
+    <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
 	<?php
 		if(isset($homepage) && $homepage == true){
 	?>

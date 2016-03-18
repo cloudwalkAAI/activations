@@ -235,7 +235,7 @@ $info = json_decode($jo_details);
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a id="show_table_mvrf" href="#panel5a">Man Power and Vehicle Request Form<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_mvrf" href="#panel5a">Manpower and Vehicle Request Form<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel5a" class="content">
                     <?= $mvrf_view ?>
                 </div>

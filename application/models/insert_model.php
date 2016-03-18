@@ -353,39 +353,37 @@ class Insert_model extends CI_Model
 
     function creative_update_calendar($calendar){
         $insid = 0;
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
+        if ($query->num_rows() == 0) {
 
-            $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
-            if ($query->num_rows() == 0) {
+            $data = array(
+                'date' => $calendar['deadline'],
+                'data' => $calendar['description'],
+                'dept_id' => $calendar['dept_id'],
+                'employee_id' => $calendar['sel_creatives_emp']
+            );
 
-                $data = array(
-                    'date' => $calendar['deadline'],
-                    'data' => $calendar['description'],
-                    'dept_id' => $calendar['dept_id'],
-                    'employee_id' => $calendar['sel_creatives_emp']
-                );
+            $this->db->insert('calendar', $data);
 
-                $this->db->insert('calendar', $data);
+            $insid = $this->db->insert_id();
 
-                $insid = $this->db->insert_id();
-
-                $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
-                if($query->num_rows() > 0){
-                    foreach ($query->result() as $row)
-                    {
-                        $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
-                        foreach($query_emp->result() as $row_emp){
-                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+            if($query->num_rows() > 0){
+                foreach ($query->result() as $row)
+                {
+                    $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                    foreach($query_emp->result() as $row_emp){
+                        $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
 //                            $this->email_calendar($row_emp->email, $str_name);
-                            $this->email_calendar('chabi050613@gmail.com', $str_name);
-                        }
-
+                        $this->email_calendar('chabi050613@gmail.com', $str_name);
                     }
-                }
-                return $insid;
-            } else {
-                return 'exist';
-            }
 
+                }
+            }
+            return $insid;
+        } else {
+            return 'exist';
+        }
     }
 
     function createDateRangeArray($strDateFrom,$strDateTo)

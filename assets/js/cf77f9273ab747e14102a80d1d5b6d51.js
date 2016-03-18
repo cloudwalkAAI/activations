@@ -1872,16 +1872,32 @@ $('#delete_paid').on('click', function(){
     });
 });
 
-if($('textarea').length > 1) {
-    CKEDITOR.replace( 'editor_campaign_overview' );
-    CKEDITOR.replace( 'editor_activation_flow' );
-    CKEDITOR.replace( 'editor_other_details' );
-    CKEDITOR.replace( 'editor_next' );
-    CKEDITOR.replace( 'editor_event_spec' );
+if($('textarea').length >= 1) {
+    CKEDITOR.replace( 'editor_campaign_overview', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_activation_flow', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_other_details', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_next', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_event_spec', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
     //CKEDITOR.replace( 'editor_detail_text' );
     //CKEDITOR.replace( 'editor_req' );
     //CKEDITOR.replace( 'editor_ns' );
-    CKEDITOR.replace( 'setup_particular' );
-    CKEDITOR.replace( 'ta_mvrf' );
-    CKEDITOR.replace( 'ta_Other' );
+    CKEDITOR.replace( 'setup_particular', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'ta_mvrf', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'ta_Other', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
 }
