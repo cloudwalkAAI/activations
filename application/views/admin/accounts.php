@@ -23,11 +23,12 @@
             <td width="200">Project Name</td>
             <td width="200">Client</td>
             <td width="150">Brand</td>
-            <td width="150">DO</td>
-            <td width="150">Bill</td>
+            <td width="150">DO No. / PO</td>
+            <td width="150">Invoice No.</td>
             <td width="150">CE</td>
+            <td width="150" style="display:none;">Transmittal</td>
             <td width="150">Paid</td>
-            <td width="150">Total</td>
+            <td width="150">Remarks</td>
         </tr>
     </thead>
     <tbody id="tbody_accounts">
@@ -69,12 +70,26 @@
 </div>
 
 <div id="paid_Modal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-    <h2 id="modalTitle">Upload CE</h2>
+    <h2 id="modalTitle">Update Payment</h2>
     <form id="form_up_paid" action="" method="post">
         <input type="hidden" name="paid_joid" id="paid_joid">
-        <input type="text" name="paid_number" id="paid_number">
-        <input type="file" name="paid_file" id="paid_file">
+        <input type="text" name="paid_datepicker" id="paid_datepicker" placeholder="Date">
+        <select name="paid_color" id="paid_color">
+            <option value="white" style="background-color:white;">Select Color...</option>
+            <option value="red" style="background-color:red;"></option>
+            <option value="green" style="background-color:green;"></option>
+        </select>
         <button id="bton_paid" class="tiny">Upload</button>
+    </form>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+<div id="remarks_Modal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle">Remarks</h2>
+    <form id="form_remarks" action="" method="post">
+        <input type="hidden" name="rem_joid" id="rem_joid">
+        <textarea name="rem_text" id="rem_text" cols="30" rows="10"></textarea>
+        <button id="bton_rem" class="tiny">Save</button>
     </form>
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>

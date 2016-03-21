@@ -173,9 +173,9 @@ class Update_model extends CI_Model
 //price
     function update_price( $a ){
         $data = array(
-            'total_price' => $a['total_value']
+            'total_price' => $a['rem_text']
         );
-        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->where( 'jo_id', $a['rem_joid'] );
         $this->db->update( 'job_order_list', $data );
 
         if( $this->db->affected_rows() > 0 ){
@@ -249,10 +249,10 @@ class Update_model extends CI_Model
         }
     }
 //paid
-    function upload_attachment_paid( $form_values, $file_location ){
+    function upload_attachment_paid( $form_values ){
         $data = array(
-            'paid_date' => $form_values['paid_number'],
-            'paid_location' => $file_location
+            'paid_date' => $form_values['paid_datepicker'],
+            'paid_location' => $form_values['paid_color']
         );
         $this->db->where( 'jo_id', $form_values['paid_joid'] );
         $this->db->update( 'job_order_list', $data );

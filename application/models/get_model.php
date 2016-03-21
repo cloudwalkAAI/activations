@@ -915,7 +915,7 @@ class Get_model extends CI_Model
         $str_tp = 0;
         $shared_arr = array();
 
-        $this->db->select( 'jo_id, 	jo_number, emp_id, do_contract_no, do_location, project_name, client_company_name, brand, billed_date, bill_location, paid_date, paid_location, shared_to, total_price, ce_number, ce_location' );
+        $this->db->select( 'jo_id, 	jo_number, emp_id, do_contract_no, do_location, project_name, client_company_name, brand, billed_date, bill_location, paid_date, paid_location, shared_to, total_price, ce_number, ce_location, transmittal' );
         $this->db->from( 'job_order_list' );
         $this->db->order_by("jo_id", "desc");
         $query = $this->db->get();
@@ -951,15 +951,24 @@ class Get_model extends CI_Model
                 }
 
                 if($row->paid_date){
-                    $str_pd = '<a href="'.base_url($row->paid_location).'" target="_blank">'.$row->paid_date.'</a><a href="#" id="delete_paid" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                    $str_pd = '
+                        <ul class="no-bullet">
+                            <li>
+                                <span>'.$row->paid_date.'</span>
+                            </li>
+                            <li>
+                                <button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="'.$row->paid_date.'" title="'.$row->paid_location.'" style="background-color:'.$row->paid_location.';">Paid</button>
+                            </li>
+                        </ul>
+                    ';
                 }else{
-                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" >Paid</button>';
+                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" style="background-color:'.$row->paid_location.';">Paid</button>';
                 }
 
-                if($row->total_price){
-                    $str_tp = '<input type="text" alt="'.$row->jo_id.'" id="inp_tp" class="inp_tp" value="'.$row->total_price.'">';
+                if($row->transmittal){
+                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="button tiny btn_rem twidth" value="'.$row->transmittal.'">';
                 }else{
-                    $str_tp = '<input type="text" alt="'.$row->jo_id.'" id="inp_tp" class="inp_tp" >';
+                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="button tiny btn_rem twidth">';
                 }
 
 
@@ -978,8 +987,13 @@ class Get_model extends CI_Model
                         <td>'.$str_do.'</td>
                         <td>'.$str_bd.'</td>
                         <td>'.$str_ce.'</td>
-                        <td>'.$str_pd.'</td>
-                        <td>'.$str_tp.'</td>
+                        <td style="display:none;">'.$str_tp.'</td>
+                        <td>
+                            '.$str_pd.'
+                        </td>
+                        <td>
+                            <button class="button tiny btn_rem twidth" value="'.$row->total_price.'" alt="'.$row->jo_id.'" >Remarks</button>
+                        </td>
                     </tr>
                 ';
             }

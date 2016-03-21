@@ -18,10 +18,10 @@ class Admin extends CI_Controller
         echo $this->update_model->upload_attachment( $this->input->post(), $target_file );
     }
 
-    function check_price(){
-//        print_r( $this->input->post() );
-        echo $this->update_model->update_price( $this->input->post() );
-    }
+//    function check_price(){
+////        print_r( $this->input->post() );
+//        echo $this->update_model->update_price( $this->input->post() );
+//    }
 
     function del_do(){
         echo $this->update_model->del_do( $this->input->post() );
@@ -56,10 +56,10 @@ class Admin extends CI_Controller
     }
 
     function upload_paid(){
-        $target_dir = "assets/uploads/paid/";
-        $target_file = $target_dir . basename($_FILES["paid_file"]["name"]);
-        move_uploaded_file($_FILES["paid_file"]["tmp_name"], $target_file);
+        echo $this->update_model->upload_attachment_paid( $this->input->post() );
+    }
 
-        echo $this->update_model->upload_attachment_paid( $this->input->post(), $target_file );
+    function remarks(){
+        echo $this->update_model->update_price( $this->input->post() );
     }
 }
