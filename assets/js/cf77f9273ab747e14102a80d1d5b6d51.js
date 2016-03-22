@@ -1483,6 +1483,18 @@ $('#search_requirements').keyup(function() {
 });
 /*end for JO-AD list table*/
 
+/*for accounts list table*/
+var $rows_accounts = $('#tbody_accounts tr');
+$('#search_accounts').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    $rows_accounts.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+/*end for JO-AD list table*/
+
 $('#show_table_mom').on('click', function(){
     $('#tbl_mom').toggle( "slide" );
     $('#tbl_other').hide( "slide" );
@@ -1681,16 +1693,267 @@ function reload_brand_u(){
 
 reload_brand_u();
 
-if($('textarea').length > 1) {
-    CKEDITOR.replace( 'editor_campaign_overview' );
-    CKEDITOR.replace( 'editor_activation_flow' );
-    CKEDITOR.replace( 'editor_other_details' );
-    CKEDITOR.replace( 'editor_next' );
-    CKEDITOR.replace( 'editor_event_spec' );
+//do
+$('.btn_do').on('click', function(){
+    $('#do_joid').val( $(this).attr('alt') );
+    $('#do_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_do').on('click', function(){
+    $('#form_up_do').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_do',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_do').prop('disabled', true);
+        },
+        success:  function(response){
+            //console.log(response);
+            //$('#bton_do').prop('disabled', false);
+            location.reload();
+        }
+    });
+});
+
+$('#delete_do').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_do',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+//remarks aka total_price
+
+$('.btn_rem').on('click', function(){
+    $('#rem_joid').val( $(this).attr('alt') );
+    $('#rem_text').text( $(this).attr('value') );
+    $('#remarks_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_rem').on('click', function(){
+    $('#form_remarks').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/remarks',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_rem').prop('disabled', true);
+        },
+        success:  function(response){
+            //console.log(response);
+            //$('#bton_do').prop('disabled', false);
+            location.reload();
+        }
+    });
+});
+
+//bill
+$('.btn_bd').on('click', function(){
+    $('#bill_joid').val( $(this).attr('alt') );
+    $('#bill_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_bill').on('click', function(){
+    $('#form_up_bill').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_bill',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_bill').prop('disabled', true);
+        },
+        success:  function(response){
+            //console.log(response);
+            //$('#bton_do').prop('disabled', false);
+            location.reload();
+        }
+    });
+});
+
+$('#delete_bd').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_bd',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+//CE
+$('.btn_ce').on('click', function(){
+    $('#ce_joid').val( $(this).attr('alt') );
+    $('#ce_Modal').foundation('reveal', 'open');
+});
+
+$('#bton_ce').on('click', function(){
+    $('#form_up_ce').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_ce',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_ce').prop('disabled', true);
+        },
+        success:  function(response){
+            location.reload();
+        }
+    });
+});
+
+$('#delete_ce').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_ce',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+//transmittal
+$('#inp_trans').keyup(function(event){
+    if( event.which == '13'){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'admin/transmittal',
+            type:'post',
+            data: {
+                'jo_id' : $(this).attr('alt'),
+                'trans_date' : $(this).val()
+            },
+            beforeSubmit: function(arr, jform, option){
+                //$('#temp_name').val('Please Wait...');
+            },
+            success: function(data) {
+                //console.log(data);
+                location.reload();
+            }
+        });
+    }
+});
+
+//contract number
+$('#inp_contract_no').keyup(function(event){
+    if( event.which == '13'){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'admin/cono',
+            type:'post',
+            data: {
+                'jo_id' : $(this).attr('alt'),
+                'cono' : $(this).val()
+            },
+            beforeSubmit: function(arr, jform, option){
+                //$('#temp_name').val('Please Wait...');
+            },
+            success: function(data) {
+                //console.log(data);
+                location.reload();
+            }
+        });
+    }
+});
+
+//paid
+$('.btn_pd').on('click', function(){
+    //$('#paid_joid').val( $(this).attr('alt') );
+    //$('#paid_datepicker').val( $(this).attr('value') );
+    //$('#paid_color').val( $(this).attr('title') );
+    //$('#paid_color').css( 'background-color', $(this).attr('title') );
+    //$('#paid_Modal').foundation('reveal', 'open');
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/payment',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt'),
+            'py' : $(this).val()
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+
+$('#paid_color').on('change', function(){
+    $('#paid_color').css('background-color', $(this).val());
+});
+
+$('#bton_paid').on('click', function(){
+    $('#form_up_paid').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_paid',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_paid').prop('disabled', true);
+        },
+        success:  function(response){
+            location.reload();
+        }
+    });
+});
+
+//$('#delete_paid').on('click', function(){
+//    $.ajax({
+//        url: MyNameSpace.config.base_url+'admin/del_paid',
+//        type:'post',
+//        data: {
+//            'jo_id' : $(this).attr('alt')
+//        },
+//        beforeSubmit: function(arr, jform, option){
+//            //$('#temp_name').val('Please Wait...');
+//        },
+//        success: function(data) {
+//            //console.log(data);
+//            location.reload();
+//        }
+//    });
+//});
+
+if($('textarea').length >= 1) {
+    CKEDITOR.replace( 'editor_campaign_overview', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_activation_flow', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_other_details', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_next', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'editor_event_spec', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
     //CKEDITOR.replace( 'editor_detail_text' );
     //CKEDITOR.replace( 'editor_req' );
     //CKEDITOR.replace( 'editor_ns' );
-    CKEDITOR.replace( 'setup_particular' );
-    CKEDITOR.replace( 'ta_mvrf' );
-    CKEDITOR.replace( 'ta_Other' );
+    CKEDITOR.replace( 'setup_particular', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'ta_mvrf', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
+    CKEDITOR.replace( 'ta_Other', {
+        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    } );
 }

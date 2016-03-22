@@ -137,4 +137,207 @@ class Update_model extends CI_Model
 //    public function test(){
 //        return 'test1';
 //    }
+
+//do
+    function upload_attachment( $form_values, $file_location ){
+        $data = array(
+            'do_contract_no' => $form_values['do_number'],
+            'do_location' => $file_location
+        );
+        $this->db->where( 'jo_id', $form_values['do_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+
+    }
+
+    function del_do( $a ){
+        $data = array(
+            'do_contract_no' => NULL,
+            'do_location' => NULL
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+//price
+    function update_price( $a ){
+        $data = array(
+            'total_price' => $a['rem_text']
+        );
+        $this->db->where( 'jo_id', $a['rem_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+//bill
+    function upload_attachment_bill( $form_values, $file_location ){
+        $data = array(
+            'billed_date' => $form_values['bill_number'],
+            'bill_location' => $file_location
+        );
+        $this->db->where( 'jo_id', $form_values['bill_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+
+    }
+
+    function del_bd( $a ){
+        $data = array(
+            'billed_date' => NULL,
+            'bill_location' => NULL
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+//ce
+    function upload_attachment_ce( $form_values, $file_location ){
+        $data = array(
+            'ce_number' => $form_values['ce_number'],
+            'ce_location' => $file_location
+        );
+        $this->db->where( 'jo_id', $form_values['ce_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+
+    }
+
+    function del_ce( $a ){
+        $data = array(
+            'ce_number' => NULL,
+            'ce_location' => NULL
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+//paid
+    function upload_attachment_paid( $form_values ){
+        $data = array(
+            'paid_date' => $form_values['paid_datepicker'],
+            'paid_location' => $form_values['paid_color']
+        );
+        $this->db->where( 'jo_id', $form_values['paid_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+
+    }
+
+    function del_paid( $a ){
+        $data = array(
+            'paid_date' => NULL,
+            'paid_location' => NULL
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+    function update_trans( $a ){
+        $data = array(
+            'transmittal' => $a['trans_date']
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+    function update_cono( $a ){
+        $arr_cono = array();
+
+        $this->db->select( 'contract_no' );
+        $this->db->from( 'job_order_list' );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->order_by("jo_id", "desc");
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                if( $row->contract_no ){
+                    $arr_cono = explode( ',', $row->contract_no );
+                    array_push( $arr_cono, $a['cono'] );
+                }else{
+                    array_push( $arr_cono, $a['cono'] );
+                }
+
+                $data = array(
+                    'contract_no' => implode(',', $arr_cono)
+                );
+                $this->db->where( 'jo_id', $a['jo_id'] );
+                $this->db->update( 'job_order_list', $data );
+
+                if( $this->db->affected_rows() > 0 ){
+                    return 'updated';
+                }else{
+                    return 'failed';
+                }
+            }
+        }
+    }
+
+    function update_payment( $a ){
+        $data = array(
+            'paid_date' => date("m-d-Y H:i:s"),
+            'paid_location' => $a['py']
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
 }

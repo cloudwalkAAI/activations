@@ -23,7 +23,8 @@
     </script>
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
     <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>    
-    <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
+<!--    <script src="--><?//=base_url('assets/js/ckeditorjs/ckeditor.js');?><!--"></script>-->
+    <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
 	<?php
 		if(isset($homepage) && $homepage == true){
 	?>
@@ -107,7 +108,7 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
+    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, #inp_trans').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });
