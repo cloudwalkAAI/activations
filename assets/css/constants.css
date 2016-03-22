@@ -626,3 +626,47 @@ thead tr > th { cursor: pointer; cursor: hand; }
 .mpvrForm table{
 	width:100%;
 }
+
+.emergency
+{
+	width:100px;
+	height:100px;
+	background:red;
+	animation:myfirst 5s linear infinite;
+	-moz-animation:myfirst 5s linear infinite; /* Firefox */
+	-webkit-animation:myfirst 5s linear infinite; /* Safari and Chrome */
+	-o-animation:myfirst 5s linear infinite; /* Opera */
+}
+
+@keyframes myfirst
+{
+	0%,100%   {background:red;color: white;}
+	25%  {background:yellow;color: black;}
+	50%  {background:blue;color: white;}
+	75% {background:green;color: white;}
+
+}
+
+@-moz-keyframes myfirst /* Firefox */
+{
+	0%,100%   {background:red;color: white;}
+	25%  {background:yellow;color: black;}
+	50%  {background:blue;color: white;}
+	75% {background:green;color: white;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+	0%,100%   {background:red;color: white;}
+	25%  {background:yellow;color: black;}
+	50%  {background:blue;color: white;}
+	75% {background:green;color: white;}
+}
+
+@-o-keyframes myfirst /* Opera */
+{
+	0%,100%   {background:red;color: white;}
+	25%  {background:yellow;color: black;}
+	50%  {background:blue;color: white;}
+	75% {background:green;color: white;}
+}
