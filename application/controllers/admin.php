@@ -62,4 +62,16 @@ class Admin extends CI_Controller
     function remarks(){
         echo $this->update_model->update_price( $this->input->post() );
     }
+
+    function transmittal(){
+        echo $this->update_model->update_trans( $this->input->post() );
+    }
+
+    function cono(){
+        echo $this->update_model->update_cono( $this->input->post() );
+    }
+
+    function payment(){
+        echo $this->update_model->update_payment( $this->input->post() );
+    }
 }

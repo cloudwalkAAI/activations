@@ -1,10 +1,10 @@
 <table class="twidth">
     <thead>
         <tr>
-            <td colspan="10" class="text-center"><h3>Admin - Accounting</h3></td>
+            <td colspan="12" class="text-center"><h3>Admin - Accounting</h3></td>
         </tr>
         <tr>
-            <td colspan="10">
+            <td colspan="12">
                 <div class="column large-5 medium-5 small-12 dash_col">
                     <div class="row collapse prefix-radius">
                         <div class="small-2 columns">
@@ -19,19 +19,20 @@
         </tr>
         <tr>
             <td width="150">Job Order No.</td>
+            <td width="150">Contract Number</td>
             <td width="400">AE Assigned</td>
             <td width="200">Project Name</td>
             <td width="200">Client</td>
             <td width="150">Brand</td>
-            <td width="150">DO No. / PO</td>
-            <td width="150">Invoice No.</td>
             <td width="150">CE</td>
-            <td width="150" style="display:none;">Transmittal</td>
+            <td width="150">DO No. / PO</td>
+            <td width="150">Transmittal</td>
+            <td width="150">Invoice No.</td>
             <td width="150">Paid</td>
             <td width="150">Remarks</td>
         </tr>
     </thead>
-    <tbody id="tbody_accounts">
+    <tbody id="tbody_accounts" <?=$disabler?>>
         <?=$jolist?>
     </tbody>
 </table>
@@ -48,10 +49,10 @@
 </div>
 
 <div id="bill_Modal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-    <h2 id="modalTitle">Upload Bill</h2>
+    <h2 id="modalTitle">Upload Invoice</h2>
     <form id="form_up_bill" action="" method="post">
         <input type="hidden" name="bill_joid" id="bill_joid">
-        <input type="text" name="bill_number" id="bill_number" placeholder="Bill Number">
+        <input type="text" name="bill_number" id="bill_number" placeholder="Invoice Number">
         <input type="file" name="bill_file" id="bill_file">
         <button id="bton_bill" class="tiny">Upload</button>
     </form>
@@ -79,7 +80,7 @@
             <option value="red" style="background-color:red;"></option>
             <option value="green" style="background-color:green;"></option>
         </select>
-        <button id="bton_paid" class="tiny">Upload</button>
+        <button id="bton_paid" class="tiny">Paid</button>
     </form>
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>

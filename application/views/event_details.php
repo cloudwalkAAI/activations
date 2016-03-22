@@ -79,7 +79,7 @@ if( isset( $shared_array ) ){
             <td>
                 <div>
                     <label for="ed_expected_guest">
-                        <input type="text" id="ed_expected_guest" name="ed_expected_guest" value="<?=isset($edcarray->expected) ? $edcarray->expected : '';?>" <?=$str_disa?> required>
+                        <input type="text" id="ed_expected_guest" name="ed_expected_guest" value="<?=isset($edcarray->expected) ? $edcarray->expected : '';?>" <?=$str_disa?>>
                     </label>
                     <small class="error">This is a required field.</small>
                 </div>

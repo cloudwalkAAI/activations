@@ -61,9 +61,18 @@ class Get_model extends CI_Model
 
         foreach ($query->result() as $row)
         {
+            $str_conoo = '';
             $jolist_array['jo_id'] = $row->jo_id;
             $jolist_array['emp_id'] = $row->emp_id;
             $jolist_array['jo_number'] = $row->jo_number;
+
+            $str_conoo .= '<ul class="no-bullet">';
+            foreach( explode(',',$row->contract_no) as $conoo ){
+                $str_conoo .= '<li>'.$conoo.'</li>';
+            }
+            $str_conoo .= '</ul>';
+
+            $jolist_array['contract_no'] = $str_conoo;
 
             if( !is_null( $row->do_contract_no )){
                 $jolist_array['do_contract_no'] = $row->do_contract_no;
@@ -887,7 +896,7 @@ class Get_model extends CI_Model
         if ($query_ae->num_rows() > 0) {
             $row_ae = $query_ae->row();
             if (isset($row_ae)) {
-                return '<li>'.$row_ae->sur_name.', '.$row_ae->first_name.' '.$row_ae->middle_name.'</li>';
+                return '<li style="font-size:12px";>'.$row_ae->sur_name.', '.$row_ae->first_name.' '.$row_ae->middle_name.'</li>';
             }else{
                 return false;
             }
@@ -906,16 +915,19 @@ class Get_model extends CI_Model
         }
     }
 
-    function accounts_jo(){
+    function accounts_jo( $disabler ){
         $str_td_jo = '';
         $str_ae = '';
         $str_do = '';
         $str_bd = '';
         $str_ce = '';
+        $str_con = '';
         $str_tp = 0;
+        $str_tp_bg = '';
+        $str_tp_bg_class = '';
         $shared_arr = array();
 
-        $this->db->select( 'jo_id, 	jo_number, emp_id, do_contract_no, do_location, project_name, client_company_name, brand, billed_date, bill_location, paid_date, paid_location, shared_to, total_price, ce_number, ce_location, transmittal' );
+        $this->db->select( 'jo_id, 	jo_number, contract_no, emp_id, do_contract_no, do_location, project_name, client_company_name, brand, billed_date, bill_location, paid_date, paid_location, shared_to, total_price, ce_number, ce_location, transmittal' );
         $this->db->from( 'job_order_list' );
         $this->db->order_by("jo_id", "desc");
         $query = $this->db->get();
@@ -933,49 +945,81 @@ class Get_model extends CI_Model
                 }
 
                 if($row->do_contract_no){
-                    $str_do = '<a href="'.base_url($row->do_location).'" target="_blank">'.$row->do_contract_no.'</a><a href="#" id="delete_do" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                    $str_do = '<a href="'.base_url($row->do_location).'" target="_blank">'.$row->do_contract_no.'</a><a href="#" id="delete_do" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
                 }else{
-                    $str_do = '<button class="button tiny btn_do twidth" alt="'.$row->jo_id.'" >Do</button>';
+                    $str_do = '<button class="button tiny btn_do twidth" alt="'.$row->jo_id.'" style="'.$disabler.'">Do</button>';
                 }
 
                 if($row->billed_date){
-                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><a href="#" id="delete_bd" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><a href="#" id="delete_bd" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
                 }else{
-                    $str_bd = '<button class="button tiny btn_bd twidth" alt="'.$row->jo_id.'" >Bill</button>';
+                    $str_bd = '<button class="button tiny btn_bd twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">Invoice</button>';
                 }
 
                 if($row->ce_number){
-                    $str_ce = '<a href="'.base_url($row->ce_location).'" target="_blank">'.$row->ce_number.'</a><a href="#" id="delete_ce" alt="'.$row->jo_id.'" style="margin-left:10px;" >[x]</a>';
+                    $str_ce = '<a href="'.base_url($row->ce_location).'" target="_blank">'.$row->ce_number.'</a><a href="#" id="delete_ce" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
                 }else{
-                    $str_ce = '<button class="button tiny btn_ce twidth" alt="'.$row->jo_id.'" >CE</button>';
+                    $str_ce = '<button class="button tiny btn_ce twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">CE</button>';
                 }
 
-                if($row->paid_date){
+                if( $row->paid_location == 'Paid' ){
                     $str_pd = '
                         <ul class="no-bullet">
                             <li>
                                 <span>'.$row->paid_date.'</span>
                             </li>
                             <li>
-                                <button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="'.$row->paid_date.'" title="'.$row->paid_location.'" style="background-color:'.$row->paid_location.';">Paid</button>
+                                <button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
                             </li>
                         </ul>
                     ';
                 }else{
-                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" style="background-color:'.$row->paid_location.';">Paid</button>';
+                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 
                 if($row->transmittal){
-                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="button tiny btn_rem twidth" value="'.$row->transmittal.'">';
+                    $now = time(); // or your date as well
+                    $your_date = strtotime( $row->transmittal );
+                    $datediff = abs( $now - $your_date );
+
+                    if( floor( $datediff/(60*60*24) ) <= 45 ){
+                        $str_tp_bg = 'background-color: green; color:white;';
+                    }elseif( ( floor( $datediff/(60*60*24) ) > 45 ) && ( floor( $datediff/(60*60*24) ) <= 60 ) ){
+                        $str_tp_bg = 'background-color: yellow; color:black;';
+                    }elseif( ( floor( $datediff/(60*60*24) ) > 60 ) && ( floor( $datediff/(60*60*24) ) <= 120 ) ){
+                        $str_tp_bg = 'background-color: red; color:white;';
+                    }else{
+                        $str_tp_bg_class = 'emergency';
+                        $str_tp_bg = '';
+                    }
+
+                    $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24));
                 }else{
-                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="button tiny btn_rem twidth">';
+                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
                 }
 
-
+                if($row->contract_no){
+                    $str_con .= '<ul class="no-bullet">';
+                    foreach( explode(',', $row->contract_no) as $cont ){
+                        $str_con .= '
+                        <li style="font-size:12px";>
+                            '.$cont.'
+                        </li>
+                        ';
+                    }
+                    $str_con .= '</ul>';
+                    $str_con .= '
+                        <input id="inp_contract_no" class="twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
+                        <span style="font-size:8px;'.$disabler.'">Press Enter to Save</span>
+                    ';
+                }else{
+                    $str_con = '<input id="inp_contract_no" class="twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
+                }
 
                 $str_td_jo .= '
                     <tr>
                         <td style="color:'.$row->jo_color.';">'.$row->jo_number.'</td>
+                        <td>'.$str_con.'</td>
                         <td>
                             <ul class="no-bullet">
                                 '.$str_ae.'
@@ -984,15 +1028,15 @@ class Get_model extends CI_Model
                         <td>'.$row->project_name.'</td>
                         <td>'.$this->accounts_get_client($row->client_company_name).'</td>
                         <td>'.$row->brand.'</td>
-                        <td>'.$str_do.'</td>
-                        <td>'.$str_bd.'</td>
                         <td>'.$str_ce.'</td>
-                        <td style="display:none;">'.$str_tp.'</td>
+                        <td>'.$str_do.'</td>
+                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
+                        <td>'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
                         </td>
                         <td>
-                            <button class="button tiny btn_rem twidth" value="'.$row->total_price.'" alt="'.$row->jo_id.'" >Remarks</button>
+                            <button class="button tiny btn_rem twidth" value="'.$row->total_price.'" alt="'.$row->jo_id.'" style="'.$disabler.'">Remarks</button>
                         </td>
                     </tr>
                 ';

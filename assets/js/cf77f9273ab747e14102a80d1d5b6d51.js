@@ -1828,13 +1828,70 @@ $('#delete_ce').on('click', function(){
     });
 });
 
+//transmittal
+$('#inp_trans').keyup(function(event){
+    if( event.which == '13'){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'admin/transmittal',
+            type:'post',
+            data: {
+                'jo_id' : $(this).attr('alt'),
+                'trans_date' : $(this).val()
+            },
+            beforeSubmit: function(arr, jform, option){
+                //$('#temp_name').val('Please Wait...');
+            },
+            success: function(data) {
+                //console.log(data);
+                location.reload();
+            }
+        });
+    }
+});
+
+//contract number
+$('#inp_contract_no').keyup(function(event){
+    if( event.which == '13'){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'admin/cono',
+            type:'post',
+            data: {
+                'jo_id' : $(this).attr('alt'),
+                'cono' : $(this).val()
+            },
+            beforeSubmit: function(arr, jform, option){
+                //$('#temp_name').val('Please Wait...');
+            },
+            success: function(data) {
+                //console.log(data);
+                location.reload();
+            }
+        });
+    }
+});
+
 //paid
 $('.btn_pd').on('click', function(){
-    $('#paid_joid').val( $(this).attr('alt') );
-    $('#paid_datepicker').val( $(this).attr('value') );
+    //$('#paid_joid').val( $(this).attr('alt') );
+    //$('#paid_datepicker').val( $(this).attr('value') );
     //$('#paid_color').val( $(this).attr('title') );
-    $('#paid_color').css( 'background-color', $(this).attr('title') );
-    $('#paid_Modal').foundation('reveal', 'open');
+    //$('#paid_color').css( 'background-color', $(this).attr('title') );
+    //$('#paid_Modal').foundation('reveal', 'open');
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/payment',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt'),
+            'py' : $(this).val()
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
 });
 
 $('#paid_color').on('change', function(){

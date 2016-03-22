@@ -349,7 +349,10 @@ class Jo extends CI_Controller{
     function accounts(){
 		$data['active_menu'] = 'ex';
 		$data['active_submenu'] = 'accounts';
-		$data['jolist'] = $this->get_model->accounts_jo();
+        if( $this->session->userdata('sess_dept') == 2 ){
+            $data['disabler'] = 'display:none;';
+        }
+        $data['jolist'] = $this->get_model->accounts_jo( $data['disabler'] );
         $data['navigator'] = $this->load->view('nav', $data, TRUE);
         $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
         $this->load->view('master_page', $data);

@@ -279,4 +279,65 @@ class Update_model extends CI_Model
             return 'failed';
         }
     }
+
+    function update_trans( $a ){
+        $data = array(
+            'transmittal' => $a['trans_date']
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+    function update_cono( $a ){
+        $arr_cono = array();
+
+        $this->db->select( 'contract_no' );
+        $this->db->from( 'job_order_list' );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->order_by("jo_id", "desc");
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                if( $row->contract_no ){
+                    $arr_cono = explode( ',', $row->contract_no );
+                    array_push( $arr_cono, $a['cono'] );
+                }else{
+                    array_push( $arr_cono, $a['cono'] );
+                }
+
+                $data = array(
+                    'contract_no' => implode(',', $arr_cono)
+                );
+                $this->db->where( 'jo_id', $a['jo_id'] );
+                $this->db->update( 'job_order_list', $data );
+
+                if( $this->db->affected_rows() > 0 ){
+                    return 'updated';
+                }else{
+                    return 'failed';
+                }
+            }
+        }
+    }
+
+    function update_payment( $a ){
+        $data = array(
+            'paid_date' => date("m-d-Y H:i:s"),
+            'paid_location' => $a['py']
+        );
+        $this->db->where( 'jo_id', $a['jo_id'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
 }
