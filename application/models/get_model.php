@@ -38,21 +38,122 @@ class Get_model extends CI_Model
         }
     }
 
-//    function get_ae_jo_details( $jo_id ){
-//        $arr = array();
-//
-//        if( $empid == $this->session->userdata('sess_id') ){
-//            $query = $this->db->get_where( 'job_order_list', array( 'jo_id' => $jo_id ) );
-//            return $query->result_array();
-//
-//            foreach( $query->result() as $row ){
-//
-//            }
-//
-//        }else{
-//            return false;
-//        }
-//    }
+    function get_ae_jo_details( $jo_id ){
+        $arr_tonight = array();
+
+        $this->db->select( 'project_type, client_company_name, brand, project_name' );
+        $this->db->from( 'job_order_list' );
+        $this->db->where( 'jo_id =', $jo_id );
+        $query = $this->db->get();
+        $row = $query->row();
+        if (isset($row))
+        {
+            $arr_tonight['jo_id']           = $jo_id;
+            $arr_tonight['cont_person']     = $this->get_client_info_jo_edit( $row->client_company_name );
+            $arr_tonight['cont_person_id']  = $row->client_company_name;
+            $arr_tonight['projtype_check']  = $this->get_project_type2( $row->project_type );
+            $arr_tonight['projtype']        = $row->project_type;
+            $arr_tonight['brand']           = $row->brand;
+            $arr_tonight['brand_check']     = $this->get_brand_list2_jo( $row->client_company_name, $row->brand );
+
+            $arr_tonight['project_name']    = $row->project_name;
+        }
+        return json_encode( $arr_tonight );
+    }
+
+    function get_project_type2( $a ){
+        $input_text = '';
+        $checked = '';
+        $array_brands = array();
+        $array_brands = explode(',',$a);
+        $i=0;
+        $query = $this->db->get( 'project_type' );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                if (in_array($row->pt_name, $array_brands)) {
+                    $checked = 'checked';
+                }else{
+                    $checked = '';
+                }
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $input_text .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $input_text;
+    }
+
+    function get_brand_list2_jo( $a, $b ){
+        $str_brand = '';
+        $checked = '';
+        $str_brand2 = array();
+        $arr_brand = array();
+        $i = 0;
+        $this->db->select( 'client_id, brand_name' );
+        $this->db->from( 'brand' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        foreach( $query->result() as $row ){
+            $arr_brand = explode(',',$row->brand_name);
+            $arr_brand2 = explode(',',$b);
+            foreach( $arr_brand as $the_brand ){
+                if (in_array($the_brand, $arr_brand2)) {
+                    $checked = 'checked';
+                }else{
+                    $checked = '';
+                }
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $str_brand .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $str_brand .= '
+                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $str_brand .= '
+                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $str_brand;
+    }
+
+
+    function get_client_info_jo_edit( $a ){
+        $this->db->select( 'client_id, company_name, contact_person' );
+        $this->db->from( 'clients' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        $row = $query->row();
+        if (isset($row))
+        {
+            return $row->contact_person;
+        }
+    }
 
     function get_ae_jo_w( $id ){
         $jolist_array = array();
@@ -138,12 +239,70 @@ class Get_model extends CI_Model
 
     function get_brand_list( $a ){
         $str_brand = '';
+        $arr_brand = array();
+        $i = 0;
         $this->db->select( 'client_id, brand_name' );
         $this->db->from( 'brand' );
         $this->db->where( 'client_id =', $a );
         $query = $this->db->get();
         foreach( $query->result() as $row ){
-            $str_brand = $row->brand_name;
+            $arr_brand = explode(',',$row->brand_name);
+            foreach( $arr_brand as $the_brand ){
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $str_brand .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $str_brand .= '
+                                <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $str_brand .= '
+                                <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $str_brand;
+    }
+
+    function get_brand_list2( $a ){
+        $str_brand = '';
+        $arr_brand = array();
+        $i = 0;
+        $this->db->select( 'client_id, brand_name' );
+        $this->db->from( 'brand' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        foreach( $query->result() as $row ){
+            $arr_brand = explode(',',$row->brand_name);
+            foreach( $arr_brand as $the_brand ){
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $str_brand .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $str_brand .= '
+                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $str_brand .= '
+                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                        ';
+                    }
+                }
+            }
         }
         return $str_brand;
     }

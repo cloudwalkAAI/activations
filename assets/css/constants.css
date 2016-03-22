@@ -457,7 +457,7 @@ thead tr > th { cursor: pointer; cursor: hand; }
 
 .jolist:hover{
 	/* background: #F57E20; */
-	cursor:pointer;
+	/*cursor:pointer;*/
 	border: 3px solid #F57E20;
 }
 

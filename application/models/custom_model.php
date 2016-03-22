@@ -67,13 +67,15 @@ class Custom_model extends CI_Model
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update( 'clients', $data );
 
-        $int_rows = $this->db->affected_rows();
+        $int_rows += $this->db->affected_rows();
 
         $data = array(
             'brand_name' => implode(',',$a['ta_brand']),
         );
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update('brand', $data);
+
+        $int_rows += $this->db->affected_rows();
 
         return $int_rows;
     }
@@ -100,4 +102,26 @@ class Custom_model extends CI_Model
             return 0;
         }
     }
+
+    function update_jo( $a ){
+        print_r($a);
+
+        $insid = 0;
+        $data = array(
+            'project_type'          => implode(',',$a['inp_projtype2']),
+            'client_company_name'   => $a['inp_client2'],
+            'brand'                 => implode(',',$a['inp_brand2']),
+            'project_name'          => $a['inp_projname2']
+        );
+
+        $this->db->where('jo_id', $a['update_joid']);
+        $this->db->update('job_order_list', $data);
+
+        if( $this->db->affected_rows() > 0 ) {
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
 }

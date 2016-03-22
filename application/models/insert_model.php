@@ -67,7 +67,7 @@ class Insert_model extends CI_Model
             'emp_id'                => $this->session->userdata('sess_id'),
             'project_type'          => implode(',',$a['inp_projtype']),
             'client_company_name'   => $a['inp_client'],
-            'brand'                 => $a['inp_brand'],
+            'brand'                 => implode(',',$a['inp_brand']),
             'project_name'          => $a['inp_projname'],
             'date_created'          => date("m-d-Y H:i:s")
         );

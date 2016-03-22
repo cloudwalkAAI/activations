@@ -27,6 +27,7 @@ class Jo extends CI_Controller{
 //            if( $arr ){
                 $data_a['jo_list'] = $arr;
                 $data_a['project_type'] = $this->get_model->get_project_type();
+//                $data_a['project_type2'] = $this->get_model->get_project_type2();
                 $data_a['client_list'] = $this->get_model->get_client_list();
                 $data['navigator'] = $this->load->view('nav', $data, TRUE);
                 $data['content'] = $this->load->view('ae/jo_list_view', $data_a, TRUE);
@@ -57,11 +58,22 @@ class Jo extends CI_Controller{
         echo $this->get_model->get_brand_list( $this->input->post( 'cid' ) );
     }
 
+    function load_brand2(){
+        echo $this->get_model->get_brand_list2( $this->input->post( 'cid' ) );
+    }
+
     function add_jo(){
-//        print_r($this->input->post());
-//        return false;
         $insid = $this->insert_model->insert_jo( $this->input->post() );
         echo $this->get_model->get_ae_jo_w( $insid );
+    }
+
+    function update_jo(){
+        echo $this->custom_model->update_jo( $this->input->post() );
+//        echo $this->get_model->get_ae_jo_w( $insid );
+    }
+
+    function load_jo_details(){
+        echo $this->get_model->get_ae_jo_details( $this->input->post( 'jcid' ) );
     }
 	
 	function get_jo(){
