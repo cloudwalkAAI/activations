@@ -113,28 +113,30 @@ class Get_model extends CI_Model
             $arr_brand = explode(',',$row->brand_name);
             $arr_brand2 = explode(',',$b);
             foreach( $arr_brand as $the_brand ){
-                if (in_array($the_brand, $arr_brand2)) {
-                    $checked = 'checked';
-                }else{
-                    $checked = '';
-                }
-                $i++;
-                if ($i <= 3) {
-                    if($i==1){
-                        $str_brand .= '
-                            <tr>
-                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
-                        ';
-                    }else if($i % 3 == 0){
-                        $str_brand .= '
-                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
-                            </tr>
-                        ';
-                        $i=0;
+                if( $the_brand != null ){
+                    if (in_array($the_brand, $arr_brand2)) {
+                        $checked = 'checked';
                     }else{
-                        $str_brand .= '
-                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
-                        ';
+                        $checked = '';
+                    }
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
                     }
                 }
             }
@@ -248,23 +250,26 @@ class Get_model extends CI_Model
         foreach( $query->result() as $row ){
             $arr_brand = explode(',',$row->brand_name);
             foreach( $arr_brand as $the_brand ){
-                $i++;
-                if ($i <= 3) {
-                    if($i==1){
-                        $str_brand .= '
-                            <tr>
-                                <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
-                        ';
-                    }else if($i % 3 == 0){
-                        $str_brand .= '
-                                <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
-                            </tr>
-                        ';
-                        $i=0;
-                    }else{
-                        $str_brand .= '
-                                <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
-                        ';
+
+                if( $the_brand != null ){
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
                     }
                 }
             }
@@ -283,23 +288,25 @@ class Get_model extends CI_Model
         foreach( $query->result() as $row ){
             $arr_brand = explode(',',$row->brand_name);
             foreach( $arr_brand as $the_brand ){
-                $i++;
-                if ($i <= 3) {
-                    if($i==1){
-                        $str_brand .= '
-                            <tr>
-                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
-                        ';
-                    }else if($i % 3 == 0){
-                        $str_brand .= '
-                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
-                            </tr>
-                        ';
-                        $i=0;
-                    }else{
-                        $str_brand .= '
-                                <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
-                        ';
+                if( $the_brand != null ){
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
                     }
                 }
             }
