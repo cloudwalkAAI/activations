@@ -165,6 +165,7 @@ class Jo extends CI_Controller{
                 }
 
             }elseif( $row == "ed" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['req_table'] = $this->get_model->get_req_table_v2( $this->input->get('a') );
                 $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
                 $data_ed['result_ed'] = $this->get_model->get_last_ed( $this->input->get('a') );
@@ -175,6 +176,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "pjat" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['attachment_list'] = $this->get_model->get_list_attachment( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/proj_attachments', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -183,6 +185,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "setup" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['setup_details'] = $this->get_model->get_last_setup( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/setup', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -191,6 +194,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "mvrf" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['mvrf_details'] = $this->get_model->get_last_mvrf( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/mvrf', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -199,6 +203,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "other" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['other_details'] = $this->get_model->get_last_other( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/others', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);

@@ -17,6 +17,12 @@ $info = json_decode($jo_details);
             <td><?= $info->date_created ?></td>
         </tr>
         <tr>
+            <td>Contract No.</td>
+        </tr>
+        <tr>
+            <td><?= $info->contract_no ?></td>
+        </tr>
+        <tr>
             <td>Client : <span style="color:#2a92db;"><?= $info->client_company_name ?></span></td>
         </tr>
         <tr>

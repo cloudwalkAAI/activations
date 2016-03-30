@@ -44,7 +44,10 @@
               <th width="200">Job Order No.</th>
               <th width="200">Date Uploaded</th>
               <th width="200">File Name</th>
-              <th width="200">Reference for</th>
+              <th width="200">Ingress</th>
+              <th width="200">Egress</th>
+              <th width="200">Assigned to</th>
+              <th width="200">Contact Number</th>
               <th width="200">Download</th>
             </tr>
           </thead>
@@ -62,7 +65,10 @@
                           echo '
                           <td>'.$row->date_uploaded.'</td> 
                           <td>'.$row->file_name.'</td> 
-                          <td>'.$row->reference_for.'</td> 
+                          <td>'.$row->ingress.'</td>
+                          <td>'.$row->egress.'</td>
+                          <td>'.$row->assigned.'</td>
+                          <td>'.$row->contact.'</td>
                           <td><a target="_blank" href="'.base_url($row->file_location).'">Download <i class="large fi-download"></i></a></td></tr>
                           ';
 
