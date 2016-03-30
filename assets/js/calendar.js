@@ -26,3 +26,25 @@
         }
     });
 //});
+
+$('.task_change').on('click',function(){
+    var cld = $(this).attr('alt');
+    var cval = $(this).attr('value');
+    $(this).closest('tr').remove();
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/update_pending',
+        type:'post',
+        data: {
+            'cal_id' : cld,
+            'cval' : cval
+        },
+        beforeSubmit: function(arr, jform, option){
+        },
+        success: function(data) {
+            if( data != 'failed' ){
+                $(data).prependTo("tbody#creatives_tbd");
+            }
+        }
+    });
+});

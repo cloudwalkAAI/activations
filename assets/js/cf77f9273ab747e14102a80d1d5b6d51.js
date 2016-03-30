@@ -96,9 +96,6 @@ $('.edit_load_jo').on('click', function(){
         },
         success: function(data) {
             var json = $.parseJSON(data);
-            //console.log(json);
-            //var arr = json['brand'].split(',');
-            //console.log(arr);
             $('#update_joid').val(json['jo_id']);
             $('#inp_client2').val(json['cont_person_id']);
             $('#inp_projname2').val(json['project_name']);
@@ -106,18 +103,10 @@ $('.edit_load_jo').on('click', function(){
             $('#client_brands2').append( json['brand_check'] );
             $('.p_list_edit_jo').empty();
             $('.p_list_edit_jo').append( json['projtype_check'] );
-            //$('label#hd').show();
-            //$('#client_brands').empty();
-            //$('#client_brands').append( data );
-            //$.each( arr, function( key, value ) {
-            //    $('#inp_brand')
-            //        .append($("<option></option>")
-            //        .attr("value", value)
-            //        .text(value));
-            //});
         }
     });
 });
+
 $('#btn_update_jo').on('click', function(){
     $('#joedit_form').ajaxForm({
         type: 'POST',

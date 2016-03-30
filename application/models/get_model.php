@@ -1204,4 +1204,20 @@ class Get_model extends CI_Model
 
         return $str_td_jo;
     }
+
+    function dt_calendar( $cal_id ){
+        $str_name = '';//test
+        $str_ret = '';//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td></tr>';
+        }
+
+        return $str_ret;
+    }
 }

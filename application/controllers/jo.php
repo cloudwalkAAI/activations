@@ -5,7 +5,7 @@ class Jo extends CI_Controller{
 
     public function __construct() {
         parent::__construct ();
-//        $this->load->model('login_model');
+        $this->load->model('email_model');
         $this->load->model('insert_model');
         $this->load->model('get_model');
         $this->load->helper('download');
@@ -81,6 +81,16 @@ class Jo extends CI_Controller{
 		$data["joData"] = $this->get_model->get_ae_jo_w( $joid );
 		$this->load->view("joeditmodal",$data);
 	}
+
+    function update_pending(){
+        $result = $this->custom_model->jo_pending( $this->input->post('cal_id') );
+        if( $result != 'failed' ){
+            $this->email_model->creatives_task_notification_email($this->input->post('cval'));
+            echo $this->get_model->dt_calendar( $result );
+        }else{
+            echo $result;
+        }
+    }
 
     /*for loading a JO*/
     function in(){

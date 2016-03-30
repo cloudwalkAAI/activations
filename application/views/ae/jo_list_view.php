@@ -115,7 +115,14 @@
                         </div>
                         <div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">
                             <ul class="inline-list jorightlist right">
-                                <li><a class="edit_load_jo" data-reveal-id="edit_joModal" alt="<?php echo $row['jo_id']; ?>"><img src="<?php echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
+								<?php
+								if( $this->session->userdata('sess_dept') <=2 ){
+								?>
+									<li><a class="edit_load_jo" data-reveal-id="edit_joModal" alt="<?php echo $row['jo_id']; ?>"><img src="<?php echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
+								<?php
+								}
+								?>
+
                                 <!--<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Delete.png');?>"/></a></li>-->
                             </ul>
                             <div class="large-12 columns text-right" style="padding-right: 30px;">

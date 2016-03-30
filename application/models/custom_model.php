@@ -124,4 +124,18 @@ class Custom_model extends CI_Model
         }
     }
 
+    function jo_pending( $cal_id ){
+        $data = array(
+            'endd' => 'Done'
+        );
+        $this->db->where( 'cal_id', $cal_id );
+        $this->db->update( 'calendar', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return $cal_id;
+        }else{
+            return 'failed';
+        }
+    }
+
 }

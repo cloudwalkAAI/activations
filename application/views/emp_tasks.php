@@ -21,6 +21,7 @@
 
                     <form id="form_creatives_tasks" action="" method="post">
                         <input type="hidden" name="dept_id" value="10">
+                        <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
                         <select name="sel_creatives_emp" id="sel_creatives_emp">
                             <option value="0">Select Employee</option>
                             <?php
@@ -52,12 +53,13 @@
                         <td>Assigned to :</td>
                         <td>Deadline</td>
                         <td>Description</td>
+                        <td>Process</td>
                     </tr>
                     </thead>
                     <tbody id="creatives_tbd">
                     <?php
                     $str_name = '';//test
-                    $query = $this->db->get_where('calendar', array('dept_id' => 10));
+                    $query = $this->db->get_where( 'calendar', array('dept_id' => 10, 'jo_id' => $this->input->get('a') ) );
                     foreach($query->result() as $row){
 
                         $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
@@ -70,8 +72,9 @@
                                 <td>'.$str_name.'</td>
                                 <td>'.$row->date.'</td>
                                 <td>'.$row->data.'</td>
+                                <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
                             </tr>
-                            ';
+                        ';
                     }
                     ?>
                     </tbody>
@@ -82,31 +85,6 @@
     <li class="accordion-navigation">
         <a class="" href="#hr_panel">HR</a>
         <div id="hr_panel" class="content">
-            <div class="row">
-                <table class="twidth">
-                    <thead>
-                    <tr>
-                        <td>Assigned to :</td>
-                        <td>Start</td>
-                        <td>Deadline</td>
-                        <td>Description</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </li>
-    <li class="accordion-navigation">
-        <a class="" href="#act_panel">Activations</a>
-        <div id="act_panel" class="content">
             <div class="row">
                 <table class="twidth">
                     <thead>
@@ -187,13 +165,15 @@
                     <thead>
                     <tr>
                         <td>Assigned to :</td>
-                        <td>Start</td>
-                        <td>Deadline</td>
+                        <td>Contact Number</td>
+                        <td>Ingress</td>
+                        <td>Egress</td>
                         <td>Description</td>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
