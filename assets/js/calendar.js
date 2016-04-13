@@ -25,6 +25,25 @@
             }
         }
     });
+
+    $('#btn_update_calendar_u').on('click',function(){
+        $('#form_creatives_tasks_u').ajaxForm({
+            type: 'post',
+            url: MyNameSpace.config.base_url+'jo/submit_date_calendar_u',
+            beforeSubmit:function(){
+                $('#btn_update_client_u').prop('disabled',true);
+            },
+            success:  function(response){
+                if( response != 'failed'){
+                    var json = $.parseJSON(response);
+                    $('tr#' + json['table_id']).replaceWith( json['table_task']  );
+                    $('#modal_creatives_tasks_u').foundation( 'reveal', 'close' );
+                    $('#btn_update_client_u').prop('disabled',false);
+                }
+            }
+        });
+    });
+
 //});
 
 $('.task_change').on('click',function(){
@@ -39,12 +58,36 @@ $('.task_change').on('click',function(){
             'cal_id' : cld,
             'cval' : cval
         },
-        beforeSubmit: function(arr, jform, option){
-        },
         success: function(data) {
             if( data != 'failed' ){
                 $(data).prependTo("tbody#creatives_tbd");
             }
+        }
+    });
+});
+
+$('.edit-btn-task').on('click',function(){
+    var cld = $(this).attr('alt');
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/update_cal_task_getinfo',
+        type:'post',
+        data: {
+            'cal_id' : cld
+        },
+        success: function(data) {
+            var json = $.parseJSON(data);
+            console.log(json);
+            $('#task_id_u').val( json['cal_id'] );
+            $('#sel_creatives_emp_u').val( json['eid'] );
+            $('#creative_deadline_u').val( json['edate'] );
+            $('#creative_description_u').val( json['desc'] );
+
+            $('#creatives_box_u').hide();
+            //$('tbody#creatives_tbd_u').append(response);
+            $('#modal_creatives_tasks_u').foundation( 'reveal', 'close' );
+            $('#btn_update_client_u').prop('disabled',false);
+
+            $('#modal_creatives_tasks_u').foundation('reveal', 'open');
         }
     });
 });

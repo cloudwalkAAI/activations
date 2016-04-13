@@ -92,6 +92,10 @@ class Jo extends CI_Controller{
         }
     }
 
+    function update_cal_task_getinfo(){
+        echo $this->get_model->get_caltask($this->input->post('cal_id'));
+    }
+
     /*for loading a JO*/
     function in(){
 		$data['active_menu'] = 'jo';
@@ -471,6 +475,11 @@ class Jo extends CI_Controller{
         }else{
             echo $result;
         }
+    }
+
+    function submit_date_calendar_u(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_task( $this->input->post() );
     }
 
     function search_ae(){

@@ -1087,7 +1087,6 @@ class Get_model extends CI_Model
         $str_do = '';
         $str_bd = '';
         $str_ce = '';
-        $str_con = '';
         $str_tp = 0;
         $str_tp_bg = '';
         $str_tp_bg_class = '';
@@ -1100,6 +1099,8 @@ class Get_model extends CI_Model
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row)
             {
+                $str_con = '';
+                $str_ae = '';
                 $str_ae .= $this->accounts_get_emp($row->emp_id);
 
                 $shared_arr = explode(",",$row->shared_to);
@@ -1161,7 +1162,7 @@ class Get_model extends CI_Model
 
                     $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24));
                 }else{
-                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
+                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
                 }
 
                 if($row->contract_no){
@@ -1175,11 +1176,11 @@ class Get_model extends CI_Model
                     }
                     $str_con .= '</ul>';
                     $str_con .= '
-                        <input id="inp_contract_no" class="twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
+                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
                         <span style="font-size:8px;'.$disabler.'">Press Enter to Save</span>
                     ';
                 }else{
-                    $str_con = '<input id="inp_contract_no" class="twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
+                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
                 }
 
                 $str_td_jo .= '
@@ -1226,5 +1227,27 @@ class Get_model extends CI_Model
         }
 
         return $str_ret;
+    }
+
+    function get_caltask($cal_id){
+        $str_name = '';//test
+        $arr_ret = array();//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+            $arr_ret = array(
+                'cal_id' => $cal_id,
+                'ename' => $str_name,
+                'eid' => $row->employee_id,
+                'edate' => $row->date,
+                'desc' => $row->data,
+                'process' => $row->endd
+            );
+        }
+
+        return json_encode($arr_ret);
     }
 }

@@ -1921,8 +1921,11 @@ $('#delete_ce').on('click', function(){
 });
 
 //transmittal
-$('#inp_trans').keyup(function(event){
-    if( event.which == '13'){
+$('.inp_trans').on('change',function(event){
+    //var keycode = (event.keyCode ? event.keyCode : event.which);
+    //console.log(keycode);
+    //if( keycode == '13'){
+    //    alert('hello');
         $.ajax({
             url: MyNameSpace.config.base_url+'admin/transmittal',
             type:'post',
@@ -1930,19 +1933,17 @@ $('#inp_trans').keyup(function(event){
                 'jo_id' : $(this).attr('alt'),
                 'trans_date' : $(this).val()
             },
-            beforeSubmit: function(arr, jform, option){
-                //$('#temp_name').val('Please Wait...');
-            },
             success: function(data) {
-                //console.log(data);
+                console.log(data);
                 location.reload();
             }
         });
-    }
+    //}
+    //event.stopPropagation();
 });
 
 //contract number
-$('#inp_contract_no').keyup(function(event){
+$('.inp_contract_no').keyup(function(event){
     if( event.which == '13'){
         $.ajax({
             url: MyNameSpace.config.base_url+'admin/cono',
@@ -1956,6 +1957,7 @@ $('#inp_contract_no').keyup(function(event){
             },
             success: function(data) {
                 //console.log(data);
+                $('.inp_contract_no').val('');
                 location.reload();
             }
         });

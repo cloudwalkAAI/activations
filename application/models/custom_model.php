@@ -138,4 +138,41 @@ class Custom_model extends CI_Model
         }
     }
 
+    function update_task( $a ){
+        $arr_new_task_update = array();
+        $str_name = '';
+
+        $data = array(
+            'date' => $a['deadline_u'],
+            'data' => $a['description_u'],
+            'employee_id' => $a['sel_creatives_emp_u']
+        );
+        $this->db->where( 'cal_id', $a['task_id_u'] );
+        $this->db->update( 'calendar', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            $query = $this->db->get_where('calendar', array('cal_id' => $a['task_id_u']));
+            foreach($query->result() as $row){
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+                $arr_new_task_update['table_id'] = $row->cal_id;
+                $arr_new_task_update['table_task'] = '
+                    <tr id="'.$row->cal_id.'">
+                        <td>'.$str_name.'</td>
+                        <td>'.$row->date.'</td>
+                        <td>'.$row->data.'</td>
+                        <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
+                        <td><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a></td>
+                    </tr>
+                ';
+
+                echo json_encode($arr_new_task_update);
+            }
+        }else{
+            return 'failed';
+        }
+    }
+
 }
