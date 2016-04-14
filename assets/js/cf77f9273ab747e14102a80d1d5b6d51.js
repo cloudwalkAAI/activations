@@ -1799,9 +1799,9 @@ $('#bton_do').on('click', function(){
             $('#bton_do').prop('disabled', true);
         },
         success:  function(response){
-            //console.log(response);
+            console.log(response);
             //$('#bton_do').prop('disabled', false);
-            location.reload();
+            //location.reload();
         }
     });
 });

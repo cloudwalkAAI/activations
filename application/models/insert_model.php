@@ -288,6 +288,7 @@ class Insert_model extends CI_Model
             'file_name'     => str_replace("assets/uploads/","",$location),
             'file_location' => $location,
             'reference_for' => $a['sel_reference'],
+            'dept_id'       => $this->session->userdata('sess_dept'),
             'date_uploaded' => date("Y-m-d H:i:s")
 
         );

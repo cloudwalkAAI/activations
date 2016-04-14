@@ -727,7 +727,6 @@ class Get_model extends CI_Model
                 return $row->project_name;
             }
         }
-
     }
 
     function emp_last_task( $a ){
@@ -1144,7 +1143,7 @@ class Get_model extends CI_Model
                     $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 
-                if($row->transmittal){
+                if($row->transmittal != NULL){
                     $now = time(); // or your date as well
                     $your_date = strtotime( $row->transmittal );
                     $datediff = abs( $now - $your_date );
@@ -1207,6 +1206,8 @@ class Get_model extends CI_Model
                         </td>
                     </tr>
                 ';
+
+                $str_tp_bg = '';
             }
         }
 
