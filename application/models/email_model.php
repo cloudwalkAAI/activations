@@ -47,8 +47,8 @@ class Email_model extends CI_Model
         // Sender email address
         $this->email->from( 'roel.r@cloudwalkdigital.com' );
         // Receiver email address.for single email
-//        $this->email->to( $str_email, $str_name);
-        $this->email->to( 'roelrosil1705@gmail.com', $str_name);
+        $this->email->to( $str_email, $str_name);
+//        $this->email->to( 'roelrosil1705@gmail.com', $str_name);
         // Subject of email
         $this->email->subject($str_jo_name.'-('.$str_jo_id.')');
         // Message in email

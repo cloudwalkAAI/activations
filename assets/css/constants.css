@@ -684,3 +684,31 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	max-height: 599px;
 	overflow-y: auto;
 }
+
+.calendar_font{
+	font-size: 10px;
+}
+
+.nav-right-strip {
+	border: none;
+	margin-right: 5px;
+	margin-top: 5px;
+}
+
+.right-off-canvas-menu {
+	min-height: 100vh;
+	background: #fff;
+}
+
+.right-off-canvas-menu .off-canvas-list li.active a, .right-off-canvas-menu .off-canvas-list li a:hover {
+	color: #f27f22;
+	border-left: 5px solid #f27f22;
+	padding-left: 23px;
+	background: transparent;
+}
+
+.right-off-canvas-menu .off-canvas-list li a {
+	color: #0063a6;
+	font-family: montserratSemiBold;
+	border: none;
+}

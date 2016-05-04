@@ -129,7 +129,6 @@ class Custom_model extends CI_Model
         $query_ae = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
         if ($query_ae->num_rows() > 0) {
             $row_ae = $query_ae->row();
-
             if( $row_ae->endd != 'Done' ){
                 $str_status = 'Done';
             }else{
@@ -145,6 +144,15 @@ class Custom_model extends CI_Model
         $this->db->update( 'calendar', $data );
 
         if( $this->db->affected_rows() > 0 ){
+
+            $data = array(
+                'message'          => 'Task '.$str_status.' by '.$this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname'),
+                'emp_id'           => $this->session->userdata('sess_id'),
+                'dept_id'          => $this->session->userdata('sess_dept'),
+                'date'    => date("m-d-Y H:i:s")
+            );
+            $this->db->insert('logs', $data);
+
             return $cal_id;
         }else{
             return 'failed';
