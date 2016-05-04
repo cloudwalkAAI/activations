@@ -80,6 +80,7 @@ class Insert_model extends CI_Model
             'client_company_name'   => $a['inp_client'],
             'brand'                 => implode(',',$a['inp_brand']),
             'project_name'          => $a['inp_projname'],
+            'jo_color'              => 'red',
             'date_created'          => date("m-d-Y H:i:s")
         );
 

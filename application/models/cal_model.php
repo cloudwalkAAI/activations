@@ -55,21 +55,24 @@ class Cal_model extends CI_Model {
 
     function get_calendar_data($year, $month){
 
-        $query = $this->db->select('jo_id, date, data')->from('calendar')
-            ->like('date', "$year-$month", 'after')->get();
+        $query = $this->db->select('jo_id, date, data, employee_id, endd')->from('calendar')
+            ->like('date', "$year-$month", 'after')->where('endd','Pending')->get();
 
         $cal_data = array();
 
-        foreach ($query->result()as $row) {
+        foreach ( $query->result() as $row ) {
             $str_joname = '';
             $str_empname = '';
+            $str_assigned = '';
+            $str_color = '';
             $str_joid = 0;
 
-            $query_jo = $this->db->select('project_name,jo_number,emp_id')->from('job_order_list')
+            $query_jo = $this->db->select('project_name,jo_number,emp_id,jo_color')->from('job_order_list')
                 ->like('jo_id', "$row->jo_id", 'after')->get();
             foreach ($query_jo->result()as $row_jo) {
                 $str_joname = $row_jo->project_name;
                 $str_joid = $row_jo->jo_number;
+                $str_color = $row_jo->jo_color;
 
                     $query_emp = $this->db->select('first_name,sur_name')->from('employee_list')
                         ->like('emp_id', "$row_jo->emp_id", 'after')->get();
@@ -79,10 +82,16 @@ class Cal_model extends CI_Model {
 
             }
 
-//            $cal_data[substr($row->date,8,2)] = '<a href="'.base_url('jo/in?a='.$row->jo_id).'">'.$row->data.'</a>';
+            $query_assigned = $this->db->get_where( 'employee_list', array( 'id' => $row->employee_id ) );
+            if ($query_assigned->num_rows() > 0) {
+                $row_ae = $query_assigned->row();
+                $str_assigned = $row_ae->sur_name.', '.$row_ae->first_name;
+            }
+
             $cal_data[substr($row->date,8,2)] = '<a href="'.base_url('jo/in?a='.$row->jo_id).
-                '" data-tooltip aria-haspopup="true" class="has-tip" title="Project ID : '.$str_joid.
-                ' <br /> Project Name : '.$str_joname.'<br /> AE assigned : '.$str_empname.'">'.$str_joname.'</a>';
+                '" data-tooltip aria-haspopup="true" class="has-tip calendar_font" title="Project ID : '.$str_joid.
+                ' <br /> Project Name : '.$str_joname.'<br /> AE assigned : '.$str_empname.'<br /> Assigned to : '.
+                $str_assigned.'" style="color:'.$str_color.';">'.$str_joname.'</a>';
 
         }
         return $cal_data;

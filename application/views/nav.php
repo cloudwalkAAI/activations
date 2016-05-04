@@ -3,6 +3,15 @@
         <a class="left-off-canvas-toggle menu-icon" href="#"><span></span></a>
     </section>
     <section class="middle tab-bar-section"><a href="<?= base_url() ?>"><img class="nav_logo" src="<?= base_url('assets/img/logos/logo_white.png')?>" alt=""></a></section>
+    <?php
+    if( $this->session->userdata('sess_dept') == '10' ){
+    ?>
+        <section class="right-small nav-right-strip">
+            <a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
+        </section>
+    <?php
+    }
+    ?>
 </nav>
 
 <aside class="left-off-canvas-menu">
@@ -62,3 +71,25 @@ if( $this->session->userdata('sess_dept') <= 2 ) {
 
     </ul>
 </aside>
+<?php
+if( $this->session->userdata('sess_dept') == '10' ) {
+?>
+    <aside class="right-off-canvas-menu">
+        <ul class="off-canvas-list">
+            <li style="text-align: center; color:#f27f22;"><a href="#" class="prevent">Logs</a></li>
+            <hr />
+            <?php
+            $query = $this->db->get( 'logs' );
+            foreach ($query->result() as $row) {
+                echo '
+                        <li>
+                            <a href="#" class="prevent" style="font-size:10px;">'.$row->message.'<br />'.$row->date.'</a>
+                        </li>
+                        <hr />';
+            }
+            ?>
+        </ul>
+    </aside>
+<?php
+}
+?>

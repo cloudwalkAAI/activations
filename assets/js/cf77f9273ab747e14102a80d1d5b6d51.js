@@ -6,6 +6,10 @@ function reload_date_picker(){
     });
 }
 
+$('.prevent').on('click', function(e){
+    e.preventDefault();
+});
+
 $('#btn_share_jo').on('click',function(){
     $('#share_jo_ae').ajaxForm({
         type: 'POST',
