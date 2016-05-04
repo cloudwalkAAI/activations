@@ -89,7 +89,7 @@
                         <?php
                         if( $this->session->userdata('sess_dept') == 10 && $this->session->userdata('sess_post') == 1 ){
                         ?>
-                            <td>Edit</td>
+                            <td> </td>
                         <?php
                         }
                         ?>
@@ -103,7 +103,7 @@
                         $validat = 'validated';
                     }
                     $str_name = '';//test
-                    $query = $this->db->get_where( 'calendar', array('dept_id' => 10, 'jo_id' => $this->input->get('a') ) );
+                    $query = $this->db->get_where( 'calendar', array( 'dept_id' => 10, 'jo_id' => $this->input->get('a') ) );
                     foreach($query->result() as $row){
 
                         $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
@@ -119,7 +119,10 @@
                                     <td>'.$row->date.'</td>
                                     <td>'.$row->data.'</td>
                                     <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
-                                    <td><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a></td>
+                                    <td style="text-align:center;">
+                                        <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                        <a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                    </td>
                                 </tr>
                             ';
                         }else{

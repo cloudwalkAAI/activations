@@ -8,6 +8,7 @@ class Jo extends CI_Controller{
         $this->load->model('email_model');
         $this->load->model('insert_model');
         $this->load->model('get_model');
+        $this->load->model('cal_model');
         $this->load->helper('download');
         $this->load->library('m_pdf');
 //        $this->load->library('pagination');
@@ -517,4 +518,8 @@ class Jo extends CI_Controller{
         }
     }
 
+    function creatives_del(){
+//        print_r( $this->input->post() );
+        echo $this->custom_model->delete_cal_task( $this->input->post('cal_id') );
+    }
 }

@@ -408,6 +408,10 @@ thead tr > th { cursor: pointer; cursor: hand; }
     font-size: 0.8em;
 }
 
+.jolist_crea{
+	margin-top: 3px !important;
+}
+
 .jorightlist li a img{
 	max-width: 15px;
 }
@@ -466,6 +470,10 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	border-radius: 4px;
 	margin-bottom: 30px;
 	border: 3px solid #FFF;
+}
+
+.mb_jolist{
+	margin-bottom: 10px !important;
 }
 
 .jopart .sjo::-moz-placeholder,.settingspage label input::-moz-placeholder{
@@ -669,4 +677,10 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	25%  {background:yellow;color: black;}
 	50%  {background:blue;color: white;}
 	75% {background:green;color: white;}
+}
+
+.scrollable_area{
+	min-height: 599px;
+	max-height: 599px;
+	overflow-y: auto;
 }

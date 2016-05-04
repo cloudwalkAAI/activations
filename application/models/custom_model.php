@@ -125,9 +125,22 @@ class Custom_model extends CI_Model
     }
 
     function jo_pending( $cal_id ){
+        $str_status = '';
+        $query_ae = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+
+            if( $row_ae->endd != 'Done' ){
+                $str_status = 'Done';
+            }else{
+                $str_status = 'Pending';
+            }
+        }
+
         $data = array(
-            'endd' => 'Done'
+            'endd' => $str_status
         );
+
         $this->db->where( 'cal_id', $cal_id );
         $this->db->update( 'calendar', $data );
 
@@ -175,4 +188,14 @@ class Custom_model extends CI_Model
         }
     }
 
+
+
+    function delete_cal_task($id){
+        $this->db->delete('calendar', array('cal_id' => $id));
+        if( $this->db->affected_rows() > 0){
+            return $id;
+        }else{
+            return $this->db->affected_rows();
+        }
+    }
 }

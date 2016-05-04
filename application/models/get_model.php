@@ -1196,7 +1196,7 @@ class Get_model extends CI_Model
                         <td>'.$row->brand.'</td>
                         <td>'.$str_ce.'</td>
                         <td>'.$str_do.'</td>
-                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
+                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a></td>
                         <td>'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
@@ -1224,7 +1224,7 @@ class Get_model extends CI_Model
                 $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
             }
 
-            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td></tr>';
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
         }
 
         return $str_ret;

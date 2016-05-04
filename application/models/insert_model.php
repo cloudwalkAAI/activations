@@ -68,7 +68,7 @@ class Insert_model extends CI_Model
             'msg' => 'Calendar has been updated'
         );
 
-         $this->sms_model->sms_send( $text_array );
+//         $this->sms_model->sms_send( $text_array );
 
     }
 

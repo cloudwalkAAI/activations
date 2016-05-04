@@ -56,6 +56,6 @@ class Email_model extends CI_Model
         // It returns boolean TRUE or FALSE based on success or failure
         $this->email->send();
 
-        echo $this->email->print_debugger();
+//        echo $this->email->print_debugger();
     }
 }

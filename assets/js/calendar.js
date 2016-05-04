@@ -46,10 +46,10 @@
 
 //});
 
-$('.task_change').on('click',function(){
+$('.task_change').on('click',function(e){
+    e.preventDefault();
     var cld = $(this).attr('alt');
     var cval = $(this).attr('value');
-    $(this).closest('tr').remove();
 
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/update_pending',
@@ -59,35 +59,56 @@ $('.task_change').on('click',function(){
             'cval' : cval
         },
         success: function(data) {
+            console.log(data);
             if( data != 'failed' ){
-                $(data).prependTo("tbody#creatives_tbd");
+                $('tbody#creatives_tbd tr#' + cld).replaceWith(data);
+                reload_task_cmd();
             }
         }
     });
 });
 
-$('.edit-btn-task').on('click',function(){
-    var cld = $(this).attr('alt');
-    $.ajax({
-        url: MyNameSpace.config.base_url+'jo/update_cal_task_getinfo',
-        type:'post',
-        data: {
-            'cal_id' : cld
-        },
-        success: function(data) {
-            var json = $.parseJSON(data);
-            console.log(json);
-            $('#task_id_u').val( json['cal_id'] );
-            $('#sel_creatives_emp_u').val( json['eid'] );
-            $('#creative_deadline_u').val( json['edate'] );
-            $('#creative_description_u').val( json['desc'] );
+function reload_task_cmd(){
+    $('.edit-btn-task').on('click',function(e){
+        e.preventDefault();
+        var cld = $(this).attr('alt');
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/update_cal_task_getinfo',
+            type:'post',
+            data: {
+                'cal_id' : cld
+            },
+            success: function(data) {
+                var json = $.parseJSON(data);
+                $('#task_id_u').val( json['cal_id'] );
+                $('#sel_creatives_emp_u').val( json['eid'] );
+                $('#creative_deadline_u').val( json['edate'] );
+                $('#creative_description_u').val( json['desc'] );
 
-            $('#creatives_box_u').hide();
-            //$('tbody#creatives_tbd_u').append(response);
-            $('#modal_creatives_tasks_u').foundation( 'reveal', 'close' );
-            $('#btn_update_client_u').prop('disabled',false);
+                $('#creatives_box_u').hide();
+                //$('tbody#creatives_tbd_u').append(response);
+                $('#modal_creatives_tasks_u').foundation( 'reveal', 'close' );
+                $('#btn_update_client_u').prop('disabled',false);
 
-            $('#modal_creatives_tasks_u').foundation('reveal', 'open');
-        }
+                $('#modal_creatives_tasks_u').foundation('reveal', 'open');
+            }
+        });
     });
-});
+
+    $('.del-btn-task').on('click',function(e){
+        e.preventDefault();
+        var cld = $(this).attr('alt');
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/creatives_del',
+            type:'post',
+            data: {
+                'cal_id' : cld
+            },
+            success: function(data) {
+                $( 'tbody#creatives_tbd tr#' + data ).remove();
+            }
+        });
+    });
+}
+
+reload_task_cmd();
