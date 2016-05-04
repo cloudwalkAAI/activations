@@ -67,13 +67,15 @@ class Custom_model extends CI_Model
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update( 'clients', $data );
 
-        $int_rows = $this->db->affected_rows();
+        $int_rows += $this->db->affected_rows();
 
         $data = array(
             'brand_name' => implode(',',$a['ta_brand']),
         );
         $this->db->where( 'client_id', $a['hid_client_id'] );
         $this->db->update('brand', $data);
+
+        $int_rows += $this->db->affected_rows();
 
         return $int_rows;
     }
@@ -98,6 +100,102 @@ class Custom_model extends CI_Model
             return 1;
         }else{
             return 0;
+        }
+    }
+
+    function update_jo( $a ){
+        print_r($a);
+
+        $insid = 0;
+        $data = array(
+            'project_type'          => implode(',',$a['inp_projtype2']),
+            'client_company_name'   => $a['inp_client2'],
+            'brand'                 => implode(',',$a['inp_brand2']),
+            'project_name'          => $a['inp_projname2']
+        );
+
+        $this->db->where('jo_id', $a['update_joid']);
+        $this->db->update('job_order_list', $data);
+
+        if( $this->db->affected_rows() > 0 ) {
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
+
+    function jo_pending( $cal_id ){
+        $str_status = '';
+        $query_ae = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+
+            if( $row_ae->endd != 'Done' ){
+                $str_status = 'Done';
+            }else{
+                $str_status = 'Pending';
+            }
+        }
+
+        $data = array(
+            'endd' => $str_status
+        );
+
+        $this->db->where( 'cal_id', $cal_id );
+        $this->db->update( 'calendar', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return $cal_id;
+        }else{
+            return 'failed';
+        }
+    }
+
+    function update_task( $a ){
+        $arr_new_task_update = array();
+        $str_name = '';
+
+        $data = array(
+            'date' => $a['deadline_u'],
+            'data' => $a['description_u'],
+            'employee_id' => $a['sel_creatives_emp_u']
+        );
+        $this->db->where( 'cal_id', $a['task_id_u'] );
+        $this->db->update( 'calendar', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            $query = $this->db->get_where('calendar', array('cal_id' => $a['task_id_u']));
+            foreach($query->result() as $row){
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+                $arr_new_task_update['table_id'] = $row->cal_id;
+                $arr_new_task_update['table_task'] = '
+                    <tr id="'.$row->cal_id.'">
+                        <td>'.$str_name.'</td>
+                        <td>'.$row->date.'</td>
+                        <td>'.$row->data.'</td>
+                        <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
+                        <td><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a></td>
+                    </tr>
+                ';
+
+                echo json_encode($arr_new_task_update);
+            }
+        }else{
+            return 'failed';
+        }
+    }
+
+
+
+    function delete_cal_task($id){
+        $this->db->delete('calendar', array('cal_id' => $id));
+        if( $this->db->affected_rows() > 0){
+            return $id;
+        }else{
+            return $this->db->affected_rows();
         }
     }
 }

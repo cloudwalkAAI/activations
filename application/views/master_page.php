@@ -108,12 +108,12 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, #inp_trans').datetimepicker({
+    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, .inp_trans').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });
 
-    jQuery('#creative_start, #creative_deadline').datetimepicker({
+    jQuery('#creative_start, #creative_deadline, #creative_deadline_u').datetimepicker({
         timepicker:false,
         format:'Y-m-j'
     });
@@ -126,26 +126,26 @@
     <?php
     if( $this->session->userdata('sess_dept')== 10 && $this->session->userdata('sess_post')== 1 ) {
     ?>
-    $(document).ready(function () {
-        $('.calendar .day').click(function () {
-            var day_num = $(this).find('.day_num').html();
-            var day_data = prompt('Enter details');
-            if (day_data != null) {
-
-                $.ajax({
-                    url: window.location,
-                    type: 'POST',
-                    data: {
-                        day: day_num,
-                        data: day_data
-                    },
-                    success: function (msg) {
-                        location.reload();
-                    }
-                });
-            }
-        });
-    });
+//    $(document).ready(function () {
+//        $('.calendar .day').click(function () {
+//            var day_num = $(this).find('.day_num').html();
+//            var day_data = prompt('Enter details');
+//            if (day_data != null) {
+//
+//                $.ajax({
+//                    url: window.location,
+//                    type: 'POST',
+//                    data: {
+//                        day: day_num,
+//                        data: day_data
+//                    },
+//                    success: function (msg) {
+//                        location.reload();
+//                    }
+//                });
+//            }
+//        });
+//    });
 
     <?php
    }

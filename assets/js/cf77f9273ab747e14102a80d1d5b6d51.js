@@ -54,7 +54,7 @@ $('#inp_client_edit').on('change',function(){
             $('label#hd').show();
             $('#inp_brand_edit').empty();
 
-            $.each( json, function( key, value ) {
+            $.each( arr, function( key, value ) {
                 $('#inp_brand_edit')
                     .append($("<option></option>")
                         .attr("value", value)
@@ -68,22 +68,114 @@ $('#inp_client').on('change',function(){
         url: MyNameSpace.config.base_url+'jo/load_brand',
         type:'post',
         data: {
-            cid : $('#inp_client').val()
+            'cid' : $('#inp_client').val()
         },
         success: function(data) {
-            var arr = data.split(',');
+            //var arr = data.split(',');
             $('label#hd').show();
-            $('#inp_brand').empty();
-
-            $.each( arr, function( key, value ) {
-                $('#inp_brand')
-                    .append($("<option></option>")
-                        .attr("value", value)
-                        .text(value));
-            });
+            $('#client_brands').empty();
+            $('#client_brands').append( data );
+            //$.each( arr, function( key, value ) {
+            //    $('#inp_brand')
+            //        .append($("<option></option>")
+            //        .attr("value", value)
+            //        .text(value));
+            //});
         }
     });
 });
+
+//update jo
+
+$('.edit_load_jo').on('click', function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/load_jo_details',
+        type:'post',
+        data: {
+            'jcid' : $(this).attr('alt')
+        },
+        success: function(data) {
+            var json = $.parseJSON(data);
+            $('#update_joid').val(json['jo_id']);
+            $('#inp_client2').val(json['cont_person_id']);
+            $('#inp_projname2').val(json['project_name']);
+            $('#client_brands2').empty();
+            $('#client_brands2').append( json['brand_check'] );
+            $('.p_list_edit_jo').empty();
+            $('.p_list_edit_jo').append( json['projtype_check'] );
+        }
+    });
+});
+
+$('#btn_update_jo').on('click', function(){
+    $('#joedit_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'jo/update_jo',
+        beforeSubmit: function(arr, jform, option){
+            $('#btn_update_jo').prop('disabled', true);
+
+            if($('#inp_client2').val() == 0){
+                $("#alert_box2").removeClass("success");
+                $("#alert_box2").removeClass("alert");
+                $("#alert_box2").addClass("warning");
+                $('#alert_box2').text();
+                $('#alert_box2').text("You haven't select a client!.");
+                $('#alert_box2').show();
+                $('#btn_update_jo').prop('disabled', false);
+                return false;
+            }else if( $("#joedit_form input:checkbox:checked").length == 0 ){
+                $("#alert_box2").removeClass("success");
+                $("#alert_box2").removeClass("alert");
+                $("#alert_box2").addClass("warning");
+                $('#alert_box2').text();
+                $('#alert_box2').text("You haven't choose a project type!.");
+                $('#alert_box2').show();
+                $('#btn_update_jo').prop('disabled', false);
+                return false;
+            }else if( $.trim( $('#inp_projname2').val() ) == '' ){
+                $("#alert_box2").removeClass("success");
+                $("#alert_box2").removeClass("alert");
+                $("#alert_box2").addClass("warning");
+                $('#alert_box2').text();
+                $('#alert_box2').text("You haven't input a project name!.");
+                $('#alert_box2').show();
+                $('#btn_update_jo').prop('disabled', false);
+                return false;
+            }else{
+                $('#alert_box').hide();
+            }
+        },
+        success:  function(response){
+            //console.log(response);
+            location.reload();
+        }
+
+    }).submit();
+});
+
+$('#inp_client2').on('change',function(){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/load_brand2',
+        type:'post',
+        data: {
+            'cid' : $('#inp_client2').val()
+        },
+        success: function(data) {
+            //var arr = data.split(',');
+            $('label#hd2').show();
+            $('#client_brands2').empty();
+            $('#client_brands2').append( data );
+            //$.each( arr, function( key, value ) {
+            //    $('#inp_brand')
+            //        .append($("<option></option>")
+            //        .attr("value", value)
+            //        .text(value));
+            //});
+        }
+    });
+});
+
+//end update jo
 $('#btn_save_jo_edit').on('click',function(){
     var dataString = "joid="+$();
     $.ajax({
@@ -95,22 +187,22 @@ $('#btn_save_jo_edit').on('click',function(){
         }
     });
 });
-function getJoId(x){
-    var parent = $(x).parents(".jolist");
-    var joid = parent.attr("alt");
-    $("#joid").val(joid);
-    var dataString = "joid="+joid;
-    $('#joEditModal').foundation( 'reveal', 'open' );
-    $.ajax({
-        type: "POST",
-        url: MyNameSpace.config.base_url +'jo/get_jo',
-        data: dataString,
-        success: function (response) {
-            $("#contentJoEdit").empty();
-            $("#contentJoEdit").html(response);
-        }
-    });
-}
+//function getJoId(x){
+//    var parent = $(x).parents(".jolist");
+//    var joid = parent.attr("alt");
+//    $("#joid").val(joid);
+//    var dataString = "joid="+joid;
+//    $('#joEditModal').foundation( 'reveal', 'open' );
+//    $.ajax({
+//        type: "POST",
+//        url: MyNameSpace.config.base_url +'jo/get_jo',
+//        data: dataString,
+//        success: function (response) {
+//            $("#contentJoEdit").empty();
+//            $("#contentJoEdit").html(response);
+//        }
+//    });
+//}
 
 $('#form_jo').ajaxForm({
     type: 'POST',
@@ -1707,9 +1799,9 @@ $('#bton_do').on('click', function(){
             $('#bton_do').prop('disabled', true);
         },
         success:  function(response){
-            //console.log(response);
+            console.log(response);
             //$('#bton_do').prop('disabled', false);
-            location.reload();
+            //location.reload();
         }
     });
 });
@@ -1829,8 +1921,11 @@ $('#delete_ce').on('click', function(){
 });
 
 //transmittal
-$('#inp_trans').keyup(function(event){
-    if( event.which == '13'){
+$('.inp_trans').on('change',function(event){
+    //var keycode = (event.keyCode ? event.keyCode : event.which);
+    //console.log(keycode);
+    //if( keycode == '13'){
+    //    alert('hello');
         $.ajax({
             url: MyNameSpace.config.base_url+'admin/transmittal',
             type:'post',
@@ -1838,19 +1933,17 @@ $('#inp_trans').keyup(function(event){
                 'jo_id' : $(this).attr('alt'),
                 'trans_date' : $(this).val()
             },
-            beforeSubmit: function(arr, jform, option){
-                //$('#temp_name').val('Please Wait...');
-            },
             success: function(data) {
-                //console.log(data);
+                console.log(data);
                 location.reload();
             }
         });
-    }
+    //}
+    //event.stopPropagation();
 });
 
 //contract number
-$('#inp_contract_no').keyup(function(event){
+$('.inp_contract_no').keyup(function(event){
     if( event.which == '13'){
         $.ajax({
             url: MyNameSpace.config.base_url+'admin/cono',
@@ -1864,6 +1957,7 @@ $('#inp_contract_no').keyup(function(event){
             },
             success: function(data) {
                 //console.log(data);
+                $('.inp_contract_no').val('');
                 location.reload();
             }
         });

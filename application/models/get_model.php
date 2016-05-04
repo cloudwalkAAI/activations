@@ -38,21 +38,124 @@ class Get_model extends CI_Model
         }
     }
 
-//    function get_ae_jo_details( $jo_id ){
-//        $arr = array();
-//
-//        if( $empid == $this->session->userdata('sess_id') ){
-//            $query = $this->db->get_where( 'job_order_list', array( 'jo_id' => $jo_id ) );
-//            return $query->result_array();
-//
-//            foreach( $query->result() as $row ){
-//
-//            }
-//
-//        }else{
-//            return false;
-//        }
-//    }
+    function get_ae_jo_details( $jo_id ){
+        $arr_tonight = array();
+
+        $this->db->select( 'project_type, client_company_name, brand, project_name' );
+        $this->db->from( 'job_order_list' );
+        $this->db->where( 'jo_id =', $jo_id );
+        $query = $this->db->get();
+        $row = $query->row();
+        if (isset($row))
+        {
+            $arr_tonight['jo_id']           = $jo_id;
+            $arr_tonight['cont_person']     = $this->get_client_info_jo_edit( $row->client_company_name );
+            $arr_tonight['cont_person_id']  = $row->client_company_name;
+            $arr_tonight['projtype_check']  = $this->get_project_type2( $row->project_type );
+            $arr_tonight['projtype']        = $row->project_type;
+            $arr_tonight['brand']           = $row->brand;
+            $arr_tonight['brand_check']     = $this->get_brand_list2_jo( $row->client_company_name, $row->brand );
+
+            $arr_tonight['project_name']    = $row->project_name;
+        }
+        return json_encode( $arr_tonight );
+    }
+
+    function get_project_type2( $a ){
+        $input_text = '';
+        $checked = '';
+        $array_brands = array();
+        $array_brands = explode(',',$a);
+        $i=0;
+        $query = $this->db->get( 'project_type' );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                if (in_array($row->pt_name, $array_brands)) {
+                    $checked = 'checked';
+                }else{
+                    $checked = '';
+                }
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $input_text .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $input_text;
+    }
+
+    function get_brand_list2_jo( $a, $b ){
+        $str_brand = '';
+        $checked = '';
+        $str_brand2 = array();
+        $arr_brand = array();
+        $i = 0;
+        $this->db->select( 'client_id, brand_name' );
+        $this->db->from( 'brand' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        foreach( $query->result() as $row ){
+            $arr_brand = explode(',',$row->brand_name);
+            $arr_brand2 = explode(',',$b);
+            foreach( $arr_brand as $the_brand ){
+                if( $the_brand != null ){
+                    if (in_array($the_brand, $arr_brand2)) {
+                        $checked = 'checked';
+                    }else{
+                        $checked = '';
+                    }
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
+                    }
+                }
+            }
+        }
+        return $str_brand;
+    }
+
+
+    function get_client_info_jo_edit( $a ){
+        $this->db->select( 'client_id, company_name, contact_person' );
+        $this->db->from( 'clients' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        $row = $query->row();
+        if (isset($row))
+        {
+            return $row->contact_person;
+        }
+    }
 
     function get_ae_jo_w( $id ){
         $jolist_array = array();
@@ -138,12 +241,75 @@ class Get_model extends CI_Model
 
     function get_brand_list( $a ){
         $str_brand = '';
+        $arr_brand = array();
+        $i = 0;
         $this->db->select( 'client_id, brand_name' );
         $this->db->from( 'brand' );
         $this->db->where( 'client_id =', $a );
         $query = $this->db->get();
         foreach( $query->result() as $row ){
-            $str_brand = $row->brand_name;
+            $arr_brand = explode(',',$row->brand_name);
+            foreach( $arr_brand as $the_brand ){
+
+                if( $the_brand != null ){
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
+                    }
+                }
+            }
+        }
+        return $str_brand;
+    }
+
+    function get_brand_list2( $a ){
+        $str_brand = '';
+        $arr_brand = array();
+        $i = 0;
+        $this->db->select( 'client_id, brand_name' );
+        $this->db->from( 'brand' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        foreach( $query->result() as $row ){
+            $arr_brand = explode(',',$row->brand_name);
+            foreach( $arr_brand as $the_brand ){
+                if( $the_brand != null ){
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
+                    }
+                }
+            }
         }
         return $str_brand;
     }
@@ -561,7 +727,6 @@ class Get_model extends CI_Model
                 return $row->project_name;
             }
         }
-
     }
 
     function emp_last_task( $a ){
@@ -921,7 +1086,6 @@ class Get_model extends CI_Model
         $str_do = '';
         $str_bd = '';
         $str_ce = '';
-        $str_con = '';
         $str_tp = 0;
         $str_tp_bg = '';
         $str_tp_bg_class = '';
@@ -934,6 +1098,8 @@ class Get_model extends CI_Model
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row)
             {
+                $str_con = '';
+                $str_ae = '';
                 $str_ae .= $this->accounts_get_emp($row->emp_id);
 
                 $shared_arr = explode(",",$row->shared_to);
@@ -977,7 +1143,7 @@ class Get_model extends CI_Model
                     $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 
-                if($row->transmittal){
+                if($row->transmittal != NULL){
                     $now = time(); // or your date as well
                     $your_date = strtotime( $row->transmittal );
                     $datediff = abs( $now - $your_date );
@@ -995,7 +1161,7 @@ class Get_model extends CI_Model
 
                     $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24));
                 }else{
-                    $str_tp = '<input alt="'.$row->jo_id.'" id="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
+                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
                 }
 
                 if($row->contract_no){
@@ -1009,11 +1175,11 @@ class Get_model extends CI_Model
                     }
                     $str_con .= '</ul>';
                     $str_con .= '
-                        <input id="inp_contract_no" class="twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
+                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
                         <span style="font-size:8px;'.$disabler.'">Press Enter to Save</span>
                     ';
                 }else{
-                    $str_con = '<input id="inp_contract_no" class="twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
+                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
                 }
 
                 $str_td_jo .= '
@@ -1030,7 +1196,7 @@ class Get_model extends CI_Model
                         <td>'.$row->brand.'</td>
                         <td>'.$str_ce.'</td>
                         <td>'.$str_do.'</td>
-                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
+                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a></td>
                         <td>'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
@@ -1040,9 +1206,49 @@ class Get_model extends CI_Model
                         </td>
                     </tr>
                 ';
+
+                $str_tp_bg = '';
             }
         }
 
         return $str_td_jo;
+    }
+
+    function dt_calendar( $cal_id ){
+        $str_name = '';//test
+        $str_ret = '';//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+        }
+
+        return $str_ret;
+    }
+
+    function get_caltask($cal_id){
+        $str_name = '';//test
+        $arr_ret = array();//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+            $arr_ret = array(
+                'cal_id' => $cal_id,
+                'ename' => $str_name,
+                'eid' => $row->employee_id,
+                'edate' => $row->date,
+                'desc' => $row->data,
+                'process' => $row->endd
+            );
+        }
+
+        return json_encode($arr_ret);
     }
 }

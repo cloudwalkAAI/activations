@@ -5,9 +5,10 @@ class Jo extends CI_Controller{
 
     public function __construct() {
         parent::__construct ();
-//        $this->load->model('login_model');
+        $this->load->model('email_model');
         $this->load->model('insert_model');
         $this->load->model('get_model');
+        $this->load->model('cal_model');
         $this->load->helper('download');
         $this->load->library('m_pdf');
 //        $this->load->library('pagination');
@@ -27,6 +28,7 @@ class Jo extends CI_Controller{
 //            if( $arr ){
                 $data_a['jo_list'] = $arr;
                 $data_a['project_type'] = $this->get_model->get_project_type();
+//                $data_a['project_type2'] = $this->get_model->get_project_type2();
                 $data_a['client_list'] = $this->get_model->get_client_list();
                 $data['navigator'] = $this->load->view('nav', $data, TRUE);
                 $data['content'] = $this->load->view('ae/jo_list_view', $data_a, TRUE);
@@ -57,11 +59,22 @@ class Jo extends CI_Controller{
         echo $this->get_model->get_brand_list( $this->input->post( 'cid' ) );
     }
 
+    function load_brand2(){
+        echo $this->get_model->get_brand_list2( $this->input->post( 'cid' ) );
+    }
+
     function add_jo(){
-//        print_r($this->input->post());
-//        return false;
         $insid = $this->insert_model->insert_jo( $this->input->post() );
         echo $this->get_model->get_ae_jo_w( $insid );
+    }
+
+    function update_jo(){
+        echo $this->custom_model->update_jo( $this->input->post() );
+//        echo $this->get_model->get_ae_jo_w( $insid );
+    }
+
+    function load_jo_details(){
+        echo $this->get_model->get_ae_jo_details( $this->input->post( 'jcid' ) );
     }
 	
 	function get_jo(){
@@ -69,6 +82,20 @@ class Jo extends CI_Controller{
 		$data["joData"] = $this->get_model->get_ae_jo_w( $joid );
 		$this->load->view("joeditmodal",$data);
 	}
+
+    function update_pending(){
+        $result = $this->custom_model->jo_pending( $this->input->post('cal_id') );
+        if( $result != 'failed' ){
+            $this->email_model->creatives_task_notification_email($this->input->post('cval'));
+            echo $this->get_model->dt_calendar( $result );
+        }else{
+            echo $result;
+        }
+    }
+
+    function update_cal_task_getinfo(){
+        echo $this->get_model->get_caltask($this->input->post('cal_id'));
+    }
 
     /*for loading a JO*/
     function in(){
@@ -143,6 +170,7 @@ class Jo extends CI_Controller{
                 }
 
             }elseif( $row == "ed" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['req_table'] = $this->get_model->get_req_table_v2( $this->input->get('a') );
                 $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
                 $data_ed['result_ed'] = $this->get_model->get_last_ed( $this->input->get('a') );
@@ -153,6 +181,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "pjat" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['attachment_list'] = $this->get_model->get_list_attachment( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/proj_attachments', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -161,6 +190,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "setup" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['setup_details'] = $this->get_model->get_last_setup( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/setup', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -169,6 +199,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "mvrf" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['mvrf_details'] = $this->get_model->get_last_mvrf( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/mvrf', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -177,6 +208,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "other" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['other_details'] = $this->get_model->get_last_other( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/others', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -446,6 +478,11 @@ class Jo extends CI_Controller{
         }
     }
 
+    function submit_date_calendar_u(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_task( $this->input->post() );
+    }
+
     function search_ae(){
         $query = $this->db->get_where( 'employee_list', array( 'emp_id' => $this->input->post('aeid'), 'department' => 2 ), 1, 0 );
         if ($query->num_rows() > 0){
@@ -481,4 +518,8 @@ class Jo extends CI_Controller{
         }
     }
 
+    function creatives_del(){
+//        print_r( $this->input->post() );
+        echo $this->custom_model->delete_cal_task( $this->input->post('cal_id') );
+    }
 }

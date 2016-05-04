@@ -18,7 +18,7 @@ class Insert_model extends CI_Model
         // SMTP Username like. (abc@gmail.com)
         $config['smtp_user'] = 'roel.r@cloudwalkdigital.com';
         // SMTP Password like (abc***##)
-        $config['smtp_pass'] = 'cloud@2468';
+        $config['smtp_pass'] = 'Cloud2468';
         $config['mailtype'] = 'html';
         // Load email library and passing configured values to email library
         $this->load->library('email', $config);
@@ -57,7 +57,18 @@ class Insert_model extends CI_Model
             'msg' => 'A JO has been created with JO ID of '.date("Y").str_pad( $insid, 5, "0", STR_PAD_LEFT ).'.'
         );
 
-        // $this->sms_model->sms_send( $text_array );
+         $this->sms_model->sms_send( $text_array );
+
+    }
+
+    function sms_compiler_task( $reciever_number = null, $message = null ){
+
+        $text_array = array(
+            'phone_num' => '639464187000', //reciever number
+            'msg' => 'Calendar has been updated'
+        );
+
+//         $this->sms_model->sms_send( $text_array );
 
     }
 
@@ -67,7 +78,7 @@ class Insert_model extends CI_Model
             'emp_id'                => $this->session->userdata('sess_id'),
             'project_type'          => implode(',',$a['inp_projtype']),
             'client_company_name'   => $a['inp_client'],
-            'brand'                 => $a['inp_brand'],
+            'brand'                 => implode(',',$a['inp_brand']),
             'project_name'          => $a['inp_projname'],
             'date_created'          => date("m-d-Y H:i:s")
         );
@@ -83,7 +94,7 @@ class Insert_model extends CI_Model
             $this->db->where('jo_id', $insid);
             $this->db->update('job_order_list', $data_update);
 
-//            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list.',$insid);
+            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list. Thank you!',$insid);
 
         }
 
@@ -277,6 +288,7 @@ class Insert_model extends CI_Model
             'file_name'     => str_replace("assets/uploads/","",$location),
             'file_location' => $location,
             'reference_for' => $a['sel_reference'],
+            'dept_id'       => $this->session->userdata('sess_dept'),
             'date_uploaded' => date("Y-m-d H:i:s")
 
         );
@@ -353,14 +365,16 @@ class Insert_model extends CI_Model
 
     function creative_update_calendar($calendar){
         $insid = 0;
-        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] ) );
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] , 'jo_id' => $calendar['jo_id'] ) );
         if ($query->num_rows() == 0) {
 
             $data = array(
-                'date' => $calendar['deadline'],
-                'data' => $calendar['description'],
-                'dept_id' => $calendar['dept_id'],
-                'employee_id' => $calendar['sel_creatives_emp']
+                'jo_id'         => $calendar['jo_id'],
+                'date'          => $calendar['deadline'],
+                'data'          => $calendar['description'],
+                'dept_id'       => $calendar['dept_id'],
+                'endd'          => 'Pending',
+                'employee_id'   => $calendar['sel_creatives_emp']
             );
 
             $this->db->insert('calendar', $data);
@@ -374,8 +388,11 @@ class Insert_model extends CI_Model
                     $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
                     foreach($query_emp->result() as $row_emp){
                         $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
-//                            $this->email_calendar($row_emp->email, $str_name);
-                        $this->email_calendar('chabi050613@gmail.com', $str_name);
+                        $this->email_calendar($row_emp->email, $str_name);
+//                        $this->email_calendar('chabi050613@gmail.com', $str_name);
+
+                        $this->sms_compiler_task('639464187000','Calendar has been updated');
+//                        $this->sms_compiler_task($row_emp->contact_nos,'Calendar has been updated'); //chikka loaded
                     }
 
                 }
