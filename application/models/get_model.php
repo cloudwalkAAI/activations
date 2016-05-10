@@ -970,6 +970,10 @@ class Get_model extends CI_Model
                     <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
                     <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td style="text-align:center;">
+                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                    </td>
                 </tr>
             ';
         }
@@ -1039,6 +1043,19 @@ class Get_model extends CI_Model
                                 <td>'.$str_name.'</td>
                                 <td>'.$row->date.'</td>
                                 <td>'.$row->data.'</td>
+                                <td>
+                                    <a href="#" id="task_change" alt="'.$row->cal_id.'">'.
+                                        $row->endd.
+                                    '</a>
+                                </td>
+                                <td style="text-align:center;">
+                                    <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'">
+                                        <img src="'.base_url("assets/img/logos/Edit.png").'" />
+                                    </a>
+                                    <a class="del-btn-task" href="#" alt="'.$row->cal_id.'">
+                                        <img src="'.base_url("assets/img/logos/Delete.png").'" />
+                                    </a>
+                                </td>
                            </tr>
                            ';
             }
