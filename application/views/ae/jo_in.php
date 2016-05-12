@@ -17,7 +17,11 @@ $info = json_decode($jo_details);
                 <h5>Date Created</h5>
                 <h6><?= $info->date_created ?></h6>
                 <h5>Job Order No</h5>
-                <h6><?= $info->jo_number ?></h6>
+                <a href="#" data-dropdown="drop_color" aria-controls="drop_color" aria-expanded="false"><h6 id="joid_color" style="color:<?=$info->jo_color?>;"><?= $info->jo_number ?></h6></a>
+                <ul id="drop_color" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
+                    <li><a href="#" class="jo_change_color" alt="red" value="<?= $info->jo_number ?>">Red</a></li>
+                    <li><a href="#" class="jo_change_color" alt="blue" value="<?= $info->jo_number ?>">Blue</a></li>
+                </ul>
                 <h5>Contract No.</h5>
                 <h6><?= $info->contract_no ?></h6>
                 <h5>Project Name</h5>

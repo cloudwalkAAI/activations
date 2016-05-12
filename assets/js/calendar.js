@@ -7,7 +7,7 @@
         type: 'post',
         url: MyNameSpace.config.base_url+'jo/submit_date_calendar',
         beforeSubmit:function(){
-            $('#btn_update_client').prop('disabled',true);
+            $('#btn_update_calendar').prop('disabled',true);
         },
         success:  function(response){
             if(response != 'exist'){
@@ -19,7 +19,8 @@
                 $('#creatives_box').hide();
                 $('tbody#creatives_tbd').append(response);
                 $('#modal_creatives_tasks').foundation( 'reveal', 'close' );
-                $('#btn_update_client').prop('disabled',false);
+                $('#btn_update_calendar').prop('disabled',false);
+                reload_task_cmd();
             }else{
                 $('#creatives_box').show();
             }

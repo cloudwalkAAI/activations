@@ -196,8 +196,6 @@ class Custom_model extends CI_Model
         }
     }
 
-
-
     function delete_cal_task($id){
         $this->db->delete('calendar', array('cal_id' => $id));
         if( $this->db->affected_rows() > 0){
@@ -205,5 +203,23 @@ class Custom_model extends CI_Model
         }else{
             return $this->db->affected_rows();
         }
+    }
+
+    function update_jo_col( $color ){
+        $data = array(
+            'jo_color' => $color['col']
+        );
+        $this->db->where('jo_number', $color['val']);
+        $this->db->update('job_order_list', $data);
+
+        return $color['col'];
+    }
+
+    function del_transmittal( $trans_id ){
+        $data = array(
+            'transmittal' => ''
+        );
+        $this->db->where('jo_id', $trans_id['jo_id']);
+        $this->db->update('job_order_list', $data);
     }
 }

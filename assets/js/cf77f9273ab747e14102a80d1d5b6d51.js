@@ -10,6 +10,28 @@ $('.prevent').on('click', function(e){
     e.preventDefault();
 });
 
+$('.jo_change_color').on('click', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/chg_col',
+        type:'post',
+        data: {
+            'val' : $(this).attr('value'),
+            'col' : $(this).attr('alt')
+        },
+        success: function(data) {
+            $('#joid_color')
+                .css('color', '')
+                .css('color', data);
+            //console.log(data);
+            //if( data != null ){
+            //    $('#temp_name').val(data);
+            //}
+        }
+    });
+});
+
 $('#btn_share_jo').on('click',function(){
     $('#share_jo_ae').ajaxForm({
         type: 'POST',
@@ -1925,11 +1947,9 @@ $('#delete_ce').on('click', function(){
 });
 
 //transmittal
-$('.inp_trans').on('change',function(event){
-    //var keycode = (event.keyCode ? event.keyCode : event.which);
-    //console.log(keycode);
-    //if( keycode == '13'){
-    //    alert('hello');
+$('.inp_trans').on('keydown',function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if( keycode == '13'){
         $.ajax({
             url: MyNameSpace.config.base_url+'admin/transmittal',
             type:'post',
@@ -1938,12 +1958,25 @@ $('.inp_trans').on('change',function(event){
                 'trans_date' : $(this).val()
             },
             success: function(data) {
-                console.log(data);
                 location.reload();
             }
         });
-    //}
-    //event.stopPropagation();
+    }
+});
+
+$('.del_trans').on('click',function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/del_transmittal',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        success: function(data) {
+            location.reload();
+        }
+    });
 });
 
 //contract number

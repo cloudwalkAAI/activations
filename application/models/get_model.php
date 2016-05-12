@@ -168,6 +168,7 @@ class Get_model extends CI_Model
             $jolist_array['jo_id'] = $row->jo_id;
             $jolist_array['emp_id'] = $row->emp_id;
             $jolist_array['jo_number'] = $row->jo_number;
+            $jolist_array['jo_color'] = $row->jo_color;
 
             $str_conoo .= '<ul class="no-bullet">';
             foreach( explode(',',$row->contract_no) as $conoo ){
@@ -208,14 +209,14 @@ class Get_model extends CI_Model
     }
 
     function get_company($c){
-        $this->db->select( 'company_name' );
+        $this->db->select( 'contact_person' );
         $this->db->from( 'clients' );
         $this->db->where( 'client_id =', $c );
         $query = $this->db->get();
         $row = $query->row();
         if (isset($row))
         {
-            return $row->company_name;
+            return $row->contact_person;
         }
     }
 
@@ -970,6 +971,10 @@ class Get_model extends CI_Model
                     <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
                     <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td style="text-align:center;">
+                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                    </td>
                 </tr>
             ';
         }
@@ -1039,6 +1044,19 @@ class Get_model extends CI_Model
                                 <td>'.$str_name.'</td>
                                 <td>'.$row->date.'</td>
                                 <td>'.$row->data.'</td>
+                                <td>
+                                    <a href="#" id="task_change" alt="'.$row->cal_id.'">'.
+                                        $row->endd.
+                                    '</a>
+                                </td>
+                                <td style="text-align:center;">
+                                    <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'">
+                                        <img src="'.base_url("assets/img/logos/Edit.png").'" />
+                                    </a>
+                                    <a class="del-btn-task" href="#" alt="'.$row->cal_id.'">
+                                        <img src="'.base_url("assets/img/logos/Delete.png").'" />
+                                    </a>
+                                </td>
                            </tr>
                            ';
             }
@@ -1159,9 +1177,9 @@ class Get_model extends CI_Model
                         $str_tp_bg = '';
                     }
 
-                    $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24));
+                    $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24)).'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a>';
                 }else{
-                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
+                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'"> <label style="font-size:10px;">press enter to save</label>';
                 }
 
                 if($row->contract_no){
@@ -1196,7 +1214,7 @@ class Get_model extends CI_Model
                         <td>'.$row->brand.'</td>
                         <td>'.$str_ce.'</td>
                         <td>'.$str_do.'</td>
-                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a></td>
+                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
                         <td>'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
