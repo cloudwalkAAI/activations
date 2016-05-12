@@ -1947,11 +1947,9 @@ $('#delete_ce').on('click', function(){
 });
 
 //transmittal
-$('.inp_trans').on('change',function(event){
-    //var keycode = (event.keyCode ? event.keyCode : event.which);
-    //console.log(keycode);
-    //if( keycode == '13'){
-    //    alert('hello');
+$('.inp_trans').on('keydown',function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if( keycode == '13'){
         $.ajax({
             url: MyNameSpace.config.base_url+'admin/transmittal',
             type:'post',
@@ -1960,12 +1958,10 @@ $('.inp_trans').on('change',function(event){
                 'trans_date' : $(this).val()
             },
             success: function(data) {
-                console.log(data);
                 location.reload();
             }
         });
-    //}
-    //event.stopPropagation();
+    }
 });
 
 //contract number

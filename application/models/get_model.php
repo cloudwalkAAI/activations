@@ -1177,9 +1177,9 @@ class Get_model extends CI_Model
                         $str_tp_bg = '';
                     }
 
-                    $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24));
+                    $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24)).'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a>';
                 }else{
-                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'">';
+                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'"> <label style="font-size:10px;">press enter to save</label>';
                 }
 
                 if($row->contract_no){
@@ -1214,7 +1214,7 @@ class Get_model extends CI_Model
                         <td>'.$row->brand.'</td>
                         <td>'.$str_ce.'</td>
                         <td>'.$str_do.'</td>
-                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a></td>
+                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
                         <td>'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
