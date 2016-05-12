@@ -527,4 +527,8 @@ class Jo extends CI_Controller{
 //        print_r( $this->input->post() );
         echo $this->custom_model->update_jo_col( $this->input->post() );
     }
+
+    function del_transmittal(){
+        echo $this->custom_model->del_transmittal( $this->input->post() );
+    }
 }

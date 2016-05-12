@@ -1964,6 +1964,21 @@ $('.inp_trans').on('keydown',function(event){
     }
 });
 
+$('.del_trans').on('click',function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/del_transmittal',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        success: function(data) {
+            location.reload();
+        }
+    });
+});
+
 //contract number
 $('.inp_contract_no').keyup(function(event){
     if( event.which == '13'){

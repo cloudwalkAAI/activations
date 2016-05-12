@@ -214,4 +214,12 @@ class Custom_model extends CI_Model
 
         return $color['col'];
     }
+
+    function del_transmittal( $trans_id ){
+        $data = array(
+            'transmittal' => ''
+        );
+        $this->db->where('jo_id', $trans_id['jo_id']);
+        $this->db->update('job_order_list', $data);
+    }
 }
