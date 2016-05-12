@@ -168,6 +168,7 @@ class Get_model extends CI_Model
             $jolist_array['jo_id'] = $row->jo_id;
             $jolist_array['emp_id'] = $row->emp_id;
             $jolist_array['jo_number'] = $row->jo_number;
+            $jolist_array['jo_color'] = $row->jo_color;
 
             $str_conoo .= '<ul class="no-bullet">';
             foreach( explode(',',$row->contract_no) as $conoo ){
@@ -208,14 +209,14 @@ class Get_model extends CI_Model
     }
 
     function get_company($c){
-        $this->db->select( 'company_name' );
+        $this->db->select( 'contact_person' );
         $this->db->from( 'clients' );
         $this->db->where( 'client_id =', $c );
         $query = $this->db->get();
         $row = $query->row();
         if (isset($row))
         {
-            return $row->company_name;
+            return $row->contact_person;
         }
     }
 

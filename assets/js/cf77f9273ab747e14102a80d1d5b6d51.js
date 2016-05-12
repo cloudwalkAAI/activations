@@ -10,6 +10,28 @@ $('.prevent').on('click', function(e){
     e.preventDefault();
 });
 
+$('.jo_change_color').on('click', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/chg_col',
+        type:'post',
+        data: {
+            'val' : $(this).attr('value'),
+            'col' : $(this).attr('alt')
+        },
+        success: function(data) {
+            $('#joid_color')
+                .css('color', '')
+                .css('color', data);
+            //console.log(data);
+            //if( data != null ){
+            //    $('#temp_name').val(data);
+            //}
+        }
+    });
+});
+
 $('#btn_share_jo').on('click',function(){
     $('#share_jo_ae').ajaxForm({
         type: 'POST',
