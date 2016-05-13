@@ -302,11 +302,20 @@ class Update_model extends CI_Model
         $this->db->where( 'jo_id', $a['jo_id'] );
         $this->db->order_by("jo_id", "desc");
         $query = $this->db->get();
-        if ($query->num_rows() > 0) {
+//        if ($query->num_rows() > 0) {
+
+
             foreach ($query->result() as $row) {
                 if( $row->contract_no ){
-                    $arr_cono = explode( ',', $row->contract_no );
-                    array_push( $arr_cono, $a['cono'] );
+                    $query_jo = $this->db->get_where('job_order_list', array('jo_id' => $a['jo_id']));
+                    $row_jo = $query_jo->row();
+//                    foreach($query_jo->result() as $row_jo){
+                        $arr_cono = explode( ',', $row_jo->contract_no );
+                        if (!in_array($a['cono'], $arr_cono))
+                        {
+                            array_push( $arr_cono, $a['cono'] );
+                        }
+//                    }
                 }else{
                     array_push( $arr_cono, $a['cono'] );
                 }
@@ -323,7 +332,7 @@ class Update_model extends CI_Model
                     return 'failed';
                 }
             }
-        }
+//        }
     }
 
     function update_payment( $a ){

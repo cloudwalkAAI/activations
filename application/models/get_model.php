@@ -1193,11 +1193,11 @@ class Get_model extends CI_Model
                     }
                     $str_con .= '</ul>';
                     $str_con .= '
-                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
-                        <span style="font-size:8px;'.$disabler.'">Press Enter to Save</span>
+                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num..">
+                        <span style="font-size:8px;">Press Enter to Save</span>
                     ';
                 }else{
-                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
+                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No.">';
                 }
 
                 $str_td_jo .= '

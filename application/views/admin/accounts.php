@@ -4,6 +4,12 @@
             <td colspan="12" class="text-center"><h3>Admin - Accounting</h3></td>
         </tr>
         <tr>
+            <td colspan="3" style="background-color: green; color:white; text-align: center;">30 days</td>
+            <td colspan="3" style="background-color: yellow; color:black; text-align: center;">45 days</td>
+            <td colspan="3" style="background-color: red; color:white; text-align: center;">60 days</td>
+            <td colspan="3" class="emergency" style="text-align: center;">More than 120 days</td>
+        </tr>
+        <tr>
             <td colspan="12">
                 <div class="column large-5 medium-5 small-12 dash_col">
                     <div class="row collapse prefix-radius">
