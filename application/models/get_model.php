@@ -1153,12 +1153,12 @@ class Get_model extends CI_Model
                                 <span>'.$row->paid_date.'</span>
                             </li>
                             <li>
-                                <button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
+                                <button class="button tiny btn_pd twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
                             </li>
                         </ul>
                     ';
                 }else{
-                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
+                    $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 
                 if($row->transmittal != NULL){
