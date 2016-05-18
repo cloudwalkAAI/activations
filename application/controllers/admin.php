@@ -44,15 +44,38 @@ class Admin extends CI_Controller
 
     function upload_bill(){
         $target_dir = "assets/uploads/bill/";
-        $target_file = $target_dir . basename($_FILES["bill_file"]["name"]);
+        $file_name = str_replace(" ", "_", basename($_FILES["bill_file"]["name"]));
+        $target_file = $target_dir . $file_name;
         move_uploaded_file($_FILES["bill_file"]["tmp_name"], $target_file);
 
         echo $this->update_model->upload_attachment_bill( $this->input->post(), $target_file );
     }
 
+    function upload_bill_u(){
+//        print_r( $this->input->post() );
+//        return false;
+        if(empty($_FILES)) {
+            //stands for any kind of errors happen during the uploading
+            echo $this->update_model->upload_attachment_bill_u( $this->input->post() );
+        }else{
+            $target_dir = "assets/uploads/bill/";
+            $file_name = str_replace(" ", "_", basename($_FILES["bill_file_u"]["name"]));
+            $target_file = $target_dir . $file_name;
+//            $target_file = $target_dir . basename($_FILES["bill_file_u"]["name"]);
+            move_uploaded_file($_FILES["bill_file_u"]["tmp_name"], $target_file);
+
+            echo $this->update_model->upload_attachment_bill_u( $this->input->post(), $target_file );
+        }
+    }
+
+    function get_invoice(){
+        echo $this->get_model->get_invoice( $this->input->post() );
+    }
+
     function upload_ce(){
         $target_dir = "assets/uploads/ce/";
-        $target_file = $target_dir . basename($_FILES["ce_file"]["name"]);
+        $file_name = str_replace(" ", "_", basename($_FILES["ce_file"]["name"]));
+        $target_file = $target_dir . $file_name;
         move_uploaded_file($_FILES["ce_file"]["tmp_name"], $target_file);
 
         echo $this->update_model->upload_attachment_ce( $this->input->post(), $target_file );

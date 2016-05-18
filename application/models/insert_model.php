@@ -297,7 +297,41 @@ class Insert_model extends CI_Model
         $this->db->insert('project_attachments', $data);
 
         if( $this->db->affected_rows() > 0 ) {
-            echo 'success';
+            $insid = $this->db->insert_id();
+            $req_array['dt_id'] = $insid;
+
+            $query = $this->db->get_where( 'project_attachments', array( 'attachment_id' => $insid ) );
+            foreach( $query->result() as $row ) {
+                if( $row->dept_id == 1 ){
+                    $str_trcolor = 'background:#fbfd04';
+                }elseif( $row->dept_id == 2 ){
+                    $str_trcolor = 'background:#01fafc';
+                }elseif( $row->dept_id == 3 ){
+                    $str_trcolor = 'background:#02fb00';
+                }elseif( $row->dept_id == 5 ){
+                    $str_trcolor = 'background:#f805fd';
+                }elseif( $row->dept_id == 6 ){
+                    $str_trcolor = 'background:#fc0404';
+                }elseif( $row->dept_id == 7 ){
+                    $str_trcolor = 'background:#0304fc';
+                }elseif( $row->dept_id == 8 ){
+                    $str_trcolor = 'background:#5d00e4';
+                }elseif( $row->dept_id == 9 ){
+                    $str_trcolor = 'background:#0b2e96';
+                }elseif( $row->dept_id == 10 ){
+                    $str_trcolor = 'background:#fbe8ea';
+                }
+
+                $req_array['dt_table'] = '
+                    <tr style="'.$str_trcolor.' !important" id="att_pro'.$row->attachment_id.'">
+                        <td>'.$row->date_uploaded.'</td>
+                        <td>'.$row->file_name.'</td>
+                        <td>'.$row->reference_for.'</td>
+                        <td><a style="'.$str_trcolor.' !important" href="'.base_url( $row->file_location ).'" target="_blank">Download</td>
+                    </tr>
+                ';
+            }
+            return json_encode( $req_array );
         }else{
             echo 'fail';
         }

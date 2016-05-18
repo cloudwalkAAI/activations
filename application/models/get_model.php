@@ -966,7 +966,7 @@ class Get_model extends CI_Model
 //            $text = str_ireplace($breaks, "\r\n", $row->deliverables);
 //            $text1 = str_ireplace($breaks, "\r\n", $row->next_steps);
             $result .= '
-                <tr>
+                <tr id="req'.$row->req_id.'">
                     <td>'.$row->department_name.'</td>
                     <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
@@ -979,6 +979,13 @@ class Get_model extends CI_Model
             ';
         }
         return $result;
+    }
+
+    function get_req( $a ){
+        $query = $this->db->get_where( 'event_requirement', array( 'req_id' => $a['req_id'] ) );
+        foreach( $query->result() as $row ) {
+            return $a['req_id'].','.$row->department_name.','.$row->deliverables.','.$row->deadline.','.$row->next_steps;
+        }
     }
 
     function get_req_table_v2( $a ){
@@ -1105,6 +1112,8 @@ class Get_model extends CI_Model
         $str_bd = '';
         $str_ce = '';
         $str_tp = 0;
+        $str_bill_bg = '';
+        $str_bill_bg_class = '';
         $str_tp_bg = '';
         $str_tp_bg_class = '';
         $shared_arr = array();
@@ -1134,8 +1143,27 @@ class Get_model extends CI_Model
                     $str_do = '<button class="button tiny btn_do twidth" alt="'.$row->jo_id.'" style="'.$disabler.'">Do</button>';
                 }
 
-                if($row->billed_date){
-                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><a href="#" id="delete_bd" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
+                if( $row->billed_date && $this->session->userdata('sess_dept') < 2 ){
+
+                    $d = explode(",", $row->billed_date);
+
+                    $now = time(); // or your date as well
+                    $bil_date = strtotime( $d[0] );
+                    $datediff_bill = abs( $now - $bil_date );
+
+                    if( floor( $datediff_bill/(60*60*24) ) <= 45 ){
+                        $str_bill_bg = 'background-color: green; color:white;';
+                    }elseif( ( floor( $datediff_bill/(60*60*24) ) > 45 ) && ( floor( $datediff_bill/(60*60*24) ) <= 60 ) ){
+                        $str_bill_bg = 'background-color: yellow; color:black;';
+                    }elseif( ( floor( $datediff_bill/(60*60*24) ) > 60 ) && ( floor( $datediff_bill/(60*60*24) ) <= 120 ) ){
+                        $str_bill_bg = 'background-color: red; color:white;';
+                    }elseif( floor( $datediff_bill/(60*60*24) ) > 120  ){
+                        $str_bill_bg_class = 'emergency';
+                        $str_bill_bg = '';
+                    }
+                    $str_bd = '<a href="#" class="bill_update" alt="'.$row->jo_id.'">'.$d[1].'<br />'.$d[0].'</a><br /><a href="#" class="delete_bd" alt="'.$row->jo_id.'" style="//margin-left:10px;'.$disabler.'" >[x] Delete</a>';
+                }elseif( $row->billed_date && $this->session->userdata('sess_dept') >= 2 ){
+                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><br /><a href="#" class="delete_bd" alt="'.$row->jo_id.'" style="//margin-left:10px;'.$disabler.'" >[x] Delete</a>';
                 }else{
                     $str_bd = '<button class="button tiny btn_bd twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">Invoice</button>';
                 }
@@ -1153,12 +1181,12 @@ class Get_model extends CI_Model
                                 <span>'.$row->paid_date.'</span>
                             </li>
                             <li>
-                                <button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
+                                <button class="button tiny btn_pd twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
                             </li>
                         </ul>
                     ';
                 }else{
-                    $str_pd = '<button class="button tiny btn_pd twidth" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
+                    $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 
                 if($row->transmittal != NULL){
@@ -1193,11 +1221,11 @@ class Get_model extends CI_Model
                     }
                     $str_con .= '</ul>';
                     $str_con .= '
-                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num.." style="'.$disabler.'">
-                        <span style="font-size:8px;'.$disabler.'">Press Enter to Save</span>
+                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num..">
+                        <span style="font-size:8px;">Press Enter to Save</span>
                     ';
                 }else{
-                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No." style="'.$disabler.'">';
+                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No.">';
                 }
 
                 $str_td_jo .= '
@@ -1215,7 +1243,7 @@ class Get_model extends CI_Model
                         <td>'.$str_ce.'</td>
                         <td>'.$str_do.'</td>
                         <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
-                        <td>'.$str_bd.'</td>
+                        <td class="'.$str_bill_bg_class.'" align="center" style="text-align: center;'.$str_bill_bg.'">'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
                         </td>
@@ -1226,10 +1254,23 @@ class Get_model extends CI_Model
                 ';
 
                 $str_tp_bg = '';
+                $str_tp_bg_class = '';
+                $str_bill_bg = '';
+                $str_bill_bg_class = '';
             }
         }
 
         return $str_td_jo;
+    }
+
+    function get_invoice( $a ){
+        $query_ae = $this->db->get_where( 'job_order_list', array( 'jo_id' => $a['jo_id'] ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return $row_ae->billed_date.','.base_url($row_ae->bill_location).','.$a['jo_id'];
+            }
+        }
     }
 
     function dt_calendar( $cal_id ){

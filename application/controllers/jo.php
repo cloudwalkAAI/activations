@@ -293,7 +293,8 @@ class Jo extends CI_Controller{
 
     function attached(){
         $target_dir = "assets/uploads/";
-        $target_file = $target_dir . basename($_FILES["inp_file_attachments"]["name"]);
+        $file_name = str_replace(" ", "_", basename($_FILES["inp_file_attachments"]["name"]));
+        $target_file = $target_dir . $file_name;
         move_uploaded_file($_FILES["inp_file_attachments"]["tmp_name"], $target_file);
 
         echo $this->insert_model->save_attachment( $this->input->post(), $target_file );
@@ -379,15 +380,19 @@ class Jo extends CI_Controller{
     }
 
     function accounts(){
-		$data['active_menu'] = 'ex';
-		$data['active_submenu'] = 'accounts';
-        if( $this->session->userdata('sess_dept') == 2 ){
-            $data['disabler'] = 'display:none;';
+        if( $this->session->userdata('sess_id') ) {
+            $data['active_menu'] = 'ex';
+            $data['active_submenu'] = 'accounts';
+            if ($this->session->userdata('sess_dept') == 2) {
+                $data['disabler'] = 'display:none;';
+            }
+            $data['jolist'] = $this->get_model->accounts_jo($data['disabler']);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
+            $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
+            $this->load->view('master_page', $data);
+        }else{
+            redirect(base_url());
         }
-        $data['jolist'] = $this->get_model->accounts_jo( $data['disabler'] );
-        $data['navigator'] = $this->load->view('nav', $data, TRUE);
-        $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
-        $this->load->view('master_page', $data);
     }
 
     function clients(){
@@ -530,5 +535,14 @@ class Jo extends CI_Controller{
 
     function del_transmittal(){
         echo $this->custom_model->del_transmittal( $this->input->post() );
+    }
+
+    function get_req(){
+        echo $this->get_model->get_req( $this->input->post() );
+    }
+
+    function jo_update_req(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_req( $this->input->post() );
     }
 }

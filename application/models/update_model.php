@@ -188,10 +188,33 @@ class Update_model extends CI_Model
 //bill
     function upload_attachment_bill( $form_values, $file_location ){
         $data = array(
-            'billed_date' => $form_values['bill_number'],
+            'billed_date' => $form_values['bill_date'].','.$form_values['bill_number'],
             'bill_location' => $file_location
         );
         $this->db->where( 'jo_id', $form_values['bill_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+
+    }
+
+    function upload_attachment_bill_u( $form_values, $file_location = null ){
+        if( $file_location != null){
+            $data = array(
+                'billed_date' => $form_values['bill_date_u'].','.$form_values['bill_number_u'],
+                'bill_location' => $file_location
+            );
+        }else{
+            $data = array(
+                'billed_date' => $form_values['bill_date_u'].','.$form_values['bill_number_u'],
+            );
+        }
+
+        $this->db->where( 'jo_id', $form_values['bill_joid_u'] );
         $this->db->update( 'job_order_list', $data );
 
         if( $this->db->affected_rows() > 0 ){
@@ -302,11 +325,20 @@ class Update_model extends CI_Model
         $this->db->where( 'jo_id', $a['jo_id'] );
         $this->db->order_by("jo_id", "desc");
         $query = $this->db->get();
-        if ($query->num_rows() > 0) {
+//        if ($query->num_rows() > 0) {
+
+
             foreach ($query->result() as $row) {
                 if( $row->contract_no ){
-                    $arr_cono = explode( ',', $row->contract_no );
-                    array_push( $arr_cono, $a['cono'] );
+                    $query_jo = $this->db->get_where('job_order_list', array('jo_id' => $a['jo_id']));
+                    $row_jo = $query_jo->row();
+//                    foreach($query_jo->result() as $row_jo){
+                        $arr_cono = explode( ',', $row_jo->contract_no );
+                        if (!in_array($a['cono'], $arr_cono))
+                        {
+                            array_push( $arr_cono, $a['cono'] );
+                        }
+//                    }
                 }else{
                     array_push( $arr_cono, $a['cono'] );
                 }
@@ -323,7 +355,7 @@ class Update_model extends CI_Model
                     return 'failed';
                 }
             }
-        }
+//        }
     }
 
     function update_payment( $a ){

@@ -4,6 +4,12 @@
             <td colspan="12" class="text-center"><h3>Admin - Accounting</h3></td>
         </tr>
         <tr>
+            <td colspan="3" style="background-color: green; color:white; text-align: center;">30 days</td>
+            <td colspan="3" style="background-color: yellow; color:black; text-align: center;">45 days</td>
+            <td colspan="3" style="background-color: red; color:white; text-align: center;">60 days</td>
+            <td colspan="3" class="emergency" style="text-align: center;">More than 120 days</td>
+        </tr>
+        <tr>
             <td colspan="12">
                 <div class="column large-5 medium-5 small-12 dash_col">
                     <div class="row collapse prefix-radius">
@@ -52,9 +58,23 @@
     <h2 id="modalTitle">Upload Invoice</h2>
     <form id="form_up_bill" action="" method="post">
         <input type="hidden" name="bill_joid" id="bill_joid">
-        <input type="text" name="bill_number" id="bill_number" placeholder="Invoice Number">
+        <input type="text" name="bill_date" id="bill_date" placeholder="Date">
+        <input type="text" name="bill_number" id="bill_number" placeholder="Invoice">
         <input type="file" name="bill_file" id="bill_file">
         <button id="bton_bill" class="tiny">Upload</button>
+    </form>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+<div id="bill_Modal_u" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle">Update Invoice</h2>
+    <form id="form_up_bill_u" action="" method="post">
+        <input type="hidden" name="bill_joid_u" id="bill_joid_u">
+        <input type="text" name="bill_date_u" id="bill_date_u" placeholder="Date">
+        <input type="text" name="bill_number_u" id="bill_number_u" placeholder="Invoice">
+        <a id="bill_download" href="" target="_blank">Download File</a>
+        <input type="file" name="bill_file_u" id="bill_file_u">
+        <button id="bton_bill_u" class="tiny">Upload</button>
     </form>
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
