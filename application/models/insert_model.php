@@ -426,7 +426,7 @@ class Insert_model extends CI_Model
                         $this->email_calendar($row_emp->email, $str_name);
 //                        $this->email_calendar('chabi050613@gmail.com', $str_name);
 
-                        $this->sms_compiler_task('639464187000','Calendar has been updated');
+//                        $this->sms_compiler_task('639464187000','Calendar has been updated');
 //                        $this->sms_compiler_task($row_emp->contact_nos,'Calendar has been updated'); //chikka loaded
                     }
 
