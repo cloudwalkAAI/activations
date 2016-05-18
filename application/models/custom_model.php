@@ -222,4 +222,38 @@ class Custom_model extends CI_Model
         $this->db->where('jo_id', $trans_id['jo_id']);
         $this->db->update('job_order_list', $data);
     }
+
+    function update_req( $a ){
+        $req_array = array();
+
+        $data = array(
+            'department_name'   => $a['rq_dept_u'],
+            'deliverables'      => $a['editor_req_u'],
+            'deadline'          => $a['rq_deadline_u'],
+            'next_steps'        => $a['editor_ns_u']
+        );
+        $this->db->where( 'req_id', $a['rq_joid_u'] );
+        $this->db->update( 'event_requirement', $data );
+
+        if($this->db->affected_rows() > 0){
+            $query = $this->db->get_where( 'event_requirement', array( 'req_id' => $a['rq_joid_u'] ) );
+            foreach( $query->result() as $row ) {
+                $req_array['dt_id'] = $row->req_id;
+                $req_array['dt_table'] = '<tr id="'.$row->req_id.'">
+                    <td>'.$row->department_name.'</td>
+                    <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td>'.$row->deadline.'</td>
+                    <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td style="text-align:center;">
+                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                    </td>
+                </tr>';
+            }
+            return json_encode( $req_array );
+        }else{
+            return 0;
+        }
+
+    }
 }

@@ -966,7 +966,7 @@ class Get_model extends CI_Model
 //            $text = str_ireplace($breaks, "\r\n", $row->deliverables);
 //            $text1 = str_ireplace($breaks, "\r\n", $row->next_steps);
             $result .= '
-                <tr>
+                <tr id="req'.$row->req_id.'">
                     <td>'.$row->department_name.'</td>
                     <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
@@ -979,6 +979,13 @@ class Get_model extends CI_Model
             ';
         }
         return $result;
+    }
+
+    function get_req( $a ){
+        $query = $this->db->get_where( 'event_requirement', array( 'req_id' => $a['req_id'] ) );
+        foreach( $query->result() as $row ) {
+            return $a['req_id'].','.$row->department_name.','.$row->deliverables.','.$row->deadline.','.$row->next_steps;
+        }
     }
 
     function get_req_table_v2( $a ){

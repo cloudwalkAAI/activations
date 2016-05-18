@@ -1915,6 +1915,72 @@ $('.bill_update').on('click', function(e){
     });
 });
 
+$('#btn_add_requ_u').on('click', function(){
+    $('#requ_form_u').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'jo/jo_update_req',
+        beforeSubmit: function(arr, jform, option){
+            $('#btn_add_requ_u').prop('disabled', true);
+        },
+        success:  function(response){
+            if( response == 0 ){
+
+                $("#alert_box_requ_u").removeClass("success");
+                $("#alert_box_requ_u").addClass("warning");
+                $("#alert_box_requ_u").text('');
+                $("#alert_box_requ_u").text('Save Failed.');
+                $("#alert_box_requ_u").show();
+
+            }else{
+                var json = $.parseJSON(response);
+                $('tr#req' + json['dt_id']).replaceWith(json['dt_table']);
+
+                $("#sel_dept_ad_u").val('0');
+                $("#editor_req_u").val('');
+                $("#datepicker_deadline_u").val('');
+                $("#editor_ns_u").val('');
+                $("#rq_joid_u").val('');
+                $("#alert_box_requ_u").removeClass("success");
+                $("#alert_box_requ_u").addClass("warning");
+                $("#alert_box_requ_u").text('');
+                $("#alert_box_requ_u").text('Save Success.');
+                $("#alert_box_requ_u").show();
+
+                req_btn_reload();
+
+                setTimeout( function(){
+                    $('#requModal').foundation('reveal', 'close');
+                    $("#alert_box_requ_u").hide();
+                }, 3000 );
+            }
+            $('#btn_add_requ_u').prop('disabled', false);
+        }
+    });
+});
+
+function req_btn_reload(){
+    $('.edit-btn-req').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/get_req',
+            type:'post',
+            data: {
+                'req_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var dtarr = data.split(",");
+                $('#rq_joid_u').val( dtarr[0] );
+                $('#sel_dept_ad_u').val( dtarr[1] );
+                $('#editor_req_u').val( dtarr[2] );
+                $('#datepicker_deadline_u').val( dtarr[3] );
+                $('#editor_ns_u').val( dtarr[4] );
+                $('#requModal_u').foundation('reveal', 'open');
+            }
+        });
+    });
+}
+req_btn_reload();
+
 $('#bton_bill_u').on('click', function(){
     $('#form_up_bill_u').ajaxForm({
         type: 'POST',

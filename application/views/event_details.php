@@ -252,6 +252,44 @@ if( isset( $shared_array ) ){
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
 
+<div id="requModal_u" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Add requirement</h2>
+
+    <div id="alert_box_requ_u" data-alert class="alert-box alert radius hide-normal">
+        Special characters are not allowed
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="requ_form_u" action="" method="post">
+        <input type="hidden" name="rq_joid_u" id="rq_joid_u">
+        <div class="row">
+            <select name="rq_dept_u" id="sel_dept_ad_u">
+                <option value="0">Department</option>
+                <?php
+                    foreach( $departments as $dept ){
+                        echo '<option value="' . $dept['department_name'] . '">'. ucfirst($dept['department_name']) .'</option>';
+                    }
+                ?>
+            </select>
+        </div>
+
+        <div class="row">
+            <textarea name="editor_req_u" id="editor_req_u" cols="30" rows="10" placeholder="Deliverables"></textarea>
+        </div>
+        <div class="row">
+            <br>
+            <input type="text" name="rq_deadline_u" id="datepicker_deadline_u" placeholder="Deadline">
+        </div>
+        <div class="row">
+            <textarea name="editor_ns_u" id="editor_ns_u" cols="30" rows="10" placeholder="Next Steps"></textarea>
+        </div>
+
+        <button id="btn_add_requ_u" type="submit" class="button medium right"><i class="fi-save medium"></i> Update</button>
+    </form>
+    <br>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
 <table id="tbl_req" class="twidth">
     <thead>
         <tr>

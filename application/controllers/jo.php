@@ -535,4 +535,13 @@ class Jo extends CI_Controller{
     function del_transmittal(){
         echo $this->custom_model->del_transmittal( $this->input->post() );
     }
+
+    function get_req(){
+        echo $this->get_model->get_req( $this->input->post() );
+    }
+
+    function jo_update_req(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_req( $this->input->post() );
+    }
 }
