@@ -188,10 +188,33 @@ class Update_model extends CI_Model
 //bill
     function upload_attachment_bill( $form_values, $file_location ){
         $data = array(
-            'billed_date' => $form_values['bill_number'],
+            'billed_date' => $form_values['bill_date'].','.$form_values['bill_number'],
             'bill_location' => $file_location
         );
         $this->db->where( 'jo_id', $form_values['bill_joid'] );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+
+    }
+
+    function upload_attachment_bill_u( $form_values, $file_location = null ){
+        if( $file_location != null){
+            $data = array(
+                'billed_date' => $form_values['bill_date_u'].','.$form_values['bill_number_u'],
+                'bill_location' => $file_location
+            );
+        }else{
+            $data = array(
+                'billed_date' => $form_values['bill_date_u'].','.$form_values['bill_number_u'],
+            );
+        }
+
+        $this->db->where( 'jo_id', $form_values['bill_joid_u'] );
         $this->db->update( 'job_order_list', $data );
 
         if( $this->db->affected_rows() > 0 ){

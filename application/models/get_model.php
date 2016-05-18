@@ -1105,6 +1105,8 @@ class Get_model extends CI_Model
         $str_bd = '';
         $str_ce = '';
         $str_tp = 0;
+        $str_bill_bg = '';
+        $str_bill_bg_class = '';
         $str_tp_bg = '';
         $str_tp_bg_class = '';
         $shared_arr = array();
@@ -1134,8 +1136,27 @@ class Get_model extends CI_Model
                     $str_do = '<button class="button tiny btn_do twidth" alt="'.$row->jo_id.'" style="'.$disabler.'">Do</button>';
                 }
 
-                if($row->billed_date){
-                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><a href="#" id="delete_bd" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
+                if( $row->billed_date && $this->session->userdata('sess_dept') < 2 ){
+
+                    $d = explode(",", $row->billed_date);
+
+                    $now = time(); // or your date as well
+                    $bil_date = strtotime( $d[0] );
+                    $datediff_bill = abs( $now - $bil_date );
+
+                    if( floor( $datediff_bill/(60*60*24) ) <= 45 ){
+                        $str_bill_bg = 'background-color: green; color:white;';
+                    }elseif( ( floor( $datediff_bill/(60*60*24) ) > 45 ) && ( floor( $datediff_bill/(60*60*24) ) <= 60 ) ){
+                        $str_bill_bg = 'background-color: yellow; color:black;';
+                    }elseif( ( floor( $datediff_bill/(60*60*24) ) > 60 ) && ( floor( $datediff_bill/(60*60*24) ) <= 120 ) ){
+                        $str_bill_bg = 'background-color: red; color:white;';
+                    }elseif( floor( $datediff_bill/(60*60*24) ) > 120  ){
+                        $str_bill_bg_class = 'emergency';
+                        $str_bill_bg = '';
+                    }
+                    $str_bd = '<a href="#" class="bill_update" alt="'.$row->jo_id.'">'.$d[1].'<br />'.$d[0].'</a><br /><a href="#" class="delete_bd" alt="'.$row->jo_id.'" style="//margin-left:10px;'.$disabler.'" >[x] Delete</a>';
+                }elseif( $row->billed_date && $this->session->userdata('sess_dept') >= 2 ){
+                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><br /><a href="#" class="delete_bd" alt="'.$row->jo_id.'" style="//margin-left:10px;'.$disabler.'" >[x] Delete</a>';
                 }else{
                     $str_bd = '<button class="button tiny btn_bd twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">Invoice</button>';
                 }
@@ -1215,7 +1236,7 @@ class Get_model extends CI_Model
                         <td>'.$str_ce.'</td>
                         <td>'.$str_do.'</td>
                         <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
-                        <td>'.$str_bd.'</td>
+                        <td class="'.$str_bill_bg_class.'" align="center" style="text-align: center;'.$str_bill_bg.'">'.$str_bd.'</td>
                         <td>
                             '.$str_pd.'
                         </td>
@@ -1226,10 +1247,23 @@ class Get_model extends CI_Model
                 ';
 
                 $str_tp_bg = '';
+                $str_tp_bg_class = '';
+                $str_bill_bg = '';
+                $str_bill_bg_class = '';
             }
         }
 
         return $str_td_jo;
+    }
+
+    function get_invoice( $a ){
+        $query_ae = $this->db->get_where( 'job_order_list', array( 'jo_id' => $a['jo_id'] ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return $row_ae->billed_date.','.base_url($row_ae->bill_location).','.$a['jo_id'];
+            }
+        }
     }
 
     function dt_calendar( $cal_id ){

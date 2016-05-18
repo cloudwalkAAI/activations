@@ -1893,7 +1893,46 @@ $('#bton_bill').on('click', function(){
     });
 });
 
-$('#delete_bd').on('click', function(){
+$('.bill_update').on('click', function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/get_invoice',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        success: function(data) {
+            var dtarr = data.split(",");
+            var index = dtarr[2].lastIndexOf("/") + 1;
+            var filename = dtarr[2].substr(index);
+            $('#bill_joid_u').val( dtarr[3] );
+            $('#bill_date_u').val( dtarr[0] );
+            $('#bill_number_u').val( dtarr[1] );
+            $('#bill_download').attr( "href", dtarr[2] );
+            $('#bill_download').text( filename );
+            $('#bill_Modal_u').foundation('reveal', 'open');
+        }
+    });
+});
+
+$('#bton_bill_u').on('click', function(){
+    $('#form_up_bill_u').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'admin/upload_bill_u',
+        beforeSubmit: function(arr, jform, option){
+            $('#bton_bill_u').prop('disabled', true);
+        },
+        success:  function(response){
+            console.log(response);
+            //$('#bton_do').prop('disabled', false);
+            //location.reload();
+        }
+    });
+});
+
+$('.delete_bd').on('click', function(e){
+    e.preventDefault();
+    alert('me');
     $.ajax({
         url: MyNameSpace.config.base_url+'admin/del_bd',
         type:'post',
