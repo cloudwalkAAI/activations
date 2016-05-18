@@ -62,7 +62,7 @@
         <th>Download Link</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="tbody_pro_att">
 
     <?php
     $str_trcolor = '';
@@ -70,33 +70,33 @@
     foreach( $proattach as $row){
 
         if( $row->dept_id == 1 ){
-            $str_trcolor = 'bgcolor="#fbfd04"';
+            $str_trcolor = 'background:#fbfd04';
         }elseif( $row->dept_id == 2 ){
-            $str_trcolor = 'bgcolor="#01fafc"';
+            $str_trcolor = 'background:#01fafc';
         }elseif( $row->dept_id == 3 ){
-            $str_trcolor = 'bgcolor="#02fb00"';
+            $str_trcolor = 'background:#02fb00';
         }elseif( $row->dept_id == 5 ){
-            $str_trcolor = 'bgcolor="#f805fd"';
+            $str_trcolor = 'background:#f805fd';
         }elseif( $row->dept_id == 6 ){
-            $str_trcolor = 'bgcolor="#fc0404"';
+            $str_trcolor = 'background:#fc0404';
         }elseif( $row->dept_id == 7 ){
-            $str_trcolor = 'bgcolor="#0304fc"';
+            $str_trcolor = 'background:#0304fc';
         }elseif( $row->dept_id == 8 ){
-            $str_trcolor = 'bgcolor="#5d00e4"';
+            $str_trcolor = 'background:#5d00e4';
         }elseif( $row->dept_id == 9 ){
-            $str_trcolor = 'bgcolor="#0b2e96"';
+            $str_trcolor = 'background:#0b2e96';
         }elseif( $row->dept_id == 10 ){
-            $str_trcolor = 'bgcolor="#fbe8ea"';
+            $str_trcolor = 'background:#fbe8ea';
         }
 
         echo '
-                    <tr '.$str_trcolor.'>
-                        <td>'.$row->date_uploaded.'</td>
-                        <td>'.$row->file_name.'</td>
-                        <td>'.$row->reference_for.'</td>
-                        <td><a href="'.base_url( $row->file_location ).'" target="_blank">Download</td>
-                    </tr>
-                ';
+                <tr style="'.$str_trcolor.' !important" id="att_pro'.$row->attachment_id.'">
+                    <td>'.$row->date_uploaded.'</td>
+                    <td>'.$row->file_name.'</td>
+                    <td>'.$row->reference_for.'</td>
+                    <td><a style="'.$str_trcolor.' !important" href="'.base_url( $row->file_location ).'" target="_blank">Download</td>
+                </tr>
+            ';
     }
     ?>
 

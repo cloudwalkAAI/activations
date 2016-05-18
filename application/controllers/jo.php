@@ -293,7 +293,8 @@ class Jo extends CI_Controller{
 
     function attached(){
         $target_dir = "assets/uploads/";
-        $target_file = $target_dir . basename($_FILES["inp_file_attachments"]["name"]);
+        $file_name = str_replace(" ", "_", basename($_FILES["inp_file_attachments"]["name"]));
+        $target_file = $target_dir . $file_name;
         move_uploaded_file($_FILES["inp_file_attachments"]["tmp_name"], $target_file);
 
         echo $this->insert_model->save_attachment( $this->input->post(), $target_file );

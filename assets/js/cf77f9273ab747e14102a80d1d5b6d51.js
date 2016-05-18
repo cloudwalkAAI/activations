@@ -829,27 +829,39 @@ $('#attach_form').ajaxForm({
     uploadProgress: function (event, position, total, percentComplete){
         $('#ref_al').hide();
         $("#progress-bar").width(percentComplete + '%');
-        $("#progress-bar").html('<div id="progress-status">' + percentComplete +' %</div>')
+        $("#progress-bar").html('<div id="progress-status">' + percentComplete +' %</div>');
     },
     success:  function(response){
+        //console.log(response);
+        //return false;
         //var json = $.parseJSON(response);
+        var json = $.parseJSON(response);
         $('#btn_add_attach').prop('disabled', false);
-        if( response == 'success' ){
+        if( json['dt_id'] > 0 ){
+
+            //$('tr#att_pro' + json['dt_id']).replaceWith(json['dt_table']);
+
             $("#alert_box_attach").removeClass("success");
             $("#alert_box_attach").removeClass("alert");
             $("#alert_box_attach").addClass("warning");
             $('#alert_box_attach').hide();
             $('#alert_box_attach_ok').show();
 
+            $("#progress-bar").width(0 + '%');
+            $("#progress-bar").html('<div id="progress-status">0 %</div>');
+
             $('#inp_file_attachments').val('');
             $("#sel_reference").prop('selectedIndex', 0);
+
+            $('#tbody_pro_att').prepend( json['dt_table'] );
 
             setTimeout(function(){
                 $('#attachModal').foundation('reveal', 'close');
                 $('#alert_box_attach_ok').hide();
-                setTimeout(function(){
-                    location.reload();
-                }, 2000);
+                //setTimeout(function(){
+                //    $('#tbody_pro_att').prepend( json['dt_table'] );
+                    //location.reload();
+                //}, 2000);
             }, 3000);
         }else{
             $('#alert_box_attach_ok').hide();

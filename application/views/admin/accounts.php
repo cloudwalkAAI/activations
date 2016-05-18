@@ -72,7 +72,7 @@
         <input type="hidden" name="bill_joid_u" id="bill_joid_u">
         <input type="text" name="bill_date_u" id="bill_date_u" placeholder="Date">
         <input type="text" name="bill_number_u" id="bill_number_u" placeholder="Invoice">
-        <a id="bill_download" href="">Download File</a>
+        <a id="bill_download" href="" target="_blank">Download File</a>
         <input type="file" name="bill_file_u" id="bill_file_u">
         <button id="bton_bill_u" class="tiny">Upload</button>
     </form>
