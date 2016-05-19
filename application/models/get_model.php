@@ -1174,18 +1174,23 @@ class Get_model extends CI_Model
                     $str_ce = '<button class="button tiny btn_ce twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">CE</button>';
                 }
 
-                if( $row->paid_location == 'Paid' ){
+                if( $row->paid_location != null ){
+                    strrpos($row->paid_location, "/");
                     $str_pd = '
                         <ul class="no-bullet">
                             <li>
                                 <span>'.$row->paid_date.'</span>
                             </li>
                             <li>
-                                <button class="button tiny btn_pd twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
+                                <a href="'.base_url($row->paid_location).'" style="font-size:12px;">Download OR</a>
+                            </li>
+                            <li>
+                                <button class="button tiny delete_paid twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
                             </li>
                         </ul>
                     ';
                 }else{
+//                    $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                     $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 

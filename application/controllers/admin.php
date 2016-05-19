@@ -82,7 +82,17 @@ class Admin extends CI_Controller
     }
 
     function upload_paid(){
-        echo $this->update_model->upload_attachment_paid( $this->input->post() );
+        if(empty($_FILES)) {
+            //stands for any kind of errors happen during the uploading
+            echo $this->update_model->upload_attachment_paid( $this->input->post() );
+        }else{
+            $target_dir = "assets/uploads/or/";
+            $file_name = str_replace(" ", "_", basename($_FILES["paid_file"]["name"]));
+            $target_file = $target_dir . $file_name;
+            move_uploaded_file($_FILES["paid_file"]["tmp_name"], $target_file);
+
+            echo $this->update_model->upload_attachment_paid( $this->input->post(), $target_file );
+        }
     }
 
     function remarks(){

@@ -272,16 +272,26 @@ class Update_model extends CI_Model
         }
     }
 //paid
-    function upload_attachment_paid( $form_values ){
+    function upload_attachment_paid( $form_values, $file_location ){
         $data = array(
             'paid_date' => $form_values['paid_datepicker'],
-            'paid_location' => $form_values['paid_color']
+            'paid_location' => $file_location
         );
+
         $this->db->where( 'jo_id', $form_values['paid_joid'] );
         $this->db->update( 'job_order_list', $data );
 
         if( $this->db->affected_rows() > 0 ){
-            return 'updated';
+//            return 'updated';
+            $this->db->select( 'paid_date, paid_location' );
+            $this->db->from( 'job_order_list' );
+            $this->db->where( 'jo_id', $form_values['paid_joid'] );
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result() as $row) {
+                    return $row->paid_date.','.$row->paid_location.','.$form_values['paid_joid'];
+                }
+            }
         }else{
             return 'failed';
         }

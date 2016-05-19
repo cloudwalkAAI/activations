@@ -2120,26 +2120,26 @@ $('.inp_contract_no').keyup(function(event){
 
 //paid
 $('.btn_pd').on('click', function(){
-    //$('#paid_joid').val( $(this).attr('alt') );
+    $('#paid_joid').val( $(this).attr('alt') );
     //$('#paid_datepicker').val( $(this).attr('value') );
     //$('#paid_color').val( $(this).attr('title') );
     //$('#paid_color').css( 'background-color', $(this).attr('title') );
-    //$('#paid_Modal').foundation('reveal', 'open');
-    $.ajax({
-        url: MyNameSpace.config.base_url+'admin/payment',
-        type:'post',
-        data: {
-            'jo_id' : $(this).attr('alt'),
-            'py' : $(this).val()
-        },
-        beforeSubmit: function(arr, jform, option){
-            //$('#temp_name').val('Please Wait...');
-        },
-        success: function(data) {
-            //console.log(data);
-            location.reload();
-        }
-    });
+    $('#paid_Modal').foundation('reveal', 'open');
+    //$.ajax({
+    //    url: MyNameSpace.config.base_url+'admin/payment',
+    //    type:'post',
+    //    data: {
+    //        'jo_id' : $(this).attr('alt'),
+    //        'py' : $(this).val()
+    //    },
+    //    beforeSubmit: function(arr, jform, option){
+    //        //$('#temp_name').val('Please Wait...');
+    //    },
+    //    success: function(data) {
+    //        //console.log(data);
+    //        location.reload();
+    //    }
+    //});
 });
 
 $('#paid_color').on('change', function(){
@@ -2153,28 +2153,33 @@ $('#bton_paid').on('click', function(){
         beforeSubmit: function(arr, jform, option){
             $('#bton_paid').prop('disabled', true);
         },
-        success:  function(response){
+        success:  function(data){
             location.reload();
+            //var dtarr = data.split(",");
+            //var index = dtarr[2].lastIndexOf("/") + 1;
+            //var filename = dtarr[2].substr(index);
+            //console.log(data);
         }
     });
 });
 
-//$('#delete_paid').on('click', function(){
-//    $.ajax({
-//        url: MyNameSpace.config.base_url+'admin/del_paid',
-//        type:'post',
-//        data: {
-//            'jo_id' : $(this).attr('alt')
-//        },
-//        beforeSubmit: function(arr, jform, option){
-//            //$('#temp_name').val('Please Wait...');
-//        },
-//        success: function(data) {
-//            //console.log(data);
-//            location.reload();
-//        }
-//    });
-//});
+$('.delete_paid').on('click', function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_paid',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
 
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {
