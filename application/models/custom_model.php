@@ -196,6 +196,70 @@ class Custom_model extends CI_Model
         }
     }
 
+    function update_task_prod_u( $a, $b = null ){
+        $arr_new_task_update = array();
+        $str_name = '';
+        $data = array();
+
+        if( $b != null){
+            $data = array(
+                'date' => $a['prod_deadline_u'],
+                'data' => $a['prod_description_u'],
+                'peg' => $b,
+                'size' => $a['prod_size_u'],
+                'qty' => $a['prod_qty_u'],
+                'other_details' => $a['prod_other_details_u'],
+                'employee_id' => $a['sel_prod_emp_u']
+            );
+        }else{
+            $data = array(
+                'date' => $a['prod_deadline_u'],
+                'data' => $a['prod_description_u'],
+                'size' => $a['prod_size_u'],
+                'qty' => $a['prod_qty_u'],
+                'other_details' => $a['prod_other_details_u'],
+                'employee_id' => $a['sel_prod_emp_u']
+            );
+        }
+
+
+        $this->db->where( 'cal_id', $a['task_id_u_prod'] );
+        $this->db->update( 'calendar', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            $query = $this->db->get_where('calendar', array('cal_id' => $a['task_id_u_prod']));
+            foreach($query->result() as $row){
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+                $filname = str_replace("assets/uploads/peg/","",$row->peg);
+
+                $arr_new_task_update['table_id'] = $row->cal_id;
+                $arr_new_task_update['table_task'] = '
+                    <tr id="prod'.$row->cal_id.'">
+                        <td>'.$str_name.'</td>
+                        <td>'.$row->date.'</td>
+                        <td><span title="'.$row->data.'" aria-describedby="tooltip-ijv27znv5a'.$row->cal_id.'" data-selector="tooltip-ijv27znv5a'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                        <td><a href="'.base_url($row->peg).'" target="_blank">'.$filname.'</a></td>
+                        <td>'.$row->size.'</td>
+                        <td>'.$row->qty.'</td>
+                        <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                        <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$row->jo_id.'">'.$row->endd.'</a></td>
+                        <td style="text-align:center;">
+                            <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                        </td>
+                    </tr>
+                ';
+
+                echo json_encode($arr_new_task_update);
+            }
+        }else{
+            return 'failed';
+        }
+    }
+
     function delete_cal_task($id){
         $this->db->delete('calendar', array('cal_id' => $id));
         if( $this->db->affected_rows() > 0){

@@ -1073,7 +1073,7 @@ class Get_model extends CI_Model
     }
 
     function check_date($a){
-        $query = $this->db->get_where( 'calendar', array( 'date' => $a ) );
+        $query = $this->db->get_where( 'calendar', array( 'date' => $a, 'dept_id' => $this->session->userdata('sess_dept') ) );
         if ( $query->num_rows() > 0 ) {
             return 'Taken';
         }else{
@@ -1309,6 +1309,36 @@ class Get_model extends CI_Model
                 'eid' => $row->employee_id,
                 'edate' => $row->date,
                 'desc' => $row->data,
+                'process' => $row->endd
+            );
+        }
+
+        return json_encode($arr_ret);
+    }
+
+    function get_caltask_prod($cal_id){
+        $str_name = '';//test
+        $arr_ret = array();//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $filname = str_replace("assets/uploads/peg/","",$row->peg);
+
+            $arr_ret = array(
+                'cal_id' => $cal_id,
+                'ename' => $str_name,
+                'eid' => $row->employee_id,
+                'edate' => $row->date,
+                'desc' => $row->data,
+                'peg' => $row->peg,
+                'flname' => $filname,
+                'size' => $row->size,
+                'quant' => $row->qty,
+                'od' => $row->other_details,
                 'process' => $row->endd
             );
         }

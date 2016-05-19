@@ -438,6 +438,50 @@ class Insert_model extends CI_Model
         }
     }
 
+    function submit_date_calendar_prod( $calendar, $target = null ){
+        $insid = 0;
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] , 'jo_id' => $calendar['jo_id'] ) );
+        if ($query->num_rows() == 0) {
+
+            $data = array(
+                'jo_id'         => $calendar['jo_id'],
+                'date'          => $calendar['prod_deadline'],
+                'data'          => $calendar['prod_description'],
+                'dept_id'       => $this->session->userdata('sess_dept'),
+                'peg'           => $target,
+                'size'          => $calendar['prod_size'],
+                'qty'           => $calendar['prod_qty'],
+                'other_details' => $calendar['prod_other_details'],
+                'endd'          => 'Pending',
+                'employee_id'   => $calendar['sel_prod_emp']
+            );
+
+            $this->db->insert('calendar', $data);
+
+            $insid = $this->db->insert_id();
+
+            $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+            if($query->num_rows() > 0){
+                foreach ($query->result() as $row)
+                {
+                    $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                    foreach($query_emp->result() as $row_emp){
+                        $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                        $this->email_calendar($row_emp->email, $str_name);
+//                        $this->email_calendar('chabi050613@gmail.com', $str_name);
+
+//                        $this->sms_compiler_task('639464187000','Calendar has been updated');
+//                        $this->sms_compiler_task($row_emp->contact_nos,'Calendar has been updated'); //chikka loaded
+                    }
+
+                }
+            }
+            return $insid;
+        } else {
+            return 'exist';
+        }
+    }
+
     function createDateRangeArray($strDateFrom,$strDateTo)
     {
         // takes two dates formatted as YYYY-MM-DD and creates an

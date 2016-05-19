@@ -97,6 +97,10 @@ class Jo extends CI_Controller{
         echo $this->get_model->get_caltask($this->input->post('cal_id'));
     }
 
+    function update_cal_task_getinfo_prod(){
+        echo $this->get_model->get_caltask_prod($this->input->post('cal_id'));
+    }
+
     /*for loading a JO*/
     function in(){
 		$data['active_menu'] = 'jo';
@@ -486,6 +490,47 @@ class Jo extends CI_Controller{
     function submit_date_calendar_u(){
 //        print_r($this->input->post());
         echo $this->custom_model->update_task( $this->input->post() );
+    }
+
+    function submit_date_calendar_prod_u(){
+        if(empty($_FILES)) {
+            echo $this->custom_model->update_task_prod_u( $this->input->post() );
+        }else{
+            $target_dir = "assets/uploads/peg/";
+            $file_name = str_replace(" ", "_", basename($_FILES["prod_file_u"]["name"]));
+            $target_file = $target_dir . $file_name;
+            move_uploaded_file($_FILES["prod_file_u"]["tmp_name"], $target_file);
+            echo $this->custom_model->update_task_prod_u( $this->input->post(), $target_file );
+        }
+    }
+
+    function submit_date_calendar_prod(){
+//        print_r($this->input->post());
+//        return false;
+
+//        $result = $this->get_model->check_date( $this->input->post( 'prod_deadline' ) );
+//        if ($result == 'notTaken' ) {
+        $res = 0;
+        if(empty($_FILES)) {
+            $res = $this->insert_model->submit_date_calendar_prod( $this->input->post() );
+        }else{
+            $target_dir = "assets/uploads/peg/";
+            $file_name = str_replace(" ", "_", basename($_FILES["prod_file"]["name"]));
+            $target_file = $target_dir . $file_name;
+            move_uploaded_file( $_FILES["prod_file"]["tmp_name"], $target_file );
+
+            $res = $this->insert_model->submit_date_calendar_prod( $this->input->post(), $target_file );
+        }
+
+        if( $res > 0 ){
+            echo $this->get_model->getlastinsertdate( $res );
+        }else{
+            echo $res;
+        }
+
+//        }else{
+//            echo $result;
+//        }
     }
 
     function search_ae(){

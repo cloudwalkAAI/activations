@@ -113,7 +113,7 @@
         format:'m/d/Y'
     });
 
-    jQuery('#creative_start, #creative_deadline, #creative_deadline_u').datetimepicker({
+    jQuery('#prod_deadline_u, #prod_deadline, #creative_start, #creative_deadline, #creative_deadline_u').datetimepicker({
         timepicker:false,
         format:'Y-m-j'
     });
