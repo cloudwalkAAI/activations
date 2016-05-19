@@ -123,5 +123,41 @@
 		</div>
     </div>
 <?php
-    }
+    }elseif( $this->session->userdata('sess_dept') == '7' ){
+?>
+		<div class="row">
+			<div class="column large-9 medium-9 small-9 dash_col">
+				<?=$calendar?>
+			</div>
+			<div class="column large-3 medium-3 small-3 dash_col scrollable_area">
+				<a href="<?=base_url('jo?id='.$this->session->userdata('sess_id'))?>" class="dash_button button round hide-for-large-down	">Job Order</a>
+				<ul class="no-bullet" id="jo_table_list">
+					<?php
+					$c = '';
+					$b = '';
+
+					foreach( $jo_list as $row) {
+
+						$query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));
+						$row_company = $query_company->row();
+						if (isset($row_company)) {
+							$c = $row_company->company_name;
+						}
+						?>
+						<li class="jolist mb_jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" >
+							<div class="small-12 medium-12 large-12 columns">
+								<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'" style="color:'.$row['jo_color'].';">'.$row['project_name'].'</a>'; ?></h6>
+								<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h6>
+								<h6 class="jolist_crea"><?php echo $row['date_created']; ?></h6>
+							</div>
+							<div class="clearfix"></div>
+						</li>
+						<?php
+					}
+					?>
+				</ul>
+			</div>
+		</div>
+<?php
+	}
 ?>
