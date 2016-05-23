@@ -1072,6 +1072,39 @@ class Get_model extends CI_Model
 
     }
 
+    function getlastinsertdate_u($a){
+        $str_dat='';
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+                $filname = str_replace("assets/uploads/peg/","",$row->peg);
+                $str_dat= '
+                           <tr id="prod'.$row->cal_id.'">
+                                <td>'.$str_name.'</td>
+                                <td>'.$row->date.'</td>
+                                <td><span title="'.$row->data.'" aria-describedby="tooltip-ijv27znv5a'.$row->cal_id.'" data-selector="tooltip-ijv27znv5a'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                <td><a href="'.base_url($row->peg).'" target="_blank">'.$filname.'</a></td>
+                                <td>'.$row->size.'</td>
+                                <td>'.$row->qty.'</td>
+                                <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$row->jo_id.'">'.$row->endd.'</a></td>
+                                <td style="text-align:center;">
+                                    <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                    <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                </td>
+                            </tr>
+                       ';
+            }
+        }
+        echo $str_dat;
+
+    }
+
     function check_date($a){
         $query = $this->db->get_where( 'calendar', array( 'date' => $a, 'dept_id' => $this->session->userdata('sess_dept') ) );
         if ( $query->num_rows() > 0 ) {

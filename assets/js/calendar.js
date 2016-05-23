@@ -53,8 +53,8 @@ $('#form_prod_tasks').ajaxForm({
         $('#btn_update_calendar_prod').prop('disabled',true);
     },
     success:  function(response){
-        console.log(response);
-        return false;
+        //console.log(response);
+        //return false;
         if(response != 'exist'){
             $('#sel_prod_emp').val(0);
             $('#prod_deadline').val('');

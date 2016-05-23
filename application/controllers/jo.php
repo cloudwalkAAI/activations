@@ -523,7 +523,7 @@ class Jo extends CI_Controller{
         }
 
         if( $res > 0 ){
-            echo $this->get_model->getlastinsertdate( $res );
+            echo $this->get_model->getlastinsertdate_u( $res );
         }else{
             echo $res;
         }
