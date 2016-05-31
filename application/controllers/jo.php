@@ -93,6 +93,16 @@ class Jo extends CI_Controller{
         }
     }
 
+    function update_pending_u(){
+        $result = $this->custom_model->jo_pending( $this->input->post('cal_id') );
+        if( $result != 'failed' ){
+            $this->email_model->creatives_task_notification_email($this->input->post('cval'));
+            echo $this->get_model->dt_calendar_u( $result );
+        }else{
+            echo $result;
+        }
+    }
+
     function update_cal_task_getinfo(){
         echo $this->get_model->get_caltask($this->input->post('cal_id'));
     }
