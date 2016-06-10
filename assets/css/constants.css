@@ -712,3 +712,7 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	font-family: montserratSemiBold;
 	border: none;
 }
+
+.btn-delete-edit-size{
+	max-width: 20px;
+}

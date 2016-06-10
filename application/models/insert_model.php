@@ -452,6 +452,8 @@ class Insert_model extends CI_Model
                 'size'          => $calendar['prod_size'],
                 'qty'           => $calendar['prod_qty'],
                 'other_details' => $calendar['prod_other_details'],
+                'prod_type'     => $calendar['sel_prod_type'],
+                'print_prod'    => json_encode($calendar['chk_prod']),
                 'endd'          => 'Pending',
                 'employee_id'   => $calendar['sel_prod_emp']
             );

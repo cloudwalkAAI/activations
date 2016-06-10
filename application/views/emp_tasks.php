@@ -1,4 +1,4 @@
-<h4>Project tasks</h4>
+<h4>Project Tasks</h4>
 <ul class="accordion" data-accordion>
     <li class="accordion-navigation">
         <a class="" href="#creatives_panel">Creatives</a>
@@ -120,8 +120,8 @@
                                     <td>'.$row->data.'</td>
                                     <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
                                     <td style="text-align:center;">
-                                        <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                                        <a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                        <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                        <a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
                                     </td>
                                 </tr>
                             ';
@@ -179,6 +179,23 @@
                             </select>
                             <input id="joid_task" type="hidden" name="joid_task" value="<?=$this->input->get('a');?>">
                             <input id="prod_deadline" type="text" name="prod_deadline" class="req radius" placeholder="Deadline">
+                            <select class="radius" name="sel_prod_type" id="sel_prod_type">
+                                <option value="0">Select...</option>
+                                <option value="Print Production">Print Production</option>
+                                <option value="Booth Production">Booth Production</option>
+                                <option value="Photo wall and Panels Production">Photo wall and Panels Production</option>
+                                <option value="Shirts Production">Shirts Production</option>
+                                <option value="Event Staging Requirements">Event Staging Requirements</option>
+                                <option value="Purchase Requirements">Purchase Requirements</option>
+                            </select>
+                            <div class="column large-6 medium-6 small-6 print_production" style="display: none;">
+                                <label for="chk_tarp"><input type="checkbox" name="chk_prod[]" id="chk_tarp" value="Tarpaulin"> Tarpaulin</label>
+                                <label for="chk_stick"><input type="checkbox" name="chk_prod[]" id="chk_stick" value="Stickers"> Stickers</label>
+                            </div>
+                            <div class="column large-6 medium-6 small-6 print_production" style="display: none;">
+                                <label for="chk_offset"><input type="checkbox" name="chk_prod[]" id="chk_offset" value="Offset"> Offset</label>
+                                <label for="chk_digital"><input type="checkbox" name="chk_prod[]" id="chk_digital" value="Digital"> Digital</label>
+                            </div>
                             <textarea style="resize: none;" class="radius" name="prod_description" id="prod_description" cols="30" rows="10" placeholder="Description"></textarea>
                             <input class="radius" type="file" name="prod_file" id="prod_file">
                         </div>
@@ -213,7 +230,6 @@
                                 <option value="0">Select Employee</option>
                                 <?php
                                 $query = $this->db->get_where('employee_list', array('department' => 7));
-
                                 foreach( $query->result() as $row ){
                                     echo '<option value="'.$row->id.'" >'.$row->sur_name.', '.$row->first_name.' '.$row->middle_name.'</option>';
                                 }
@@ -264,6 +280,9 @@
                         $validat = 'validated';
                     }
                     $str_name = '';//test
+                    $str_print_prod = '';//test
+                    $i = 0;
+
                     $query = $this->db->get_where( 'calendar', array( 'dept_id' => 7, 'jo_id' => $this->input->get('a') ) );
                     foreach($query->result() as $row){
 
@@ -274,23 +293,38 @@
 
                         $filname = str_replace("assets/uploads/peg/","",$row->peg);
 
+                        $str_r = str_replace("[","",$row->print_prod);
+                        $str_r1 = str_replace("]","",$str_r);
+                        $str_r2 = str_replace('"','',$str_r1);
+
+                        foreach ( explode(",", $str_r2) as $print_prod ){
+                            $i++;
+                            if( $i == 2 && $print_prod != NULL ){
+                                $str_print_prod .= $print_prod;
+                            }elseif( $print_prod != NULL ){
+                                $str_print_prod .= ', '.$print_prod;
+                            }
+
+                        }
+
                         if($validat == 'validated'){
                             echo '
                                 <tr id="prod'.$row->cal_id.'">
                                     <td>'.$str_name.'</td>
                                     <td>'.$row->date.'</td>
-                                    <td><span title="'.$row->data.'" aria-describedby="tooltip-ijv27znv5a'.$row->cal_id.'" data-selector="tooltip-ijv27znv5a'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                    <td>'.$row->prod_type.' - '.$str_print_prod.'<br /><br /><span title="'.$row->data.'" aria-describedby="tooltip-ijv27znv5a'.$row->cal_id.'" data-selector="tooltip-ijv27znv5a'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
                                     <td><a href="'.base_url($row->peg).'" target="_blank">'.$filname.'</a></td>
                                     <td>'.$row->size.'</td>
                                     <td>'.$row->qty.'</td>
                                     <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
                                     <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
                                     <td style="text-align:center;">
-                                        <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                                        <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                        <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                        <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
                                     </td>
                                 </tr>
                             ';
+                            $str_print_prod = '';
                         }else{
                             echo '
                                 <tr>

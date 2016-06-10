@@ -235,7 +235,7 @@ class Get_model extends CI_Model
     function get_client_list(){
         $this->db->select( 'client_id, company_name, contact_person' );
         $this->db->from( 'clients' );
-        $this->db->group_by( 'company_name' );
+//        $this->db->group_by( 'company_name' );
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -972,8 +972,8 @@ class Get_model extends CI_Model
                     <td>'.$row->deadline.'</td>
                     <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td style="text-align:center;">
-                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
                     </td>
                 </tr>
             ';
@@ -1058,10 +1058,10 @@ class Get_model extends CI_Model
                                 </td>
                                 <td style="text-align:center;">
                                     <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'">
-                                        <img src="'.base_url("assets/img/logos/Edit.png").'" />
+                                        <img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" />
                                     </a>
                                     <a class="del-btn-task" href="#" alt="'.$row->cal_id.'">
-                                        <img src="'.base_url("assets/img/logos/Delete.png").'" />
+                                        <img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" />
                                     </a>
                                 </td>
                            </tr>
@@ -1094,8 +1094,8 @@ class Get_model extends CI_Model
                                 <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
                                 <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$row->jo_id.'">'.$row->endd.'</a></td>
                                 <td style="text-align:center;">
-                                    <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                                    <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                    <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                    <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
                                 </td>
                             </tr>
                        ';
@@ -1321,7 +1321,7 @@ class Get_model extends CI_Model
                 $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
             }
 
-            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
         }
 
         return $str_ret;
@@ -1337,7 +1337,7 @@ class Get_model extends CI_Model
                 $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
             }
 
-            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change_u" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change_u" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
         }
 
         return $str_ret;

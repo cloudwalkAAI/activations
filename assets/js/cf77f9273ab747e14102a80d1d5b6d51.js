@@ -2181,6 +2181,15 @@ $('.delete_paid').on('click', function(e){
     });
 });
 
+$('#sel_prod_type').on('change', function(e){
+    e.preventDefault();
+    if( $(this).val() == 'Print Production' ){
+        $('.print_production').css('display', 'block');
+    }else{
+        $('.print_production').css('display', 'none');
+    }
+});
+
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {
         filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
