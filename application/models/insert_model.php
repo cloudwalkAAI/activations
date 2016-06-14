@@ -508,4 +508,91 @@ class Insert_model extends CI_Model
         }
         return $aryRange;
     }
+
+    function add_venue($a){
+        $str_return = '';
+
+        $data = array(
+            'venue'     => $a['inp_venue'],
+            'area'      => $a['inp_area'],
+            'street'    => $a['inp_street'],
+            'rate'      => $a['inp_rates']
+        );
+
+        $this->db->insert( 'cmtuva_location_list', $data );
+
+        $insid = $this->db->insert_id();
+
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $insid ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $str_return = '
+                    <tr id="cmt_'.$row->location_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+            }
+            return $str_return;
+        }
+    }
+
+    function ins_ae_loc($a){
+
+        $dtr = array();
+        $dtr = explode(",",$a['cmtuva_sel_area']);
+
+        $data = array(
+            'loc_id'        => $a['loc_id'],
+            'jo_id'         => $a['jo_id'],
+            'venue'         => $a['cmtuva_sel_venue'],
+            'area'          => $dtr[0],
+            'street'        => $a['cmae_street'],
+            'date_start'    => $a['cmtuva_date'],
+            'duration'      => $a['cmtuva_duration'],
+            'rate'          => $a['cmtuva_rate'],
+            'total_rate'    => $a['cmtuva_esp']
+        );
+
+        $this->db->insert( 'cmtuva_ae_list', $data );
+
+        $insid = $this->db->insert_id();
+
+        $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $insid ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+
+                $str_return = '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $dtr[0] ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+            }
+            return $str_return;
+        }
+    }
 }

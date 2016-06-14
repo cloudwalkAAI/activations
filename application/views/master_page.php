@@ -117,7 +117,7 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#bill_date, #bill_date_u, #datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, .inp_trans').datetimepicker({
+    jQuery('#cmtuva_date,#bill_date, #bill_date_u, #datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, .inp_trans').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });

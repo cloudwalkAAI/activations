@@ -50,7 +50,7 @@ if( isset( $shared_array ) ){
                 <textarea name="ed_what_add" id="ed_what_add" cols="30" placeholder="Additional notes" rows="5" <?=$str_disa?>><?=isset($edcarray->wtad) ? $edcarray->wtad : '';?></textarea>
             </td>
         </tr>
-        <tr>
+        <tr class="hide-normal">
             <td>When</td>
             <td>
                 <div>
@@ -62,7 +62,7 @@ if( isset( $shared_array ) ){
                 <textarea name="ed_when_add" id="ed_when_add" cols="30" placeholder="Additional notes" rows="5" <?=$str_disa?>><?=isset($edcarray->wnad) ? $edcarray->wnad : '';?></textarea>
             </td>
         </tr>
-        <tr>
+        <tr class="hide-normal">
             <td>Where</td>
             <td>
                 <div>
@@ -105,6 +105,133 @@ if( isset( $shared_array ) ){
     <button id="btn_save_ed" class="right mar10" <?=$str_display?>><i class="fi-plus small"></i> Save</button>
 
 </form>
+<hr>
+
+<div class="column large-3 medium-3 small-12">
+    <form id="cmtuva_ae_form" action="" method="post" <?=($this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ? 'style="display:block;"':'style="display:none;"';?>>
+        <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
+        <input type="hidden" id="loc_id" name="loc_id" value="">
+        <select name="cmtuva_sel_venue" id="cmtuva_sel_venue">
+            <option value="0">Select Venue ...</option>
+            <?php
+            $this->db->select( 'venue' );
+            $this->db->from( 'cmtuva_location_list' );
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result() as $row) {
+                    echo '<option value="'.ucfirst($row->venue).'">'.ucfirst($row->venue).'</option>';
+                }
+            }
+            ?>
+        </select>
+        <select name="cmtuva_sel_area" id="cmtuva_sel_area" disabled>
+            <option value="0">Select Area ...</option>
+        </select>
+        <textarea name="cmae_street" id="cmae_street" cols="30" rows="3"></textarea>
+        <input type="text" name="cmtuva_date" id="cmtuva_date" placeholder="Start date">
+        <input type="text" class="txtboxToFilter text-right" name="cmtuva_duration" id="cmtuva_duration" placeholder="Duration">
+        <input type="text" name="cmtuva_rate" id="cmtuva_rate" class="twidth text-right" placeholder="0" readonly>
+        <input type="text" class="text-right" name="cmtuva_esp" id="cmtuva_esp" readonly>
+        <button id="btn_ae_cmtuva_rate" class="button twidth text-center success">Add</button>
+    </form>
+</div>
+<div class="column large-9 medium-9 small-12 scrollable_area">
+    <input type="search" class="radius" name="inp_search_cmae" id="inp_search_cmae" placeholder="Search">
+    <table class="twidth" id="cmae_table">
+        <thead>
+        <tr>
+            <th width="2">Venue</th>
+            <th width="3">Area</th>
+            <th width="3">Address</th>
+            <th width="1">Start date</th>
+            <th width="1">Duration</th>
+            <th width="1">Rate</th>
+            <th width="1">Total</th>
+            <th> </th>
+        </tr>
+        </thead>
+        <tbody id="cmae_tbody">
+        <?php
+        $query = $this->db->order_by('cmae_id', 'DESC')->get_where( 'cmtuva_ae_list', array('jo_id'=>$this->input->get('a')) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                echo '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.'</td>
+                        <td>Php '.$row->rate.' day(s)</td>
+                        <td>Php '.$row->total_rate.'</td>
+                    </tr>
+                ';
+
+                if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ) {
+                    echo '
+                        <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.'</td>
+                        <td>Php '.$row->rate.' day(s)</td>
+                        <td>Php '.$row->total_rate.'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                    ';
+                }
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
+
+<div id="cmae_Modal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Update the info.</h2>
+
+    <div id="alert_cmae" data-alert class="alert-box alert radius hide-normal">
+        Special characters are not allowed
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="cmae_form" action="" method="post">
+        <input type="hidden" name="cm_id" id="cm_id">
+        <select name="cmae_sel_venue" id="cmae_sel_venue">
+            <option value="0">Select Venue ...</option>
+            <?php
+            $this->db->select( 'venue' );
+            $this->db->from( 'cmtuva_location_list' );
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result() as $row) {
+                    echo '<option value="'.ucfirst($row->venue).'">'.ucfirst($row->venue).'</option>';
+                }
+            }
+            ?>
+        </select>
+        <select name="cmae_sel_area" id="cmae_sel_area" disabled>
+            <option value="0">Select Area ...</option>
+        </select>
+        <textarea name="cmuae_street" id="cmuae_street" cols="30" rows="3"></textarea>
+        <input type="text" name="cmae_date" id="cmae_date" placeholder="Start date">
+        <input type="text" class="txtboxToFilter text-right" name="cmae_duration" id="cmae_duration" placeholder="Duration">
+        <input type="text" name="cmae_rate" id="cmae_rate" class="twidth text-right" placeholder="0" readonly>
+        <input type="text" class="text-right" name="cmae_esp" id="cmae_esp" readonly>
+        <a href="#" id="btn_edit_cmae" class="button medium right">Update</a>
+    </form>
+
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
 <hr>
 
 <h4>Animation Details</h4>

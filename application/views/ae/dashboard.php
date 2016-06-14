@@ -159,5 +159,109 @@
 			</div>
 		</div>
 <?php
+	}elseif($this->session->userdata('sess_dept') == '6'){
+?>
+		<div class="row" style="margin-top: 5px;">
+			<div class="column large-2 medium-2 small-12" style=" border: 1px solid; padding: 5px; border-radius:5px;">
+				<div class="cmtuva_form">
+					<h3 class="twidth text-center">Location</h3>
+					<form id="cmtuva_form" action="" method="post" autocomplete="on">
+						<label for="inp_venue"><input type="text" class="radius" name="inp_venue" id="inp_venue" placeholder="Venue"></label>
+						<label for="inp_area"><textarea type="text" class="radius" name="inp_area" id="inp_area" placeholder="Area"></textarea></label>
+						<label for="inp_street"><textarea type="text" class="radius" name="inp_street" id="inp_street" placeholder="Address"></textarea></label>
+						<label for="inp_rates"><input type="number" class="radius txtboxToFilter" name="inp_rates" id="inp_rates" placeholder="Rates"></label>
+						<a id="cmtuva_btn" href="#" class="button tiny twidth">Add</a>
+					</form>
+				</div>
+			</div>
+			<div class="column large-8 medium-8 small-12 scrollable_area">
+				<input type="search" class="radius" name="inp_search_cmtuva" id="inp_search_cmtuva" placeholder="Search">
+				<table class="twidth" id="cmtuva_table">
+					<thead>
+						<tr>
+							<th width="2">Venue</th>
+							<th width="3">Area</th>
+							<th width="3">Address</th>
+							<th width="1">Rate</th>
+							<th width="1"> </th>
+						</tr>
+					</thead>
+					<tbody id="cmtuva_tbody">
+						<?php
+							$query = $this->db->order_by('location_id', 'DESC')->get( 'cmtuva_location_list' );
+							if($query->num_rows() > 0) {
+								foreach ($query->result() as $row) {
+									echo '
+										<tr id="cmt_'.$row->location_id.'">
+											<td>'.ucfirst( $row->venue ).'</td>
+											<td>'.ucfirst( $row->area ).'</td>
+											<td>'.ucfirst( $row->street ).'</td>
+											<td>Php '.ucfirst( $row->rate ).'</td>
+											<td style="text-align:center;">
+												<div class="column large-6 medium-6 small-6">
+													<a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+												</div>
+												<div class="column large-6 medium-6 small-6">
+													<a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+												</div>
+											</td>
+										</tr>
+									';
+								}
+							}
+						?>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="column large-2 medium-2 small-12 text-right scrollable_area">
+				<ul class="no-bullet" id="jo_table_list">
+					<?php
+					$c = '';
+					$b = '';
+
+					foreach( $jo_list as $row) {
+
+						$query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));
+						$row_company = $query_company->row();
+						if (isset($row_company)) {
+							$c = $row_company->company_name;
+						}
+						?>
+						<li class="jolist mb_jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" >
+							<div class="small-12 medium-12 large-12 columns">
+								<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'" style="color:'.$row['jo_color'].';">'.$row['project_name'].'</a>'; ?></h6>
+								<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h6>
+								<h6 class="jolist_crea"><?php echo $row['date_created']; ?></h6>
+							</div>
+							<div class="clearfix"></div>
+						</li>
+						<?php
+					}
+					?>
+				</ul>
+			</div>
+
+			<div id="cmt_Modal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+				<h2 id="modalTitle" class="text-center">Update the information.</h2>
+
+				<div id="alert_cmt" data-alert class="alert-box alert radius hide-normal">
+					Special characters are not allowed
+					<a href="#" class="close">&times;</a>
+				</div>
+
+				<form id="cmt_form" action="" method="post">
+					<input type="hidden" class="radius" id="cmt_joid" name="cmt_joid" value="">
+					<input type="text" class="radius" name="cmt_venue" id="cmt_venue" placeholder="Venue">
+					<textarea name="cmt_area" id="cmt_area" cols="30" rows="3" placeholder="Area"></textarea>
+					<textarea name="cmt_st" id="cmt_st" cols="30" rows="3" placeholder="Address"></textarea>
+					<input type="number" class="radius txtboxToFilter" name="cmt_rate" id="cmt_rate" placeholder="Rate">
+					<a href="#" id="btn_edit_cmt" class="button medium right">Update</a>
+				</form>
+
+				<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+			</div>
+		</div>
+<?php
 	}
 ?>

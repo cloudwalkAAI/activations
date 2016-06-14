@@ -320,4 +320,42 @@ class Custom_model extends CI_Model
         }
 
     }
+
+    function update_cmtuva($a){
+        $arr_cmt_info = array();
+
+        $data = array(
+            'venue'   => $a['cmt_venue'],
+            'area'    => $a['cmt_area'],
+            'street'  => $a['cmt_st'],
+            'rate'    => $a['cmt_rate']
+        );
+        $this->db->where( 'location_id', $a['cmt_joid'] );
+        $this->db->update( 'cmtuva_location_list', $data );
+
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $a['cmt_joid'] ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $arr_cmt_info['content'] = '
+                    <tr id="cmt_'.$row->location_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+
+                $arr_cmt_info['content_id'] = $row->location_id;
+            }
+        }
+        echo json_encode($arr_cmt_info);
+    }
 }

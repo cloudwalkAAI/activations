@@ -1072,6 +1072,11 @@ class Get_model extends CI_Model
 
     }
 
+    function get_cmtuva_info( $a ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $a ) );
+        return json_encode($query->result());
+    }
+
     function getlastinsertdate_u($a){
         $str_dat='';
         $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
@@ -1393,5 +1398,30 @@ class Get_model extends CI_Model
         }
 
         return json_encode($arr_ret);
+    }
+
+    function get_areas( $venue_name ){
+        $str_areas = '<option value="0">Select Area ...</option>';
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'venue' => $venue_name ) );
+        foreach($query->result() as $row){
+            if( $row->area != NULL ){
+                $str_areas .= '
+                    <option value="'.$row->area.','.$row->location_id.'">'.$row->area.'<option>
+                ';
+            }
+        }
+        return $str_areas;
+    }
+
+    function get_areas_rate( $venue_id ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $venue_id ) );
+        foreach($query->result() as $row){
+            echo $row->rate.','.$venue_id.','.$row->street;
+        }
+    }
+
+    function get_cmae( $venue_id ){
+        $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $venue_id ) );
+        return json_encode($query->result());
     }
 }

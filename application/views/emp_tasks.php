@@ -262,7 +262,7 @@
                 <table id="tbl_prod" class="twidth">
                     <thead>
                     <tr>
-                        <td>Assigned to :</td>
+                        <td>Assigned to</td>
                         <td>Deadline</td>
                         <td>Description</td>
                         <td>Visual Peg / Per file</td>
@@ -319,8 +319,12 @@
                                     <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
                                     <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
                                     <td style="text-align:center;">
-                                        <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                                        <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                        <div class="column large-6 medium-6 small-6">
+                                            <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                        </div>
+                                        <div class="column large-6 medium-6 small-6">
+                                            <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                        </div>
                                     </td>
                                 </tr>
                             ';
@@ -349,7 +353,7 @@
                 <table class="twidth">
                     <thead>
                     <tr>
-                        <td>Assigned to :</td>
+                        <td>Assigned to</td>
                         <td>Start</td>
                         <td>Deadline</td>
                         <td>Description</td>
@@ -374,7 +378,7 @@
                 <table class="twidth">
                     <thead>
                     <tr>
-                        <td>Assigned to :</td>
+                        <td>Assigned to</td>
                         <td>Start</td>
                         <td>Deadline</td>
                         <td>Description</td>
@@ -399,7 +403,7 @@
                 <table class="twidth">
                     <thead>
                     <tr>
-                        <td>Assigned to :</td>
+                        <td>Assigned to</td>
                         <td>Contact Number</td>
                         <td>Ingress</td>
                         <td>Egress</td>

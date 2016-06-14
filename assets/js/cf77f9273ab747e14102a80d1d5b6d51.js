@@ -552,7 +552,7 @@ $('#emp_form_up').ajaxForm({
 			window.location.href = MyNameSpace.config.base_url+'emp';
         },3000);
 
-        // $('#alert_box_emp_success').val();		
+        // $('#alert_box_emp_success').val();
         // $('#empModalupdate').foundation( 'reveal', 'open' );
         // $('#btn_add_emp_u').prop('disabled', false);
     }
@@ -1970,6 +1970,266 @@ $('#btn_add_requ_u').on('click', function(){
     });
 });
 
+/*for cmtuva table*/
+$('#cmtuva_btn').on('click', function(e){
+    e.preventDefault();
+    $('#cmtuva_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'cmtuva/add_location',
+        beforeSubmit: function(arr, jform, option){
+            $('#cmtuva_btn').prop('disabled', true);
+        },
+        success:  function(response){
+            // console.log(response);
+            $('#inp_venue').val('');
+            $('#inp_area').val('');
+            $('#inp_street').val('');
+            $('#inp_rates').val('');
+
+            $('#bton_do').prop('disabled', false);
+            $('#cmtuva_tbody').prepend( response );
+            reload_table_cmtuva();
+        }
+    }).submit();
+});
+
+function reload_table_cmtuva(){
+    var $rows_animation = $('#cmtuva_tbody tr');
+    $('#inp_search_cmtuva').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_animation.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+
+    $('.edit-btn-cmtuva').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/edit_cmtuva',
+            type:'post',
+            data: {
+                'venue_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var res = data.replace("[", "");
+                var res1 = res.replace("]", "");
+                var obj = JSON.parse(res1);
+
+                $('#cmt_joid').val( obj.location_id );
+                $('#cmt_venue').val( obj.venue );
+                $('#cmt_area').val( obj.area );
+                $('#cmt_st').val( obj.street );
+                $('#cmt_rate').val( obj.rate );
+
+                $('#cmt_Modal').foundation('reveal', 'open');
+            }
+        });
+    });
+
+    $('.del-btn-cmtuva').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/del_cmtuva',
+            type:'post',
+            data: {
+                'venue_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var row = document.getElementById(data);
+                row.parentNode.removeChild(row);
+
+                reload_table_cmtuva();
+            }
+        });
+    });
+
+    $('#btn_edit_cmt').on('click', function(e){
+        alert('hello');
+        e.preventDefault();
+        $('#cmt_form').ajaxForm({
+            type: 'POST',
+            url: MyNameSpace.config.base_url+'cmtuva/update_information',
+            beforeSubmit: function(arr, jform, option){
+                $('#btn_edit_cmt').prop('disabled', true);
+            },
+            success:  function(response){
+                var json = JSON.parse(response);
+                $('#cmt_Modal').foundation('reveal', 'close');
+                $( 'tr#cmt_' + json['content_id'] ).replaceWith( json['content'] );
+                reload_table_cmtuva();
+            }
+        }).submit();
+    });
+
+}
+reload_table_cmtuva();
+/*end for cmtuva table*/
+
+/*end cmtuva*/
+
+/*cmtuva ae*/
+$('#cmtuva_sel_venue').on('change', function(e){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'cmtuva/load_areas',
+        type:'post',
+        data: {
+            'venue_name' : $(this).val()
+        },
+        success: function(data) {
+            // console.log(data);
+            $('#cmtuva_sel_area').empty();
+            $('#cmtuva_sel_area').append(data);
+            document.getElementById('cmtuva_sel_area').disabled = false;
+        }
+    });
+});
+
+$('#cmtuva_sel_area').on('change', function(e){
+    var val_arr = $(this).val().split(",");
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'cmtuva/load_rate',
+        type:'post',
+        data: {
+            'area' : val_arr[0],
+            'venue_id' : val_arr[1]
+        },
+        success: function(data) {
+            var dtarr = data.split(",");
+            $('#loc_id').val( dtarr[1] );
+            $('#cmtuva_rate').val( dtarr[0] );
+            $('#cmae_street').val( dtarr[2] );
+        }
+    });
+});
+
+$('#cmtuva_duration').on('keyup', function(e){
+    var esp = $('#cmtuva_duration').val() * $('#cmtuva_rate').val();
+    $('#cmtuva_esp').val(esp);
+});
+
+$('#btn_ae_cmtuva_rate').on('click', function(e){
+    e.preventDefault();
+    $('#cmtuva_ae_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'cmtuva/add_ae_location',
+        beforeSubmit: function(arr, jform, option){
+            $('#btn_ae_cmtuva_rate').prop('disabled', true);
+        },
+        success:  function(response){
+            // console.log(response);
+            $('#cmtuva_sel_venue').val(0);
+            $('#cmtuva_sel_area').val(0);
+            $('#cmtuva_sel_area').prop('disabled', true);
+            $('#cmae_street').val('');
+            $('#cmtuva_date').val('');
+            $('#cmtuva_duration').val('');
+            $('#cmtuva_rate').val('');
+            $('#cmtuva_esp').val('');
+            $('#btn_ae_cmtuva_rate').prop('disabled', false);
+            $('tbody#cmae_tbody').prepend( response );
+            reload_table_cmae();
+        }
+    }).submit();
+});
+
+function reload_table_cmae() {
+    var $rows_animation = $('#cmae_tbody tr');
+    $('#inp_search_cmae').keyup(function () {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_animation.show().filter(function () {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+
+    $('.edit-btn-cmtuva-ae').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/edit_cmae',
+            type:'post',
+            data: {
+                'cmae_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var res = data.replace("[", "");
+                var res1 = res.replace("]", "");
+                var obj = JSON.parse(res1);
+                $('#cm_id').val( obj.cmae_id );
+                $('#cmae_sel_venue').val( obj.venue );
+                $('#cmuae_street').val( obj.street );
+                $('#cmae_date').val( obj.date_start );
+                $('#cmae_duration').val( obj.duration );
+                $('#cmae_rate').val( obj.rate );
+                $('#cmae_esp').val( obj.total_rate );
+
+                $('#cmae_Modal').foundation('reveal', 'open');
+            }
+        });
+    });
+
+    $('.del-btn-cmtuva-ae').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/del_cmae',
+            type:'post',
+            data: {
+                'venue_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var row = document.getElementById(data);
+                row.parentNode.removeChild(row);
+            }
+        });
+    });
+
+    $('#cmae_sel_venue').on('change', function(e){
+        alert('hello');
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/load_areas',
+            type:'post',
+            data: {
+                'venue_name' : $(this).val()
+            },
+            success: function(data) {
+                console.log(data);
+                $('#cmae_sel_area').empty();
+                $('#cmae_sel_area').append(data);
+                document.getElementById('cmae_sel_area').disabled = false;
+            }
+        });
+    });
+
+    $('#cmae_sel_area').on('change', function(e){
+        var val_arr = $(this).val().split(",");
+
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/load_rate',
+            type:'post',
+            data: {
+                'area' : val_arr[0],
+                'venue_id' : val_arr[1]
+            },
+            success: function(data) {
+                var dtarr = data.split(",");
+                $('#cmae_rate').val( dtarr[0] );
+                $('#cmuae_street').val( dtarr[2] );
+            }
+        });
+    });
+
+    $('#cmae_duration').on('keyup', function(e){
+        var esp = $('#cmae_duration').val() * $('#cmae_rate').val();
+        $('#cmae_esp').val(esp);
+    });
+
+}
+reload_table_cmae()
+/*cmtuva end ae*/
+
 function req_btn_reload(){
     $('.edit-btn-req').on('click', function(e){
         e.preventDefault();
@@ -2001,7 +2261,7 @@ $('#bton_bill_u').on('click', function(){
             $('#bton_bill_u').prop('disabled', true);
         },
         success:  function(response){
-            console.log(response);
+            // console.log(response);
             //$('#bton_do').prop('disabled', false);
             //location.reload();
         }
@@ -2010,7 +2270,6 @@ $('#bton_bill_u').on('click', function(){
 
 $('.delete_bd').on('click', function(e){
     e.preventDefault();
-    alert('me');
     $.ajax({
         url: MyNameSpace.config.base_url+'admin/del_bd',
         type:'post',
@@ -2187,6 +2446,23 @@ $('#sel_prod_type').on('change', function(e){
         $('.print_production').css('display', 'block');
     }else{
         $('.print_production').css('display', 'none');
+    }
+});
+
+
+$(".txtboxToFilter").keydown(function (e) {
+    // Allow: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+        // Allow: Ctrl+A, Command+A
+        (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
+        // Allow: home, end, left, right, down, up
+        (e.keyCode >= 35 && e.keyCode <= 40)) {
+        // let it happen, don't do anything
+        return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
     }
 });
 
