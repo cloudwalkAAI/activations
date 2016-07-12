@@ -1424,4 +1424,16 @@ class Get_model extends CI_Model
         $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $venue_id ) );
         return json_encode($query->result());
     }
+
+    function check_item( $a ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'venue' => $a['inp_venue'], 'area' => $a['inp_area'] ) );
+        return $query->num_rows();
+    }
+
+    function load_qty( $a ){
+        $query = $this->db->get_where( 'stocks', array( 'stock_id' => $a['deduct_select'] ) );
+        foreach($query->result() as $row){
+            echo $row->qty;
+        }
+    }
 }

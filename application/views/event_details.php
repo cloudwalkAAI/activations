@@ -155,27 +155,16 @@ if( isset( $shared_array ) ){
         $query = $this->db->order_by('cmae_id', 'DESC')->get_where( 'cmtuva_ae_list', array('jo_id'=>$this->input->get('a')) );
         if($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
-                echo '
-                    <tr id="cmae_'.$row->cmae_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
-                        <td>'.ucfirst( $row->area ).'</td>
-                        <td>'.ucfirst( $row->street ).'</td>
-                        <td>'.$row->date_start.'</td>
-                        <td>'.$row->duration.'</td>
-                        <td>Php '.$row->rate.' day(s)</td>
-                        <td>Php '.$row->total_rate.'</td>
-                    </tr>
-                ';
-
+                $arr_cmae = explode(",",$row->area);
                 if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ) {
                     echo '
                         <tr id="cmae_'.$row->cmae_id.'">
                         <td>'.ucfirst( $row->venue ).'</td>
-                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $arr_cmae[0] ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
                         <td>'.$row->date_start.'</td>
-                        <td>'.$row->duration.'</td>
-                        <td>Php '.$row->rate.' day(s)</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
                         <td>Php '.$row->total_rate.'</td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
@@ -187,6 +176,18 @@ if( isset( $shared_array ) ){
                         </td>
                     </tr>
                     ';
+                }else{
+                    echo '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                    </tr>
+                ';
                 }
             }
         }

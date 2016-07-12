@@ -358,4 +358,66 @@ class Custom_model extends CI_Model
         }
         echo json_encode($arr_cmt_info);
     }
+
+    function update_cmae($a){
+        $arr_cmt_info = array();
+
+        $data = array(
+            'venue'         => $a['cmae_sel_venue'],
+            'area'          => $a['cmae_sel_area'],
+            'street'        => $a['cmuae_street'],
+            'date_start'    => $a['cmae_date'],
+            'duration'      => $a['cmae_duration'],
+            'rate'          => $a['cmae_rate'],
+            'total_rate'    => $a['cmae_esp']
+        );
+        $this->db->where( 'cmae_id', $a['cm_id'] );
+        $this->db->update( 'cmtuva_ae_list', $data );
+
+        $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $a['cm_id'] ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $arr_cmae = explode(",",$row->area);
+
+                $arr_cmt_info['content'] = '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $arr_cmae[0] ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+
+                $arr_cmt_info['content_id'] = $row->cmae_id;
+            }
+        }
+        echo json_encode($arr_cmt_info);
+    }
+
+    function deduct_item( $a ){
+        $data = array(
+            'qty'          => $a['deduct_total']
+        );
+        $this->db->where( 'stock_id', $a['deduct_select'] );
+        $this->db->update( 'stocks', $data );
+
+        $query = $this->db->get_where( 'stocks', array( 'stock_id' => $a['deduct_select'] ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $str_data = '<tr id="ori'.$row->stock_id.'"><td>'.$row->item_code.'</td><td>'.$row->item_name.'</td><td>'.$row->description.'</td><td>'.$row->qty.'</td><td>'.$row->expiration.'</td><td>'.$row->date_stored.'</td></tr>***'.$row->stock_id.'';
+            }
+        }
+        return $str_data;
+    }
 }

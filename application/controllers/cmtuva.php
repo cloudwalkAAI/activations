@@ -14,7 +14,9 @@ class Cmtuva extends CI_Controller
 
     /*CMTUVA Dashboard*/
     function add_location(){
-        echo $this->insert_model->add_venue( $this->input->post() );
+        if( $this->get_model->check_item( $this->input->post() ) <= 0){
+            echo $this->insert_model->add_venue( $this->input->post() );
+        }
     }
     function edit_cmtuva(){
         echo $this->get_model->get_cmtuva_info( $this->input->post('venue_id') );
@@ -51,6 +53,11 @@ class Cmtuva extends CI_Controller
     function del_cmae(){
         $this->db->delete('cmtuva_ae_list', array('cmae_id' => $this->input->post('venue_id')));
         echo 'cmae_'.$this->input->post('venue_id');
+    }
+
+    function update_cmae(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_cmae($this->input->post());
     }
 
     /*AE CMTUVA End*/

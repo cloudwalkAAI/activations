@@ -1837,9 +1837,9 @@ $('#bton_do').on('click', function(){
             $('#bton_do').prop('disabled', true);
         },
         success:  function(response){
-            console.log(response);
-            //$('#bton_do').prop('disabled', false);
-            //location.reload();
+            // console.log(response);
+            $('#bton_do').prop('disabled', false);
+            location.reload();
         }
     });
 });
@@ -2046,7 +2046,6 @@ function reload_table_cmtuva(){
     });
 
     $('#btn_edit_cmt').on('click', function(e){
-        alert('hello');
         e.preventDefault();
         $('#cmt_form').ajaxForm({
             type: 'POST',
@@ -2187,7 +2186,6 @@ function reload_table_cmae() {
     });
 
     $('#cmae_sel_venue').on('change', function(e){
-        alert('hello');
         $.ajax({
             url: MyNameSpace.config.base_url+'cmtuva/load_areas',
             type:'post',
@@ -2195,7 +2193,7 @@ function reload_table_cmae() {
                 'venue_name' : $(this).val()
             },
             success: function(data) {
-                console.log(data);
+                // console.log(data);
                 $('#cmae_sel_area').empty();
                 $('#cmae_sel_area').append(data);
                 document.getElementById('cmae_sel_area').disabled = false;
@@ -2226,9 +2224,44 @@ function reload_table_cmae() {
         $('#cmae_esp').val(esp);
     });
 
+    $('#btn_edit_cmae').on('click', function(e){
+        e.preventDefault();
+        $('#cmae_form').ajaxForm({
+            type: 'POST',
+            url: MyNameSpace.config.base_url+'cmtuva/update_cmae',
+            beforeSubmit: function(arr, jform, option){
+                $('#btn_edit_cmae').prop('disabled', true);
+            },
+            success:  function(response){
+                var json = JSON.parse(response);
+                // console.log(json['content_id']);
+                $( 'tr#cmae_' + json['content_id'] ).replaceWith( json['content'] );
+                $('#btn_edit_cmae').prop('disabled', false);
+                $('#cmae_Modal').foundation('reveal', 'close');
+                reload_table_cmae();
+            }
+        }).submit();
+    });
 }
 reload_table_cmae()
 /*cmtuva end ae*/
+
+
+/*inventory*/
+
+function reload_table_inventory() {
+    var $rows_animation = $('#tbody_current tr');
+    $('#search_current_items').keyup(function () {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_animation.show().filter(function () {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+
+/*end inventory*/
 
 function req_btn_reload(){
     $('.edit-btn-req').on('click', function(e){
@@ -2449,6 +2482,217 @@ $('#sel_prod_type').on('change', function(e){
     }
 });
 
+/*inventory*/
+$('#btn_add_inv').on('click',function(){
+    $('#inv_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'inventory/save_item',
+        success:  function(response){
+
+            var json = $.parseJSON(response);
+
+            if( json['add_current'] != null ){
+                $('#inv_code').val('');
+                $('#inv_name').val('');
+                $('#inv_delivered_by').val('');
+                $('#inv_received_by').val('');
+                $('#inv_description').val('');
+                $('#inv_qty').val('');
+                $('#inv_expiration').val('');
+
+                $('#alert_add_inv').text();
+                $('#alert_add_inv').text("The item(s) has been successfully recorded.");
+
+                $('#tbody_current').prepend( json['add_current'] );
+                $('#tbody_add').prepend( json['add_transaction'] );
+
+                setTimeout( function(){
+                    $('#alert_add_inv').foundation( 'reveal', 'close' );
+                    $('#alert_add_inv').css( 'display', 'none' );
+                }, 3000);
+            }else{
+                $('#alert_add_inv').text();
+                $('#alert_add_inv').text("The 'item code' or 'item name' exists.");
+                $('#alert_add_inv').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_add_inv').css( 'display', 'none' );
+                }, 5000);
+            }
+
+            $('#alert_add_inv').css( 'display', 'block' );
+        }
+    }).submit();
+});
+
+$('#btn_deduct_inv').on('click',function(){
+    $('#inv_form_deduct').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'inventory/deduct_item',
+        success:  function(response){
+            var json = $.parseJSON(response);
+
+            if( json['deduct_tbl'] != null ){
+                $('#deduct_select').val(0);
+                $('#deduct_jo').val(0);
+                $('#deduct_rece').val('');
+                $('#deduct_desc').val('');
+                $('#deduct_total').val(0);
+                $('#deduct_qty_total').val(0);
+                $('#deduct_qty').val(0);
+                $('#alert_deduct_inv').text();
+                $('#alert_deduct_inv').text("The item has been successfully deducted.");
+                $('#alert_deduct_inv').css( 'display', 'block' );
+
+                var result = json['ori_tbl'].split('***');
+
+                $('#tbody_deduct').prepend( json['deduct_tbl'] );
+
+                $('tr#ori' + result[1]).replaceWith(result[0]);
+                // $('#tbody_current').prepend( json['ori_tbl'] );
+
+                setTimeout( function(){
+                    $('#alert_deduct_inv').foundation( 'reveal', 'close' );
+                    $('#alert_deduct_inv').css( 'display', 'none' );
+                }, 3000);
+            }else{
+                $('#alert_deduct_inv').text();
+                $('#alert_deduct_inv').text("Fail to deduct the item.");
+                $('#alert_deduct_inv').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_deduct_inv').css( 'display', 'none' );
+                }, 5000);
+            }
+
+            // $('#alert_add_inv').css( 'display', 'block' );
+        }
+    }).submit();
+});
+
+$('#deduct_select').on('change',function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'inventory/load_qty',
+        type:'post',
+        data: {
+            'deduct_select' : $('#deduct_select').val()
+        },
+        success: function(data) {
+            $('#deduct_qty_total').val(data);
+        }
+    });
+});
+
+$('#deduct_qty').on('keyup',function(e){
+    e.preventDefault();
+    var total = 0;
+    if( $('#deduct_qty_total').val() >= $('#deduct_qty').val() ){
+        $('#btn_deduct_inv').attr( 'disabled', false );
+
+        total = $('#deduct_qty_total').val() - $('#deduct_qty').val();
+
+        $('#deduct_total').val(total);
+    }else{
+        $('#btn_deduct_inv').attr('disabled', 'disabled');
+    }
+});
+
+$('#returned_select, #return_by, #return_recieved, #return_desc, #return_qty').on('keyup',function(e){
+    e.preventDefault();
+    if( $('#returned_select').val() != 0 ){
+        if( $('#return_by').val().trim() != '' ){
+            if( $('#return_recieved').val().trim() != '' ){
+                if( $('#return_desc').val().trim() != '' ){
+                    if( $('#return_qty').val().trim() != '' ){
+                        $('#btn_return_inv').attr( 'disabled', false );
+                    }else {
+                        $('#btn_return_inv').attr( 'disabled', 'disabled' );
+                    }
+                }else {
+                    $('#btn_return_inv').attr( 'disabled', 'disabled' );
+                }
+            }else {
+                $('#btn_return_inv').attr( 'disabled', 'disabled' );
+            }
+        }else {
+            $('#btn_return_inv').attr( 'disabled', 'disabled' );
+        }
+    }else {
+        $('#btn_return_inv').attr( 'disabled', 'disabled' );
+    }
+});
+
+$('#returned_select').on('change',function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'inventory/load_qty',
+        type:'post',
+        data: {
+            'deduct_select' : $('#returned_select').val()
+        },
+        success: function(data) {
+            $('#return_current_stocks_hide').val(data);
+            $('#return_current_stocks').val(data);
+        }
+    });
+});
+
+$('#return_qty').on('keyup',function(e){
+    e.preventDefault();
+    var total = 0;
+    if( $('#return_qty').val() > 0 ){
+        $('#btn_deduct_inv').attr( 'disabled', false );
+
+        total = parseInt( $('#return_qty').val() ) + parseInt( $('#return_current_stocks_hide').val() );
+
+        $('#return_current_stocks').val(total);
+    }else{
+        total = parseInt( $('#return_current_stocks_hide').val() )
+        $('#return_current_stocks').val(total);
+    }
+});
+
+$('#btn_return_inv').on('click',function(){
+    $('#inv_form_returned').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'inventory/return_item',
+        success:  function(response){
+
+            var json = $.parseJSON(response);
+
+            if( json['return_table'] != null ){
+                $('#returned_select').val('0');
+                $('#return_current_stocks_hide').val('0');
+                $('#return_current_stocks').val('0');
+                $('#return_qty').val('0');
+                $('#return_by').val('');
+                $('#return_recieved').val('');
+                $('#return_desc').val('');
+                $('#alert_returned_inv').text();
+                $('#alert_returned_inv').text("The item has been successfully returned.");
+                $('#alert_returned_inv').css( 'display', 'block' );
+
+                var result = json['ori'].split('***');
+                $('tr#ori' + result[1]).replaceWith(result[0]);
+
+                $('#tbody_inv_return').prepend( json['return_table'] );
+
+                setTimeout( function(){
+                    $('#alert_returned_inv').foundation( 'reveal', 'close' );
+                    $('#alert_returned_inv').css( 'display', 'none' );
+                }, 3000);
+            }else{
+                $('#alert_returned_inv').text();
+                $('#alert_returned_inv').text("Fail to deduct the item.");
+                $('#alert_returned_inv').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_returned_inv').css( 'display', 'none' );
+                }, 5000);
+            }
+        }
+    }).submit();
+});
+
+/*end inventory*/
 
 $(".txtboxToFilter").keydown(function (e) {
     // Allow: backspace, delete, tab, escape, enter and .

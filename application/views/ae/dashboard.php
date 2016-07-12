@@ -161,7 +161,7 @@
 <?php
 	}elseif($this->session->userdata('sess_dept') == '6'){
 ?>
-		<div class="row" style="margin-top: 5px;">
+		<div style="padding: 10px;">
 			<div class="column large-2 medium-2 small-12" style=" border: 1px solid; padding: 5px; border-radius:5px;">
 				<div class="cmtuva_form">
 					<h3 class="twidth text-center">Location</h3>
@@ -261,6 +261,363 @@
 
 				<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 			</div>
+		</div>
+<?php
+	}elseif($this->session->userdata('sess_dept') == '8'){
+?>
+		<div class="column large-2 medium-2 small-12 scrollable_area">
+			<ul class="tabs vertical inv_tabs tbl_bdr" data-tab>
+				<li class="tab-title active"><a class="tbl_bdr" href="#panel11">Current Item(s)</a></li>
+				<li class="tab-title"><a class="tbl_bdr" href="#panel21">Add Item(s)</a></li>
+				<li class="tab-title"><a class="tbl_bdr" href="#panel31">Deduct Item(s)</a></li>
+				<li class="tab-title"><a class="tbl_bdr" href="#panel41">Returned Items(s)</a></li>
+				<li class="tab-title"><a class="tbl_bdr" href="#panel51">Summary</a></li>
+			</ul>
+
+		</div>
+		<div class="column large-8 medium-8 small-12 scrollable_area">
+			<div class="tabs-content">
+				<div class="content active" id="panel11">
+					<input type="search" class="radius tbl_bdr" name="search_current_items" id="search_current_items" placeholder="Search">
+					<table style="width:inherit;" class="tbl_bdr">
+						<thead>
+						<tr style="background-color:#ccccff;">
+							<th style="text-align:center;">Code</th>
+							<th style="text-align:center;">Name</th>
+							<th style="text-align:center;">Description</th>
+							<th style="text-align:center;">Quantity</th>
+							<th style="text-align:center;">Expiration</th>
+							<th style="text-align:center;">Date Stored</th>
+						</tr>
+						</thead>
+						<tbody id="tbody_current">
+						<?php
+						$this->db->order_by("stock_id","desc");
+						$query = $this->db->get('stocks');
+						foreach ( $query->result() as $row ){
+							echo '
+								<tr id="ori'.$row->stock_id.'">
+									<td>'.$row->item_code.'</td>
+									<td>'.$row->item_name.'</td>
+									<td>'.$row->description.'</td>
+									<td>'.$row->qty.'</td>
+									<td>'.$row->expiration.'</td>
+									<td>'.$row->date_stored.'</td>
+								</tr>
+							';
+						}
+						?>
+						</tbody>
+					</table>
+				</div>
+				<div class="content" id="panel21">
+
+					<div class="column large-10 medium-10 small-12">
+						<input type="search" class="radius tbl_bdr" name="search_added_items" id="search_added_items" placeholder="Search">
+					</div>
+					<div class="column large-2 medium-2 small-12 right-align">
+						<a href="#" class="button tiny" data-reveal-id="inv_add_item">Add new item</a>
+					</div>
+					<div id="inv_add_item" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+						<h2 id="modalTitle" class="text-center">Add Item.</h2>
+
+						<div id="alert_add_inv" data-alert class="alert-box warning round" style="display: none;">
+							This is an alert - alert that is rounded.
+							<a href="#" class="close">&times;</a>
+						</div>
+
+						<form id="inv_form" action="" method="post" autocomplete="on">
+
+							<div class="column large-6 medium-6 small-12">
+								<input type="text" class="radius" name="inv_code" id="inv_code" placeholder="Code">
+								<input type="text" class="radius" name="inv_name" id="inv_name" placeholder="Name">
+								<input type="text" class="radius" name="inv_delivered_by" id="inv_delivered_by" placeholder="Delivered By">
+								<input type="text" class="radius" name="inv_received_by" id="inv_received_by" placeholder="Received By">
+							</div>
+							<div class="column large-6 medium-6 small-12">
+								<input type="text" class="radius" name="inv_description" id="inv_description" placeholder="Description">
+								<input type="number" class="radius txtboxToFilter" name="inv_qty" id="inv_qty" placeholder="Quantity">
+								<input type="text" class="radius" name="inv_expiration" id="inv_expiration" placeholder="Expiration date">
+								<a href="#" id="btn_add_inv" class="button radius tiny right">Add</a>
+							</div>
+						</form>
+
+						<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+					</div>
+
+					<table id="deduct_table" class="tbl_bdr twidth">
+						<thead>
+						<tr style="background-color:#ccccff;">
+							<th style="text-align:center;">Code</th>
+							<th style="text-align:center;">Name</th>
+							<th style="text-align:center;">Description</th>
+							<th style="text-align:center;">Quantity</th>
+							<th style="text-align:center;">Expiration</th>
+							<th style="text-align:center;display: none;">Delivered By</th>
+							<th style="text-align:center;display: none;">Received By</th>
+							<th style="text-align:center;display: none;">Updated By</th>
+							<th style="text-align:center;">Informations</th>
+							<th style="text-align:center;">Date Stored</th>
+						</tr>
+						</thead>
+						<tbody id="tbody_add">
+						<?php
+						$this->db->select('*'); // Select field
+						$this->db->from('stocks_sub'); // from Table1
+						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+						$this->db->order_by("stock_id","desc");
+						$this->db->where('process','add');
+						$res = $this->db->get();
+
+						foreach ( $res->result() as $row ){
+							echo '
+							<tr id="add'.$row->trans_id.'">
+								<td>'.$row->item_code.'</td>
+								<td>'.$row->item_name.'</td>
+								<td>'.$row->description.'</td>
+								<td>'.$row->item_qty.'</td>
+								<td>'.$row->expiration.'</td>
+								<td>Delivered by : '.$row->personel.
+									'<br> Received by : '.$row->received_by.
+									'<br> Transacted by : '.$row->transacted_by.
+								'</td>
+								<td>'.$row->date_stored.'</td>
+							</tr>
+							';
+						}
+						?>
+						</tbody>
+					</table>
+				</div>
+				<div class="content" id="panel31">
+					<div class="column large-10 medium-10 small-12">
+						<input type="search" class="radius tbl_bdr" name="search_deduct_items" id="search_deduct_items" placeholder="Search">
+					</div>
+					<div class="column large-2 medium-2 small-12 right-align">
+						<a href="#" class="button tiny" data-reveal-id="inv_deduct_item">Deduct item</a>
+					</div>
+
+					<div id="inv_deduct_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+						<h2 id="modalTitle" class="text-center">Deduct Item.</h2>
+
+						<div id="alert_deduct_inv" data-alert class="alert-box warning round" style="display: none;">
+							This is an alert - alert that is rounded.
+							<a href="#" class="close">&times;</a>
+						</div>
+
+						<form id="inv_form_deduct" action="" method="post" autocomplete="on">
+							<select name="deduct_select" id="deduct_select">
+								<option value="0">Select Item</option>
+								<?php
+								$query = $this->db->get('stocks');
+								foreach ( $query->result() as $row ){
+									echo '
+										<option value="'.$row->stock_id.'">'.$row->item_code.' : '.$row->item_name.'</option>
+									';
+								}
+								?>
+							</select>
+							<select name="deduct_jo" id="deduct_jo">
+								<option value="0">Select Job Order</option>
+								<?php
+								$this->db->where( 'jo_color', 'blue' );
+								$query_jho = $this->db->get('job_order_list');
+								foreach ( $query_jho->result() as $row_jho ){
+									echo '
+										<option value="'.$row_jho->jo_number.'">'.$row_jho->jo_number.' : '.$row_jho->project_name.'</option>
+									';
+								}
+								?>
+							</select>
+							<input type="text" name="deduct_rece" id="deduct_rece" placeholder="Receiver's name">
+							<input type="text" name="deduct_desc" id="deduct_desc" placeholder="Description">
+							<input type="text" name="deduct_qty_total" id="deduct_qty_total" readonly>
+							<input type="text" name="deduct_qty" id="deduct_qty" placeholder="Quantity">
+							<input type="text" name="deduct_total" id="deduct_total" placeholder="Total" readonly>
+							<a href="#" id="btn_deduct_inv" class="button radius tiny right" disabled>Deduct</a>
+						</form>
+
+						<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+					</div>
+					<table class="tbl_bdr twidth">
+						<thead>
+						<tr style="background-color:#ccccff;">
+							<th style="text-align:center;">Item Name</th>
+							<th style="text-align:center;">JO ID.</th>
+							<th style="text-align:center;">Received By</th>
+							<th style="text-align:center;">Description</th>
+							<th style="text-align:center;">Quantity</th>
+							<th style="text-align:center;">Deducted By</th>
+							<th style="text-align:center;">Date Deducted</th>
+						</tr>
+						</thead>
+						<tbody id="tbody_deduct">
+						<?php
+						$this->db->select('*'); // Select field
+						$this->db->from('stocks_sub'); // from Table1
+						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+						$this->db->where('process','deduct');
+						$this->db->order_by("trans_id","DESC");
+						$res = $this->db->get();
+
+						foreach ( $res->result() as $row ){
+							echo '
+							<tr id="trans'.$row->trans_id.'">
+								<td>'.$row->item_name.'</td>
+								<td>'.$row->jo_id.'</td>
+								<td>'.$row->received_by.'</td>
+								<td>'.$row->sub_description.'</td>
+								<td>'.$row->item_qty.'</td>
+								<td>'.$row->deducted_by.'</td>
+								<td>'.$row->transaction_date.'</td>
+							</tr>
+							';
+						}
+						?>
+						</tbody>
+					</table>
+				</div>
+				<div class="content" id="panel41">
+					<div class="column large-10 medium-10 small-12">
+						<input type="search" class="radius tbl_bdr" name="search_returned_items" id="search_returned_items" placeholder="Search">
+					</div>
+					<div class="column large-2 medium-2 small-12 right-align">
+						<a href="#" class="button tiny" data-reveal-id="inv_returned_item">Return item</a>
+					</div>
+
+					<div id="inv_returned_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+						<h2 id="modalTitle" class="text-center">Return Item.</h2>
+
+						<div id="alert_returned_inv" data-alert class="alert-box warning round" style="display: none;">
+							This is an alert - alert that is rounded.
+							<a href="#" class="close">&times;</a>
+						</div>
+
+						<form id="inv_form_returned" action="" method="post" autocomplete="on">
+							<select name="returned_select" id="returned_select">
+								<option value="0">Select Item</option>
+								<?php
+								$query = $this->db->get('stocks');
+								foreach ( $query->result() as $row ){
+									echo '
+										<option value="'.$row->stock_id.'">'.$row->item_code.' : '.$row->item_name.'</option>
+									';
+								}
+								?>
+							</select>
+							<input type="hidden" name="return_current_stocks_hide" id="return_current_stocks_hide">
+							<input type="text" name="return_current_stocks" id="return_current_stocks" placeholder="Returned By" readonly>
+							<input type="text" name="return_qty" id="return_qty" placeholder="Quantity">
+							<input type="text" name="return_by" id="return_by" placeholder="Returned By">
+							<input type="text" name="return_recieved" id="return_recieved" placeholder="Received By">
+							<input type="text" name="return_desc" id="return_desc" placeholder="Description">
+							<a href="#" id="btn_return_inv" class="button radius tiny right" disabled>Returned</a>
+						</form>
+
+						<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+					</div>
+					<table class="tbl_bdr twidth">
+						<thead>
+						<tr style="background-color:#ccccff;">
+							<th style="text-align:center;">Item Name</th>
+							<th style="text-align:center;">Returned By</th>
+							<th style="text-align:center;">Received By</th>
+							<th style="text-align:center;">Description</th>
+							<th style="text-align:center;">Quantity</th>
+							<th style="text-align:center;">Date Returned</th>
+						</tr>
+						</thead>
+						<tbody id="tbody_inv_return">
+						<?php
+						$this->db->select('*'); // Select field
+						$this->db->from('stocks_sub'); // from Table1
+						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+						$this->db->order_by("stock_id","desc");
+						$this->db->where('process','return');
+						$res_inv = $this->db->get();
+						foreach ( $res_inv->result() as $row_inv ){
+							echo '
+								<tr id="ret'.$row_inv->trans_id.'">
+									<td>'.$row_inv->item_code.' - '.$row_inv->item_name.'</td>
+									<td>'.$row_inv->personel.'</td>
+									<td>'.$row_inv->received_by.'</td>
+									<td>'.$row_inv->description.'</td>
+									<td>'.$row_inv->qty.'</td>
+									<td>'.$row_inv->transaction_date.'</td>
+								</tr>
+							';
+						}
+						?>
+						</tbody>
+					</table>
+				</div>
+				<div class="content" id="panel51">
+					<input type="search" class="radius tbl_bdr" name="search_summary_items" id="search_summary_items" placeholder="Search">
+					<table class="twidth">
+						<thead>
+						<tr style="background-color:#ccccff;">
+							<th style="text-align:center;">Item Name</th>
+							<th style="text-align:center;">Process</th>
+							<th style="text-align:center;">Date Received/<br/>Delivered/<br/>Returned</th>
+							<th style="text-align:center;">Quantity</th>
+							<th style="text-align:center;">Receiver/<br/>Delivered by/<br/>Returned by</th>
+							<th style="text-align:center;">Updated By</th>
+						</tr>
+						</thead>
+						<tbody class="tbodyAppend">
+						<?php
+						$this->db->select('*'); // Select field
+						$this->db->from('stocks_sub'); // from Table1
+						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
+						$this->db->order_by("stock_id","desc");
+						$query = $this->db->get();
+						foreach ( $query->result() as $row ){
+							echo '
+								<tr>
+									<td>'.$row->item_code.'<br>'.$row->item_name.'</td>
+									<td>'.ucfirst($row->process).'</td>
+									<td>'.$row->transaction_date.'</td>
+									<td>'.$row->item_qty.'</td>
+									<td>
+										Receiver : '.$row->received_by.'<br>
+										Delivered / Returned By : '.$row->personel.'
+									</td>
+									<td>'.$row->transacted_by.'</td>
+								</tr>
+							';
+						}
+						?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="column large-2 medium-2 small-12 scrollable_area">
+			<ul class="no-bullet" id="jo_table_list">
+				<?php
+				$c = '';
+				$b = '';
+
+				foreach( $jo_list as $row) {
+
+					$query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));
+					$row_company = $query_company->row();
+					if (isset($row_company)) {
+						$c = $row_company->company_name;
+					}
+					?>
+					<li class="jolist mb_jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" >
+						<div class="small-12 medium-12 large-12 columns">
+							<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'" style="color:'.$row['jo_color'].';">'.$row['project_name'].'</a>'; ?></h6>
+							<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h6>
+							<h6 class="jolist_crea"><?php echo $row['date_created']; ?></h6>
+						</div>
+						<div class="clearfix"></div>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
 		</div>
 <?php
 	}
