@@ -1625,6 +1625,102 @@ $('#search_accounts').keyup(function() {
 });
 /*end for JO-AD list table*/
 
+/*inventory*/
+$('.inv_edit').on('click', function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_do',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
+            location.reload();
+        }
+    });
+});
+/*end inventory*/
+
+/*for inventory current table*/
+function reload_table_cur(){
+    var $rows_cur = $('#tbody_current tr');
+    $('#search_current_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_cur.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_cur();
+/*end for inventory current table*/
+
+/*for deduct table*/
+function reload_table_deduct(){
+    var $rows_deduct_items = $('#tbody_deduct tr');
+    $('#search_deduct_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_deduct_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_deduct();
+/*end for deduct table*/
+
+/*for inv add table*/
+function reload_table_inv_add(){
+    var $rows_added_items = $('#tbody_add tr');
+    $('#search_added_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_added_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_inv_add();
+/*end for inv add table*/
+
+/*for inv ret table*/
+function reload_table_inv_ret(){
+    var $rows_returned_items = $('#tbody_inv_return tr');
+    $('#search_returned_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_returned_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_inv_ret();
+/*end for inv ret table*/
+
+/*for summary_items table*/
+function reload_table_summary_items(){
+    var $rows_summary_items = $('#tbodyAppend tr');
+    $('#search_summary_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+        alert
+
+        $rows_summary_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_summary_items();
+/*end for summary_items table*/
+
 $('#show_table_mom').on('click', function(){
     $('#tbl_mom').toggle( "slide" );
     $('#tbl_other').hide( "slide" );
@@ -1827,21 +1923,6 @@ reload_brand_u();
 $('.btn_do').on('click', function(){
     $('#do_joid').val( $(this).attr('alt') );
     $('#do_Modal').foundation('reveal', 'open');
-});
-
-$('#bton_do').on('click', function(){
-    $('#form_up_do').ajaxForm({
-        type: 'POST',
-        url: MyNameSpace.config.base_url+'admin/upload_do',
-        beforeSubmit: function(arr, jform, option){
-            $('#bton_do').prop('disabled', true);
-        },
-        success:  function(response){
-            // console.log(response);
-            $('#bton_do').prop('disabled', false);
-            location.reload();
-        }
-    });
 });
 
 $('#delete_do').on('click', function(){
@@ -2545,9 +2626,12 @@ $('#btn_deduct_inv').on('click',function(){
 
                 var result = json['ori_tbl'].split('***');
 
+
+                if ($('tr#ori').length > 0) {
+                    $('tr#ori' + result[1]).replaceWith(result[0]);
+                }
                 $('#tbody_deduct').prepend( json['deduct_tbl'] );
 
-                $('tr#ori' + result[1]).replaceWith(result[0]);
                 // $('#tbody_current').prepend( json['ori_tbl'] );
 
                 setTimeout( function(){

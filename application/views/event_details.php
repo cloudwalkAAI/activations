@@ -1,5 +1,6 @@
 <?php
 //    print_r($ed_details);
+    $info = json_decode($jo_details);
     $edcarray = array();
     $edcarray = json_decode( $ed_details );
 
@@ -106,7 +107,7 @@ if( isset( $shared_array ) ){
 
 </form>
 <hr>
-
+<h4>Venue(s)</h4>
 <div class="column large-3 medium-3 small-12">
     <form id="cmtuva_ae_form" action="" method="post" <?=($this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ? 'style="display:block;"':'style="display:none;"';?>>
         <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
@@ -232,6 +233,85 @@ if( isset( $shared_array ) ){
 
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
+
+<hr>
+
+<div class="column large-10 medium-10 small-12">
+    <input type="search" class="radius tbl_bdr" name="search_deduct_items" id="search_deduct_items" placeholder="Search">
+</div>
+<div class="column large-2 medium-2 small-12 right-align">
+    <button class="button tiny" data-reveal-id="inv_deduct_item" <?=$str_display;?>>Deduct item</button>
+</div>
+
+<div id="inv_deduct_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Deduct Item.</h2>
+
+    <div id="alert_deduct_inv" data-alert class="alert-box warning round" style="display: none;">
+        This is an alert - alert that is rounded.
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="inv_form_deduct" action="" method="post" autocomplete="on">
+        <select name="deduct_select" id="deduct_select">
+            <option value="0">Select Item</option>
+            <?php
+            $query = $this->db->get('stocks');
+            foreach ( $query->result() as $row ){
+                echo '
+										<option value="'.$row->stock_id.'">'.$row->item_code.' : '.$row->item_name.'</option>
+									';
+            }
+            ?>
+        </select>
+        <input type="hidden" name="deduct_jo" id="deduct_jo" value="<?=$info->jo_number;?>" readonly>
+        <input type="text" name="deduct_rece" id="deduct_rece" placeholder="Receiver's name">
+        <input type="text" name="deduct_desc" id="deduct_desc" placeholder="Description">
+        <input type="text" name="deduct_qty_total" id="deduct_qty_total" readonly>
+        <input type="text" name="deduct_qty" id="deduct_qty" placeholder="Quantity">
+        <input type="text" name="deduct_total" id="deduct_total" placeholder="Total" readonly>
+        <a href="#" id="btn_deduct_inv" class="button radius tiny right" disabled>Deduct</a>
+    </form>
+
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+<table class="tbl_bdr twidth">
+    <thead>
+    <tr style="background-color:#ccccff;">
+        <th style="text-align:center;">Item Name</th>
+        <th style="text-align:center;">JO ID.</th>
+        <th style="text-align:center;">Received By</th>
+        <th style="text-align:center;">Description</th>
+        <th style="text-align:center;">Quantity</th>
+        <th style="text-align:center;">Deducted By</th>
+        <th style="text-align:center;">Date Deducted</th>
+    </tr>
+    </thead>
+    <tbody id="tbody_deduct">
+    <?php
+    $this->db->select('*'); // Select field
+    $this->db->from('stocks_sub'); // from Table1
+    $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+    $this->db->where('process','deduct');
+    $this->db->where('jo_id',$info->jo_number);
+    $this->db->order_by("trans_id","DESC");
+    $res = $this->db->get();
+
+    foreach ( $res->result() as $row ){
+        echo '
+        <tr id="trans'.$row->trans_id.'">
+            <td>'.$row->item_name.'</td>
+            <td>'.$row->jo_id.'</td>
+            <td>'.$row->received_by.'</td>
+            <td>'.$row->sub_description.'</td>
+            <td>'.$row->item_qty.'</td>
+            <td>'.$row->deducted_by.'</td>
+            <td>'.$row->transaction_date.'</td>
+        </tr>
+        ';
+    }
+    ?>
+    </tbody>
+</table>
 
 <hr>
 

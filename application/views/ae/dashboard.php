@@ -319,7 +319,7 @@
 						<a href="#" class="button tiny" data-reveal-id="inv_add_item">Add new item</a>
 					</div>
 					<div id="inv_add_item" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-						<h2 id="modalTitle" class="text-center">Add Item.</h2>
+						<h2 id="modalTitle" class="text-center">Add Item</h2>
 
 						<div id="alert_add_inv" data-alert class="alert-box warning round" style="display: none;">
 							This is an alert - alert that is rounded.
@@ -339,6 +339,32 @@
 								<input type="number" class="radius txtboxToFilter" name="inv_qty" id="inv_qty" placeholder="Quantity">
 								<input type="text" class="radius" name="inv_expiration" id="inv_expiration" placeholder="Expiration date">
 								<a href="#" id="btn_add_inv" class="button radius tiny right">Add</a>
+							</div>
+						</form>
+
+						<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+					</div>
+					<div id="inv_edit_item" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+						<h2 id="modalTitle" class="text-center">Update Item</h2>
+
+						<div id="alert_edit_inv" data-alert class="alert-box warning round" style="display: none;">
+							This is an alert - alert that is rounded.
+							<a href="#" class="close">&times;</a>
+						</div>
+
+						<form id="inv_edit_form" action="" method="post" autocomplete="on">
+
+							<div class="column large-6 medium-6 small-12">
+								<input type="text" class="radius" name="edit_inv_code" id="edit_inv_code" placeholder="Code">
+								<input type="text" class="radius" name="edit_inv_name" id="edit_inv_name" placeholder="Name">
+								<input type="text" class="radius" name="edit_inv_delivered_by" id="edit_inv_delivered_by" placeholder="Delivered By">
+								<input type="text" class="radius" name="edit_inv_received_by" id="edit_inv_received_by" placeholder="Received By">
+							</div>
+							<div class="column large-6 medium-6 small-12">
+								<input type="text" class="radius" name="edit_inv_description" id="edit_inv_description" placeholder="Description">
+								<input type="number" class="radius txtboxToFilter" name="edit_inv_qty" id="edit_inv_qty" placeholder="Quantity">
+								<input type="text" class="radius" name="edit_inv_expiration" id="edit_inv_expiration" placeholder="Expiration date">
+								<a href="#" id="btn_edit_inv" class="button radius tiny right">Add</a>
 							</div>
 						</form>
 
@@ -372,7 +398,7 @@
 						foreach ( $res->result() as $row ){
 							echo '
 							<tr id="add'.$row->trans_id.'">
-								<td>'.$row->item_code.'</td>
+								<td><a class="inv_edit" href="#" alt="'.$row->trans_id.'">'.$row->item_code.'</a></td>
 								<td>'.$row->item_name.'</td>
 								<td>'.$row->description.'</td>
 								<td>'.$row->item_qty.'</td>
@@ -398,7 +424,7 @@
 					</div>
 
 					<div id="inv_deduct_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-						<h2 id="modalTitle" class="text-center">Deduct Item.</h2>
+						<h2 id="modalTitle" class="text-center">Deduct Item</h2>
 
 						<div id="alert_deduct_inv" data-alert class="alert-box warning round" style="display: none;">
 							This is an alert - alert that is rounded.
@@ -486,7 +512,7 @@
 					</div>
 
 					<div id="inv_returned_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-						<h2 id="modalTitle" class="text-center">Return Item.</h2>
+						<h2 id="modalTitle" class="text-center">Return Item</h2>
 
 						<div id="alert_returned_inv" data-alert class="alert-box warning round" style="display: none;">
 							This is an alert - alert that is rounded.
@@ -564,12 +590,12 @@
 							<th style="text-align:center;">Updated By</th>
 						</tr>
 						</thead>
-						<tbody class="tbodyAppend">
+						<tbody id="tbodyAppend" class="tbodyAppend">
 						<?php
 						$this->db->select('*'); // Select field
 						$this->db->from('stocks_sub'); // from Table1
 						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
-						$this->db->order_by("stock_id","desc");
+						$this->db->order_by("trans_id","desc");
 						$query = $this->db->get();
 						foreach ( $query->result() as $row ){
 							echo '
