@@ -33,4 +33,12 @@ class Inventory extends CI_Controller
         echo $this->insert_model->return_item_to_inventory( $this->input->post() );
     }
 
+    function load_add_inv(){
+        echo $this->get_model->load_added_inventory( $this->input->post('jo_id') );
+    }
+
+    function update_added_item(){
+        echo $this->custom_model->update_added_item( $this->input->post() );
+    }
+
 }

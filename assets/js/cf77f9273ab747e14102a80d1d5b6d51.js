@@ -1625,26 +1625,6 @@ $('#search_accounts').keyup(function() {
 });
 /*end for JO-AD list table*/
 
-/*inventory*/
-$('.inv_edit').on('click', function(e){
-    e.preventDefault();
-    $.ajax({
-        url: MyNameSpace.config.base_url+'admin/del_do',
-        type:'post',
-        data: {
-            'jo_id' : $(this).attr('alt')
-        },
-        beforeSubmit: function(arr, jform, option){
-            //$('#temp_name').val('Please Wait...');
-        },
-        success: function(data) {
-            //console.log(data);
-            location.reload();
-        }
-    });
-});
-/*end inventory*/
-
 /*for inventory current table*/
 function reload_table_cur(){
     var $rows_cur = $('#tbody_current tr');
@@ -2757,7 +2737,6 @@ $('#btn_return_inv').on('click',function(){
 
                 var result = json['ori'].split('***');
                 $('tr#ori' + result[1]).replaceWith(result[0]);
-
                 $('#tbody_inv_return').prepend( json['return_table'] );
 
                 setTimeout( function(){
@@ -2775,6 +2754,60 @@ $('#btn_return_inv').on('click',function(){
         }
     }).submit();
 });
+
+function edit_inv(){
+    $('.inv_edit').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'inventory/load_add_inv',
+            type:'post',
+            data: {
+                'jo_id' : $(this).attr('alt')
+            },
+            success: function(response) {
+                var res = response.replace("[", "");
+                var res1 = res.replace("]", "");
+                var json = $.parseJSON(res1);
+                // console.log(json);
+                $('#edit_inv_trans_id').val(json['trans_id']);
+                $('#edit_inv_stck_id').val(json['item_id']);
+                $('#edit_inv_code').val(json['item_code']);
+                $('#edit_inv_name').val(json['item_name']);
+                $('#edit_inv_delivered_by').val(json['personel']);
+                $('#edit_inv_received_by').val(json['received_by']);
+                $('#edit_inv_description').val(json['description']);
+                $('#edit_inv_qty').val(json['item_qty']);
+                $('#edit_inv_expiration').val(json['expiration']);
+
+                $('#inv_edit_item').foundation('reveal','open');
+
+                edit_inv();
+            }
+        });
+    });
+
+    $('#btn_edit_inv').on('click',function(){
+        $('#inv_edit_form').ajaxForm({
+            type: 'POST',
+            url: MyNameSpace.config.base_url+'inventory/update_added_item',
+            success:  function(response){
+                var json = $.parseJSON(response);
+                // console.log(response);
+
+                var result = json['add_current'].split('***');
+                $('tr#ori' + result[1]).replaceWith(result[0]);
+
+                var result = json['add_transaction'].split('***');
+                $('tr#add' + result[1]).replaceWith(result[0]);
+                // $('#tbody_inv_return').prepend( json['return_table'] );
+
+                $('#inv_edit_item').foundation('reveal','close');
+            }
+        }).submit();
+    });
+
+}
+edit_inv();
 
 /*end inventory*/
 

@@ -274,6 +274,35 @@ if( isset( $shared_array ) ){
 
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>
+
+<div id="inv_edit_item" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Update Item</h2>
+
+    <div id="alert_edit_inv" data-alert class="alert-box warning round" style="display: none;">
+        This is an alert - alert that is rounded.
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="inv_edit_form" action="" method="post" autocomplete="on">
+        <input type="hidden" id="edit_inv_trans_id" name="edit_inv_trans_id">
+        <input type="hidden" id="edit_inv_stck_id" name="edit_inv_stck_id">
+        <div class="column large-6 medium-6 small-12">
+            <input type="text" class="radius" name="edit_inv_code" id="edit_inv_code" placeholder="Code">
+            <input type="text" class="radius" name="edit_inv_name" id="edit_inv_name" placeholder="Name">
+            <input type="text" class="radius" name="edit_inv_delivered_by" id="edit_inv_delivered_by" placeholder="Delivered By">
+            <input type="text" class="radius" name="edit_inv_received_by" id="edit_inv_received_by" placeholder="Received By">
+        </div>
+        <div class="column large-6 medium-6 small-12">
+            <input type="text" class="radius" name="edit_inv_description" id="edit_inv_description" placeholder="Description">
+            <input type="number" class="radius txtboxToFilter" name="edit_inv_qty" id="edit_inv_qty" placeholder="Quantity">
+            <input type="text" class="radius" name="edit_inv_expiration" id="edit_inv_expiration" placeholder="Expiration date">
+            <a href="#" id="btn_edit_inv" class="button radius tiny right">Update</a>
+        </div>
+    </form>
+
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
 <table class="tbl_bdr twidth">
     <thead>
     <tr style="background-color:#ccccff;">

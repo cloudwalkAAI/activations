@@ -420,4 +420,79 @@ class Custom_model extends CI_Model
         }
         return $str_data;
     }
+
+    function update_added_item($a){
+        $data = array(
+            'item_code'     => $a['edit_inv_code'],
+            'item_name'     => $a['edit_inv_name'],
+            'description'   => $a['edit_inv_description'],
+            'qty'           => $a['edit_inv_qty'],
+            'expiration'    => $a['edit_inv_expiration'],
+        );
+        $this->db->where( 'stock_id', $a['edit_inv_stck_id'] );
+        $this->db->update( 'stocks', $data );
+
+        $query = $this->db->get_where( 'stocks', array( 'stock_id' => $a['edit_inv_stck_id'] ) );
+        if($query->num_rows() > 0) {
+            $insid_current = $a['edit_inv_stck_id'];
+
+            $arr_data['add_current'] = $this->get_tables_added( $insid_current );
+            $arr_data['add_transaction'] = $this->table_append_add_item( $a, $insid_current );
+        }
+        return json_encode($arr_data);
+    }
+
+    function get_tables_added( $inv_id = null){
+        $str_data = '';
+        $query = $this->db->get_where('stocks', array( 'stock_id' => $inv_id ));
+        foreach ( $query->result() as $row ){
+            $str_data = '
+            <tr id="ori'.$row->stock_id.'">
+                <td>'.$row->item_code.'</td>
+                <td>'.$row->item_name.'</td>
+                <td>'.$row->description.'</td>
+                <td>'.$row->qty.'</td>
+                <td>'.$row->expiration.'</td>
+                <td>'.$row->date_stored.'</td>
+            </tr>***'.$row->stock_id.'
+            ';
+        }
+        return $str_data;
+    }
+
+    function table_append_add_item( $a = null, $item_id = null ){
+        $data = array(
+            'item_id'           => $item_id,
+            'sub_description'   => $a['edit_inv_description'],
+            'item_qty'          => $a['edit_inv_qty'],
+            'process'           => 'add',
+            'personel'          => $a['edit_inv_delivered_by'],
+            'received_by'       => $a['edit_inv_received_by'],
+            'transacted_by'     => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+            'transaction_date'  => date("m-d-Y H:i:s")
+        );
+
+        $this->db->where( 'trans_id', $a['edit_inv_trans_id'] );
+        $this->db->update( 'stocks_sub', $data );
+
+//        return $this->db->insert_id();
+        return $this->inv_join_tables( $a['edit_inv_trans_id'] );
+    }
+
+    function inv_join_tables( $tbl_id = null ){
+        $str_add_table = '';
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+        $this->db->where('stocks_sub.trans_id',$tbl_id); // Set Filter
+        $res = $this->db->get();
+
+//        return json_encode($res->result());
+        foreach ( $res->result() as $row ){
+            $str_add_table = '<tr id="add"'.$row->trans_id.'><td><a class="inv_edit" href="#" alt="'.$row->trans_id.'">'.$row->item_code.'</a></td><td>'.$row->item_name.'</td><td>'.$row->description.'</td><td>'.$row->item_qty.'</td><td>'.$row->expiration.'</td><td>Delivered by : '.$row->personel.'<br> Received by : '.$row->received_by.'<br> Transacted by : '.$row->transacted_by.'</td><td>'.$row->date_stored.'</td></tr>***'.$row->trans_id.'';
+        }
+
+        return $str_add_table;
+    }
 }

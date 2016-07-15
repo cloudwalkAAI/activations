@@ -1436,4 +1436,15 @@ class Get_model extends CI_Model
             echo $row->qty;
         }
     }
+
+    function load_added_inventory( $trans_id = null ){
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
+        $this->db->where('trans_id',$trans_id);
+        $query = $this->db->get();
+//        $query = $this->db->get_where( 'stocks_sub', array( 'trans_id' => $trans_id ) );
+        return json_encode($query->result());
+    }
 }
