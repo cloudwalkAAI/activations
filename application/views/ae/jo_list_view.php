@@ -39,7 +39,7 @@
 									<?php
 										foreach($client_list as $row){
 											echo '
-												<option value="'.$row['client_id'].'">'.$row['company_name'].'</option>
+												<option value="'.$row['client_id'].'">'.$row['contact_person'].'</option>
 											';
 										}
 									?>
@@ -48,9 +48,12 @@
 						</div>	
 						<div class="large-11 columns large-centered">
 							<label for="inp_brand" id="hd" class="hide">Brand
-								<select name="inp_brand" id="inp_brand">
-									<option value="0">Select...</option>
-								</select>
+<!--								<select name="inp_brand" id="inp_brand">-->
+<!--									<option value="0">Select...</option>-->
+<!--								</select>-->
+								<table id="client_brands" class="twidth">
+
+								</table>
 							</label>
 						</div>
 						<div class="large-11 columns large-centered">
@@ -103,16 +106,23 @@
                     if (isset($row_company)) {
                         $c = $row_company->company_name;
                     }
-            ?>
-                    <li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" onclick="window.location.href='<?= base_url('jo/in?a=').$row['jo_id']; ?>';">
+			?>
+                    <li class="jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" >
                         <div class="small-7 medium-8 large-8 columns" style="padding: 50px;">
-                            <h3><?php echo $row['project_name']; ?></h3>
+                            <h3><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'" style="color:'.$row['jo_color'].';">'.$row['project_name'].'</a>'; ?></h3>
                             <h5><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h5>
                             <h6><?php echo $row['date_created']; ?></h6>
                         </div>
                         <div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">
                             <ul class="inline-list jorightlist right">
-                                <!--<li><a onclick="getJoId(this)"><img src="<?php //echo base_url('assets/img/logos/Edit.png');?>" /></a></li>-->
+								<?php
+								if( $this->session->userdata('sess_dept') <=2 ){
+								?>
+									<li><a class="edit_load_jo" data-reveal-id="edit_joModal" alt="<?php echo $row['jo_id']; ?>"><img src="<?php echo base_url('assets/img/logos/Edit.png');?>" /></a></li>
+								<?php
+								}
+								?>
+
                                 <!--<li><a href="#"><img src="<?php //echo base_url('assets/img/logos/Delete.png');?>"/></a></li>-->
                             </ul>
                             <div class="large-12 columns text-right" style="padding-right: 30px;">
@@ -132,4 +142,59 @@
 
 		</ul>
 	</div>
+</div>
+
+<div id="edit_joModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+	<h2 id="modalTitle" class="twidth text-center">Edit Job Order</h2>
+
+	<div id="alert_box2" data-alert class="alert-box warning radius hide-normal">
+		Special characters are not allowed
+		<a href="#" class="close">&times;</a>
+	</div>
+
+	<form id="joedit_form" action="" method="post">
+		<input type="hidden" id="update_joid" name="update_joid">
+		<div class="large-11 columns large-centered">
+			<label> Project type</label>
+			<table id="pt_list" class="pt_list twidth p_list_edit_jo">
+
+			</table>
+
+			<div class="column large-8 medium-8 small-8" style="position: relative;z-index: 999;">
+				<input type="text" class="twidth" id="other_pt" placeholder="Input other project type">
+			</div>
+			<div class="column large-4 medium-4 small-4" style="position: relative;z-index: 999;">
+				<a href="#" id="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
+			</div>
+		</div>
+		<div class="large-11 columns large-centered">
+			<span>Client
+				<select name="inp_client2" id="inp_client2">
+					<option value="0">Select...</option>
+					<?php
+					foreach($client_list as $row){
+						echo '
+								<option value="'.$row['client_id'].'">'.$row['contact_person'].'</option>
+							';
+					}
+					?>
+				</select>
+			</span>
+		</div>
+		<div class="large-11 columns large-centered">
+			<label for="client_brands2" id="hd2" >Brand</label>
+			<table id="client_brands2" class="twidth">
+
+			</table>
+		</div>
+		<div class="large-11 columns large-centered">
+			<label for="inp_projname2">Project Name
+				<input type="text" id="inp_projname2" name="inp_projname2" placeholder="Project Name" />
+			</label>
+		</div>
+		<div class="large-11 columns large-centered">
+			<button id="btn_update_jo" class="button medium expand">Update Job Order</button>
+		</div>
+	</form>
+	<a class="close-reveal-modal" aria-label="Close">&#215;</a>
 </div>

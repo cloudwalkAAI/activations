@@ -17,7 +17,13 @@ $info = json_decode($jo_details);
                 <h5>Date Created</h5>
                 <h6><?= $info->date_created ?></h6>
                 <h5>Job Order No</h5>
-                <h6><?= $info->jo_number ?></h6>
+                <a href="#" data-dropdown="drop_color" aria-controls="drop_color" aria-expanded="false"><h6 id="joid_color" style="color:<?=$info->jo_color?>;"><?= $info->jo_number ?></h6></a>
+                <ul id="drop_color" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
+                    <li><a href="#" class="jo_change_color" alt="red" value="<?= $info->jo_number ?>">Red</a></li>
+                    <li><a href="#" class="jo_change_color" alt="blue" value="<?= $info->jo_number ?>">Blue</a></li>
+                </ul>
+                <h5>Contract No.</h5>
+                <h6><?= $info->contract_no ?></h6>
                 <h5>Project Name</h5>
                 <h6><?= $info->project_name ?></h6>
                 <h5>Project Type</h5>
@@ -26,7 +32,7 @@ $info = json_decode($jo_details);
                 <h6><?= $info->client_company_name ?></h6>
                 <h5>Brand</h5>
                 <h6><?= $info->brand ?></h6>
-                <h5>DO/Contract Date</h5>
+                <h5>DO No.</h5>
                 <h6>
                     <?php
                     if( $info->do_contract_no == '' ){
@@ -36,7 +42,7 @@ $info = json_decode($jo_details);
                     }
                     ?>
                 </h6>
-                <h5>Billed Date</h5>
+                <h5>Invoice</h5>
                 <h6>
                     <?php
                     if( $info->billed_date == '' ){
@@ -235,7 +241,7 @@ $info = json_decode($jo_details);
                 </div>
             </li>
             <li class="accordion-navigation acd">
-                <a id="show_table_mvrf" href="#panel5a">Man Power and Vehicle Request Form<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
+                <a id="show_table_mvrf" href="#panel5a">Manpower and Vehicle Request Form<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="panel5a" class="content">
                     <?= $mvrf_view ?>
                 </div>

@@ -1,5 +1,5 @@
 <?php
-    echo '<div class="fb-comments" data-href="'.current_full_url().'" data-width="1058" data-numposts="5"></div>';
+    echo '<div class="fb-comments" data-href="'.current_full_url().'" data-width="100%" data-numposts="5"></div>';
 
     function current_full_url()
     {
@@ -9,4 +9,5 @@
         return $_SERVER['QUERY_STRING'] ? $url.'?'.$_SERVER['QUERY_STRING'] : $url;
     }
 ?>
-
+<!--<div class="fb-comments twidth text-center"></div>-->
+<!--<div class="fb-comments" data-href="--><?//=current_url();?><!--" data-width="100%" data-numposts="5"></div>-->

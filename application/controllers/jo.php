@@ -5,9 +5,10 @@ class Jo extends CI_Controller{
 
     public function __construct() {
         parent::__construct ();
-//        $this->load->model('login_model');
+        $this->load->model('email_model');
         $this->load->model('insert_model');
         $this->load->model('get_model');
+        $this->load->model('cal_model');
         $this->load->helper('download');
         $this->load->library('m_pdf');
 //        $this->load->library('pagination');
@@ -27,6 +28,7 @@ class Jo extends CI_Controller{
 //            if( $arr ){
                 $data_a['jo_list'] = $arr;
                 $data_a['project_type'] = $this->get_model->get_project_type();
+//                $data_a['project_type2'] = $this->get_model->get_project_type2();
                 $data_a['client_list'] = $this->get_model->get_client_list();
                 $data['navigator'] = $this->load->view('nav', $data, TRUE);
                 $data['content'] = $this->load->view('ae/jo_list_view', $data_a, TRUE);
@@ -57,11 +59,22 @@ class Jo extends CI_Controller{
         echo $this->get_model->get_brand_list( $this->input->post( 'cid' ) );
     }
 
+    function load_brand2(){
+        echo $this->get_model->get_brand_list2( $this->input->post( 'cid' ) );
+    }
+
     function add_jo(){
-//        print_r($this->input->post());
-//        return false;
         $insid = $this->insert_model->insert_jo( $this->input->post() );
         echo $this->get_model->get_ae_jo_w( $insid );
+    }
+
+    function update_jo(){
+        echo $this->custom_model->update_jo( $this->input->post() );
+//        echo $this->get_model->get_ae_jo_w( $insid );
+    }
+
+    function load_jo_details(){
+        echo $this->get_model->get_ae_jo_details( $this->input->post( 'jcid' ) );
     }
 	
 	function get_jo(){
@@ -69,6 +82,34 @@ class Jo extends CI_Controller{
 		$data["joData"] = $this->get_model->get_ae_jo_w( $joid );
 		$this->load->view("joeditmodal",$data);
 	}
+
+    function update_pending(){
+        $result = $this->custom_model->jo_pending( $this->input->post('cal_id') );
+        if( $result != 'failed' ){
+            $this->email_model->creatives_task_notification_email($this->input->post('cval'));
+            echo $this->get_model->dt_calendar( $result );
+        }else{
+            echo $result;
+        }
+    }
+
+    function update_pending_u(){
+        $result = $this->custom_model->jo_pending( $this->input->post('cal_id') );
+        if( $result != 'failed' ){
+            $this->email_model->creatives_task_notification_email($this->input->post('cval'));
+            echo $this->get_model->dt_calendar_u( $result );
+        }else{
+            echo $result;
+        }
+    }
+
+    function update_cal_task_getinfo(){
+        echo $this->get_model->get_caltask($this->input->post('cal_id'));
+    }
+
+    function update_cal_task_getinfo_prod(){
+        echo $this->get_model->get_caltask_prod($this->input->post('cal_id'));
+    }
 
     /*for loading a JO*/
     function in(){
@@ -143,6 +184,7 @@ class Jo extends CI_Controller{
                 }
 
             }elseif( $row == "ed" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['req_table'] = $this->get_model->get_req_table_v2( $this->input->get('a') );
                 $data_ed['eda_table'] = $this->get_model->get_ada_table_no_info( $this->input->get('a') );
                 $data_ed['result_ed'] = $this->get_model->get_last_ed( $this->input->get('a') );
@@ -153,6 +195,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "pjat" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['attachment_list'] = $this->get_model->get_list_attachment( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/proj_attachments', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -161,6 +204,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "setup" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['setup_details'] = $this->get_model->get_last_setup( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/setup', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -169,6 +213,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "mvrf" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['mvrf_details'] = $this->get_model->get_last_mvrf( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/mvrf', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -177,6 +222,7 @@ class Jo extends CI_Controller{
                     $mpdf->AddPage(); //add new page
                 }
             }elseif( $row == "other" ){
+                $data_ed['jo_details'] = $this->get_model->get_ae_jo_w( $this->input->get('a') );
                 $data_ed['other_details'] = $this->get_model->get_last_other( $this->input->get('a') );
                 $page_ed = $this->load->view('pdf/others', $data_ed, TRUE);
                 $mpdf->WriteHTML($page_ed);
@@ -261,7 +307,8 @@ class Jo extends CI_Controller{
 
     function attached(){
         $target_dir = "assets/uploads/";
-        $target_file = $target_dir . basename($_FILES["inp_file_attachments"]["name"]);
+        $file_name = str_replace(" ", "_", basename($_FILES["inp_file_attachments"]["name"]));
+        $target_file = $target_dir . $file_name;
         move_uploaded_file($_FILES["inp_file_attachments"]["tmp_name"], $target_file);
 
         echo $this->insert_model->save_attachment( $this->input->post(), $target_file );
@@ -347,11 +394,19 @@ class Jo extends CI_Controller{
     }
 
     function accounts(){
-		$data['active_menu'] = 'ex';
-		$data['active_submenu'] = 'accounts';
-        $data['navigator'] = $this->load->view('nav', $data, TRUE);
-        $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
-        $this->load->view('master_page', $data);
+        if( $this->session->userdata('sess_id') ) {
+            $data['active_menu'] = 'ex';
+            $data['active_submenu'] = 'accounts';
+            if ($this->session->userdata('sess_dept') == 2) {
+                $data['disabler'] = 'display:none;';
+            }
+            $data['jolist'] = $this->get_model->accounts_jo($data['disabler']);
+            $data['navigator'] = $this->load->view('nav', $data, TRUE);
+            $data['content'] = $this->load->view('admin/accounts', NULL, TRUE);
+            $this->load->view('master_page', $data);
+        }else{
+            redirect(base_url());
+        }
     }
 
     function clients(){
@@ -442,6 +497,52 @@ class Jo extends CI_Controller{
         }
     }
 
+    function submit_date_calendar_u(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_task( $this->input->post() );
+    }
+
+    function submit_date_calendar_prod_u(){
+        if(empty($_FILES)) {
+            echo $this->custom_model->update_task_prod_u( $this->input->post() );
+        }else{
+            $target_dir = "assets/uploads/peg/";
+            $file_name = str_replace(" ", "_", basename($_FILES["prod_file_u"]["name"]));
+            $target_file = $target_dir . $file_name;
+            move_uploaded_file($_FILES["prod_file_u"]["tmp_name"], $target_file);
+            echo $this->custom_model->update_task_prod_u( $this->input->post(), $target_file );
+        }
+    }
+
+    function submit_date_calendar_prod(){
+//        print_r($this->input->post());
+//        return false;
+
+//        $result = $this->get_model->check_date( $this->input->post( 'prod_deadline' ) );
+//        if ($result == 'notTaken' ) {
+        $res = 0;
+        if(empty($_FILES)) {
+            $res = $this->insert_model->submit_date_calendar_prod( $this->input->post() );
+        }else{
+            $target_dir = "assets/uploads/peg/";
+            $file_name = str_replace(" ", "_", basename($_FILES["prod_file"]["name"]));
+            $target_file = $target_dir . $file_name;
+            move_uploaded_file( $_FILES["prod_file"]["tmp_name"], $target_file );
+
+            $res = $this->insert_model->submit_date_calendar_prod( $this->input->post(), $target_file );
+        }
+
+        if( $res > 0 ){
+            echo $this->get_model->getlastinsertdate_u( $res );
+        }else{
+            echo $res;
+        }
+
+//        }else{
+//            echo $result;
+//        }
+    }
+
     function search_ae(){
         $query = $this->db->get_where( 'employee_list', array( 'emp_id' => $this->input->post('aeid'), 'department' => 2 ), 1, 0 );
         if ($query->num_rows() > 0){
@@ -477,4 +578,26 @@ class Jo extends CI_Controller{
         }
     }
 
+    function creatives_del(){
+//        print_r( $this->input->post() );
+        echo $this->custom_model->delete_cal_task( $this->input->post('cal_id') );
+    }
+
+    function chg_col(){
+//        print_r( $this->input->post() );
+        echo $this->custom_model->update_jo_col( $this->input->post() );
+    }
+
+    function del_transmittal(){
+        echo $this->custom_model->del_transmittal( $this->input->post() );
+    }
+
+    function get_req(){
+        echo $this->get_model->get_req( $this->input->post() );
+    }
+
+    function jo_update_req(){
+//        print_r($this->input->post());
+        echo $this->custom_model->update_req( $this->input->post() );
+    }
 }

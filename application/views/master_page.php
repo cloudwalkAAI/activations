@@ -23,7 +23,8 @@
     </script>
     <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
     <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>    
-    <script src="<?=base_url('assets/js/ckeditorjs/ckeditor.js');?>"></script>
+<!--    <script src="--><?//=base_url('assets/js/ckeditorjs/ckeditor.js');?><!--"></script>-->
+    <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
 	<?php
 		if(isset($homepage) && $homepage == true){
 	?>
@@ -39,6 +40,15 @@
 	?>
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1478177725812128";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
 <?php
 	if(isset($homepagess)){
 ?>
@@ -107,12 +117,12 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
+    jQuery('#edit_inv_expiration, #inv_expiration,#cmtuva_date,#bill_date, #bill_date_u, #datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, .inp_trans').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });
 
-    jQuery('#creative_start, #creative_deadline').datetimepicker({
+    jQuery('#prod_deadline_u, #prod_deadline, #creative_start, #creative_deadline, #creative_deadline_u').datetimepicker({
         timepicker:false,
         format:'Y-m-j'
     });
@@ -125,26 +135,26 @@
     <?php
     if( $this->session->userdata('sess_dept')== 10 && $this->session->userdata('sess_post')== 1 ) {
     ?>
-    $(document).ready(function () {
-        $('.calendar .day').click(function () {
-            var day_num = $(this).find('.day_num').html();
-            var day_data = prompt('Enter details');
-            if (day_data != null) {
-
-                $.ajax({
-                    url: window.location,
-                    type: 'POST',
-                    data: {
-                        day: day_num,
-                        data: day_data
-                    },
-                    success: function (msg) {
-                        location.reload();
-                    }
-                });
-            }
-        });
-    });
+//    $(document).ready(function () {
+//        $('.calendar .day').click(function () {
+//            var day_num = $(this).find('.day_num').html();
+//            var day_data = prompt('Enter details');
+//            if (day_data != null) {
+//
+//                $.ajax({
+//                    url: window.location,
+//                    type: 'POST',
+//                    data: {
+//                        day: day_num,
+//                        data: day_data
+//                    },
+//                    success: function (msg) {
+//                        location.reload();
+//                    }
+//                });
+//            }
+//        });
+//    });
 
     <?php
    }

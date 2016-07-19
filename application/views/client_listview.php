@@ -1,7 +1,7 @@
 <li class="jolist load_client cl-item-<?php echo $row['client_id']; ?>" alt="<?php echo $row['client_id']; ?>" >
 	<div class="small-7 medium-8 large-8 columns" style="padding: 50px;">
-		<h3><?php echo $row['company_name']; ?></h3>
-		<h5><?php echo '<a href="#" alt="'.$row['client_id'].'">'.$row['contact_person'].'</a>'; ?></h5>
+		<h3><?php echo $row['contact_person']; ?></h3>
+		<h5><?php echo '<a href="#" alt="'.$row['client_id'].'">'.$row['company_name'].'</a>'; ?></h5>
 		<h6><?php echo $row['date_created']; ?></h6>
 	</div>
 	<div class="small-5 medium-4 large-4 columns text-right" style="padding: 12px;">

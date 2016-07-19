@@ -1,5 +1,6 @@
 <?php
 //    print_r($ed_details);
+    $info = json_decode($jo_details);
     $edcarray = array();
     $edcarray = json_decode( $ed_details );
 
@@ -50,7 +51,7 @@ if( isset( $shared_array ) ){
                 <textarea name="ed_what_add" id="ed_what_add" cols="30" placeholder="Additional notes" rows="5" <?=$str_disa?>><?=isset($edcarray->wtad) ? $edcarray->wtad : '';?></textarea>
             </td>
         </tr>
-        <tr>
+        <tr class="hide-normal">
             <td>When</td>
             <td>
                 <div>
@@ -62,7 +63,7 @@ if( isset( $shared_array ) ){
                 <textarea name="ed_when_add" id="ed_when_add" cols="30" placeholder="Additional notes" rows="5" <?=$str_disa?>><?=isset($edcarray->wnad) ? $edcarray->wnad : '';?></textarea>
             </td>
         </tr>
-        <tr>
+        <tr class="hide-normal">
             <td>Where</td>
             <td>
                 <div>
@@ -79,7 +80,7 @@ if( isset( $shared_array ) ){
             <td>
                 <div>
                     <label for="ed_expected_guest">
-                        <input type="text" id="ed_expected_guest" name="ed_expected_guest" value="<?=isset($edcarray->expected) ? $edcarray->expected : '';?>" <?=$str_disa?> required>
+                        <input type="text" id="ed_expected_guest" name="ed_expected_guest" value="<?=isset($edcarray->expected) ? $edcarray->expected : '';?>" <?=$str_disa?>>
                     </label>
                     <small class="error">This is a required field.</small>
                 </div>
@@ -105,6 +106,242 @@ if( isset( $shared_array ) ){
     <button id="btn_save_ed" class="right mar10" <?=$str_display?>><i class="fi-plus small"></i> Save</button>
 
 </form>
+<hr>
+<h4>Venue(s)</h4>
+<div class="column large-3 medium-3 small-12">
+    <form id="cmtuva_ae_form" action="" method="post" <?=($this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ? 'style="display:block;"':'style="display:none;"';?>>
+        <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
+        <input type="hidden" id="loc_id" name="loc_id" value="">
+        <select name="cmtuva_sel_venue" id="cmtuva_sel_venue">
+            <option value="0">Select Venue ...</option>
+            <?php
+            $this->db->select( 'venue' );
+            $this->db->from( 'cmtuva_location_list' );
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result() as $row) {
+                    echo '<option value="'.ucfirst($row->venue).'">'.ucfirst($row->venue).'</option>';
+                }
+            }
+            ?>
+        </select>
+        <select name="cmtuva_sel_area" id="cmtuva_sel_area" disabled>
+            <option value="0">Select Area ...</option>
+        </select>
+        <textarea name="cmae_street" id="cmae_street" cols="30" rows="3"></textarea>
+        <input type="text" name="cmtuva_date" id="cmtuva_date" placeholder="Start date">
+        <input type="text" class="txtboxToFilter text-right" name="cmtuva_duration" id="cmtuva_duration" placeholder="Duration">
+        <input type="text" name="cmtuva_rate" id="cmtuva_rate" class="twidth text-right" placeholder="0" readonly>
+        <input type="text" class="text-right" name="cmtuva_esp" id="cmtuva_esp" readonly>
+        <button id="btn_ae_cmtuva_rate" class="button twidth text-center success">Add</button>
+    </form>
+</div>
+<div class="column large-9 medium-9 small-12 scrollable_area">
+    <input type="search" class="radius" name="inp_search_cmae" id="inp_search_cmae" placeholder="Search">
+    <table class="twidth" id="cmae_table">
+        <thead>
+        <tr>
+            <th width="2">Venue</th>
+            <th width="3">Area</th>
+            <th width="3">Address</th>
+            <th width="1">Start date</th>
+            <th width="1">Duration</th>
+            <th width="1">Rate</th>
+            <th width="1">Total</th>
+            <th> </th>
+        </tr>
+        </thead>
+        <tbody id="cmae_tbody">
+        <?php
+        $query = $this->db->order_by('cmae_id', 'DESC')->get_where( 'cmtuva_ae_list', array('jo_id'=>$this->input->get('a')) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $arr_cmae = explode(",",$row->area);
+                if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ) {
+                    echo '
+                        <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $arr_cmae[0] ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                    ';
+                }else{
+                    echo '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                    </tr>
+                ';
+                }
+            }
+        }
+        ?>
+        </tbody>
+    </table>
+</div>
+
+<div id="cmae_Modal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Update the info.</h2>
+
+    <div id="alert_cmae" data-alert class="alert-box alert radius hide-normal">
+        Special characters are not allowed
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="cmae_form" action="" method="post">
+        <input type="hidden" name="cm_id" id="cm_id">
+        <select name="cmae_sel_venue" id="cmae_sel_venue">
+            <option value="0">Select Venue ...</option>
+            <?php
+            $this->db->select( 'venue' );
+            $this->db->from( 'cmtuva_location_list' );
+            $query = $this->db->get();
+            if ($query->num_rows() > 0) {
+                foreach ($query->result() as $row) {
+                    echo '<option value="'.ucfirst($row->venue).'">'.ucfirst($row->venue).'</option>';
+                }
+            }
+            ?>
+        </select>
+        <select name="cmae_sel_area" id="cmae_sel_area" disabled>
+            <option value="0">Select Area ...</option>
+        </select>
+        <textarea name="cmuae_street" id="cmuae_street" cols="30" rows="3"></textarea>
+        <input type="text" name="cmae_date" id="cmae_date" placeholder="Start date">
+        <input type="text" class="txtboxToFilter text-right" name="cmae_duration" id="cmae_duration" placeholder="Duration">
+        <input type="text" name="cmae_rate" id="cmae_rate" class="twidth text-right" placeholder="0" readonly>
+        <input type="text" class="text-right" name="cmae_esp" id="cmae_esp" readonly>
+        <a href="#" id="btn_edit_cmae" class="button medium right">Update</a>
+    </form>
+
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+<hr>
+
+<div class="column large-10 medium-10 small-12">
+    <input type="search" class="radius tbl_bdr" name="search_deduct_items" id="search_deduct_items" placeholder="Search">
+</div>
+<div class="column large-2 medium-2 small-12 right-align">
+    <button class="button tiny" data-reveal-id="inv_deduct_item" <?=$str_display;?>>Deduct item</button>
+</div>
+
+<div id="inv_deduct_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Deduct Item.</h2>
+
+    <div id="alert_deduct_inv" data-alert class="alert-box warning round" style="display: none;">
+        This is an alert - alert that is rounded.
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="inv_form_deduct" action="" method="post" autocomplete="on">
+        <select name="deduct_select" id="deduct_select">
+            <option value="0">Select Item</option>
+            <?php
+            $query = $this->db->get('stocks');
+            foreach ( $query->result() as $row ){
+                echo '
+										<option value="'.$row->stock_id.'">'.$row->item_code.' : '.$row->item_name.'</option>
+									';
+            }
+            ?>
+        </select>
+        <input type="hidden" name="deduct_jo" id="deduct_jo" value="<?=$info->jo_number;?>" readonly>
+        <input type="text" name="deduct_rece" id="deduct_rece" placeholder="Receiver's name">
+        <input type="text" name="deduct_desc" id="deduct_desc" placeholder="Description">
+        <input type="text" name="deduct_qty_total" id="deduct_qty_total" readonly>
+        <input type="text" name="deduct_qty" id="deduct_qty" placeholder="Quantity">
+        <input type="text" name="deduct_total" id="deduct_total" placeholder="Total" readonly>
+        <a href="#" id="btn_deduct_inv" class="button radius tiny right" disabled>Deduct</a>
+    </form>
+
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+<div id="inv_edit_item" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Update Item</h2>
+
+    <div id="alert_edit_inv" data-alert class="alert-box warning round" style="display: none;">
+        This is an alert - alert that is rounded.
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="inv_edit_form" action="" method="post" autocomplete="on">
+        <input type="hidden" id="edit_inv_trans_id" name="edit_inv_trans_id">
+        <input type="hidden" id="edit_inv_stck_id" name="edit_inv_stck_id">
+        <div class="column large-6 medium-6 small-12">
+            <input type="text" class="radius" name="edit_inv_code" id="edit_inv_code" placeholder="Code">
+            <input type="text" class="radius" name="edit_inv_name" id="edit_inv_name" placeholder="Name">
+            <input type="text" class="radius" name="edit_inv_delivered_by" id="edit_inv_delivered_by" placeholder="Delivered By">
+            <input type="text" class="radius" name="edit_inv_received_by" id="edit_inv_received_by" placeholder="Received By">
+        </div>
+        <div class="column large-6 medium-6 small-12">
+            <input type="text" class="radius" name="edit_inv_description" id="edit_inv_description" placeholder="Description">
+            <input type="number" class="radius txtboxToFilter" name="edit_inv_qty" id="edit_inv_qty" placeholder="Quantity">
+            <input type="text" class="radius" name="edit_inv_expiration" id="edit_inv_expiration" placeholder="Expiration date">
+            <a href="#" id="btn_edit_inv" class="button radius tiny right">Update</a>
+        </div>
+    </form>
+
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+<table class="tbl_bdr twidth">
+    <thead>
+    <tr style="background-color:#ccccff;">
+        <th style="text-align:center;">Item Name</th>
+        <th style="text-align:center;">JO ID.</th>
+        <th style="text-align:center;">Received By</th>
+        <th style="text-align:center;">Description</th>
+        <th style="text-align:center;">Quantity</th>
+        <th style="text-align:center;">Deducted By</th>
+        <th style="text-align:center;">Date Deducted</th>
+    </tr>
+    </thead>
+    <tbody id="tbody_deduct">
+    <?php
+    $this->db->select('*'); // Select field
+    $this->db->from('stocks_sub'); // from Table1
+    $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+    $this->db->where('process','deduct');
+    $this->db->where('jo_id',$info->jo_number);
+    $this->db->order_by("trans_id","DESC");
+    $res = $this->db->get();
+
+    foreach ( $res->result() as $row ){
+        echo '
+        <tr id="trans'.$row->trans_id.'">
+            <td>'.$row->item_name.'</td>
+            <td>'.$row->jo_id.'</td>
+            <td>'.$row->received_by.'</td>
+            <td>'.$row->sub_description.'</td>
+            <td>'.$row->item_qty.'</td>
+            <td>'.$row->deducted_by.'</td>
+            <td>'.$row->transaction_date.'</td>
+        </tr>
+        ';
+    }
+    ?>
+    </tbody>
+</table>
+
 <hr>
 
 <h4>Animation Details</h4>
@@ -172,8 +409,7 @@ if( isset( $shared_array ) ){
         <tr>
             <th>Particulars</th>
             <th>Target Activity</th>
-            <th colspan="5" class="text-center">Target Schedule</th>
-            <th>Target Schedule</th>
+            <th colspan="5" class="text-center">Target Hits</th>
             <th>Target Duration</th>
             <th>Areas</th>
         </tr>
@@ -230,7 +466,7 @@ if( isset( $shared_array ) ){
                 <option value="0">Department</option>
                 <?php
                     foreach( $departments as $dept ){
-                        echo '<option value="' . $dept['department_name'] . '">'. $dept['department_name'] .'</option>';
+                        echo '<option value="' . $dept['department_name'] . '">'. ucfirst($dept['department_name']) .'</option>';
                     }
                 ?>
             </select>
@@ -248,6 +484,44 @@ if( isset( $shared_array ) ){
         </div>
 
         <button id="btn_add_requ" type="submit" class="button medium right"><i class="fi-save medium"></i> Add</button>
+    </form>
+    <br>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+</div>
+
+<div id="requModal_u" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle" class="text-center">Add requirement</h2>
+
+    <div id="alert_box_requ_u" data-alert class="alert-box alert radius hide-normal">
+        Special characters are not allowed
+        <a href="#" class="close">&times;</a>
+    </div>
+
+    <form id="requ_form_u" action="" method="post">
+        <input type="hidden" name="rq_joid_u" id="rq_joid_u">
+        <div class="row">
+            <select name="rq_dept_u" id="sel_dept_ad_u">
+                <option value="0">Department</option>
+                <?php
+                    foreach( $departments as $dept ){
+                        echo '<option value="' . $dept['department_name'] . '">'. ucfirst($dept['department_name']) .'</option>';
+                    }
+                ?>
+            </select>
+        </div>
+
+        <div class="row">
+            <textarea name="editor_req_u" id="editor_req_u" cols="30" rows="10" placeholder="Deliverables"></textarea>
+        </div>
+        <div class="row">
+            <br>
+            <input type="text" name="rq_deadline_u" id="datepicker_deadline_u" placeholder="Deadline">
+        </div>
+        <div class="row">
+            <textarea name="editor_ns_u" id="editor_ns_u" cols="30" rows="10" placeholder="Next Steps"></textarea>
+        </div>
+
+        <button id="btn_add_requ_u" type="submit" class="button medium right"><i class="fi-save medium"></i> Update</button>
     </form>
     <br>
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>

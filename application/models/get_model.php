@@ -38,21 +38,124 @@ class Get_model extends CI_Model
         }
     }
 
-//    function get_ae_jo_details( $jo_id ){
-//        $arr = array();
-//
-//        if( $empid == $this->session->userdata('sess_id') ){
-//            $query = $this->db->get_where( 'job_order_list', array( 'jo_id' => $jo_id ) );
-//            return $query->result_array();
-//
-//            foreach( $query->result() as $row ){
-//
-//            }
-//
-//        }else{
-//            return false;
-//        }
-//    }
+    function get_ae_jo_details( $jo_id ){
+        $arr_tonight = array();
+
+        $this->db->select( 'project_type, client_company_name, brand, project_name' );
+        $this->db->from( 'job_order_list' );
+        $this->db->where( 'jo_id =', $jo_id );
+        $query = $this->db->get();
+        $row = $query->row();
+        if (isset($row))
+        {
+            $arr_tonight['jo_id']           = $jo_id;
+            $arr_tonight['cont_person']     = $this->get_client_info_jo_edit( $row->client_company_name );
+            $arr_tonight['cont_person_id']  = $row->client_company_name;
+            $arr_tonight['projtype_check']  = $this->get_project_type2( $row->project_type );
+            $arr_tonight['projtype']        = $row->project_type;
+            $arr_tonight['brand']           = $row->brand;
+            $arr_tonight['brand_check']     = $this->get_brand_list2_jo( $row->client_company_name, $row->brand );
+
+            $arr_tonight['project_name']    = $row->project_name;
+        }
+        return json_encode( $arr_tonight );
+    }
+
+    function get_project_type2( $a ){
+        $input_text = '';
+        $checked = '';
+        $array_brands = array();
+        $array_brands = explode(',',$a);
+        $i=0;
+        $query = $this->db->get( 'project_type' );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                if (in_array($row->pt_name, $array_brands)) {
+                    $checked = 'checked';
+                }else{
+                    $checked = '';
+                }
+                $i++;
+                if ($i <= 3) {
+                    if($i==1){
+                        $input_text .= '
+                            <tr>
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }else if($i % 3 == 0){
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                            </tr>
+                        ';
+                        $i=0;
+                    }else{
+                        $input_text .= '
+                                <td><input type="checkbox" name="inp_projtype2[]" id="inp_projtype2" value="' . $row->pt_name . '" '.$checked.'><span> ' . $row->pt_name . '</span></td>
+                        ';
+                    }
+                }
+            }
+        }
+        return $input_text;
+    }
+
+    function get_brand_list2_jo( $a, $b ){
+        $str_brand = '';
+        $checked = '';
+        $str_brand2 = array();
+        $arr_brand = array();
+        $i = 0;
+        $this->db->select( 'client_id, brand_name' );
+        $this->db->from( 'brand' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        foreach( $query->result() as $row ){
+            $arr_brand = explode(',',$row->brand_name);
+            $arr_brand2 = explode(',',$b);
+            foreach( $arr_brand as $the_brand ){
+                if( $the_brand != null ){
+                    if (in_array($the_brand, $arr_brand2)) {
+                        $checked = 'checked';
+                    }else{
+                        $checked = '';
+                    }
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '" '.$checked.'><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
+                    }
+                }
+            }
+        }
+        return $str_brand;
+    }
+
+
+    function get_client_info_jo_edit( $a ){
+        $this->db->select( 'client_id, company_name, contact_person' );
+        $this->db->from( 'clients' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        $row = $query->row();
+        if (isset($row))
+        {
+            return $row->contact_person;
+        }
+    }
 
     function get_ae_jo_w( $id ){
         $jolist_array = array();
@@ -61,9 +164,19 @@ class Get_model extends CI_Model
 
         foreach ($query->result() as $row)
         {
+            $str_conoo = '';
             $jolist_array['jo_id'] = $row->jo_id;
             $jolist_array['emp_id'] = $row->emp_id;
             $jolist_array['jo_number'] = $row->jo_number;
+            $jolist_array['jo_color'] = $row->jo_color;
+
+            $str_conoo .= '<ul class="no-bullet">';
+            foreach( explode(',',$row->contract_no) as $conoo ){
+                $str_conoo .= '<li>'.$conoo.'</li>';
+            }
+            $str_conoo .= '</ul>';
+
+            $jolist_array['contract_no'] = $str_conoo;
 
             if( !is_null( $row->do_contract_no )){
                 $jolist_array['do_contract_no'] = $row->do_contract_no;
@@ -96,14 +209,14 @@ class Get_model extends CI_Model
     }
 
     function get_company($c){
-        $this->db->select( 'company_name' );
+        $this->db->select( 'contact_person' );
         $this->db->from( 'clients' );
         $this->db->where( 'client_id =', $c );
         $query = $this->db->get();
         $row = $query->row();
         if (isset($row))
         {
-            return $row->company_name;
+            return $row->contact_person;
         }
     }
 
@@ -122,19 +235,82 @@ class Get_model extends CI_Model
     function get_client_list(){
         $this->db->select( 'client_id, company_name, contact_person' );
         $this->db->from( 'clients' );
-        $this->db->group_by( 'company_name' );
+//        $this->db->group_by( 'company_name' );
         $query = $this->db->get();
         return $query->result_array();
     }
 
     function get_brand_list( $a ){
         $str_brand = '';
+        $arr_brand = array();
+        $i = 0;
         $this->db->select( 'client_id, brand_name' );
         $this->db->from( 'brand' );
         $this->db->where( 'client_id =', $a );
         $query = $this->db->get();
         foreach( $query->result() as $row ){
-            $str_brand = $row->brand_name;
+            $arr_brand = explode(',',$row->brand_name);
+            foreach( $arr_brand as $the_brand ){
+
+                if( $the_brand != null ){
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand[]" id="inp_brand" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
+                    }
+                }
+            }
+        }
+        return $str_brand;
+    }
+
+    function get_brand_list2( $a ){
+        $str_brand = '';
+        $arr_brand = array();
+        $i = 0;
+        $this->db->select( 'client_id, brand_name' );
+        $this->db->from( 'brand' );
+        $this->db->where( 'client_id =', $a );
+        $query = $this->db->get();
+        foreach( $query->result() as $row ){
+            $arr_brand = explode(',',$row->brand_name);
+            foreach( $arr_brand as $the_brand ){
+                if( $the_brand != null ){
+                    $i++;
+                    if ($i <= 3) {
+                        if($i==1){
+                            $str_brand .= '
+                                <tr>
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }else if($i % 3 == 0){
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                                </tr>
+                            ';
+                            $i=0;
+                        }else{
+                            $str_brand .= '
+                                    <td><input type="checkbox" name="inp_brand2[]" id="inp_brand2" value="' . $the_brand . '"><span> ' . $the_brand . '</span></td>
+                            ';
+                        }
+                    }
+                }
+            }
         }
         return $str_brand;
     }
@@ -552,7 +728,6 @@ class Get_model extends CI_Model
                 return $row->project_name;
             }
         }
-
     }
 
     function emp_last_task( $a ){
@@ -791,15 +966,26 @@ class Get_model extends CI_Model
 //            $text = str_ireplace($breaks, "\r\n", $row->deliverables);
 //            $text1 = str_ireplace($breaks, "\r\n", $row->next_steps);
             $result .= '
-                <tr>
+                <tr id="req'.$row->req_id.'">
                     <td>'.$row->department_name.'</td>
                     <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
                     <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td style="text-align:center;">
+                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                    </td>
                 </tr>
             ';
         }
         return $result;
+    }
+
+    function get_req( $a ){
+        $query = $this->db->get_where( 'event_requirement', array( 'req_id' => $a['req_id'] ) );
+        foreach( $query->result() as $row ) {
+            return $a['req_id'].','.$row->department_name.','.$row->deliverables.','.$row->deadline.','.$row->next_steps;
+        }
     }
 
     function get_req_table_v2( $a ){
@@ -865,6 +1051,19 @@ class Get_model extends CI_Model
                                 <td>'.$str_name.'</td>
                                 <td>'.$row->date.'</td>
                                 <td>'.$row->data.'</td>
+                                <td>
+                                    <a href="#" id="task_change" alt="'.$row->cal_id.'">'.
+                                        $row->endd.
+                                    '</a>
+                                </td>
+                                <td style="text-align:center;">
+                                    <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'">
+                                        <img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" />
+                                    </a>
+                                    <a class="del-btn-task" href="#" alt="'.$row->cal_id.'">
+                                        <img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" />
+                                    </a>
+                                </td>
                            </tr>
                            ';
             }
@@ -873,12 +1072,379 @@ class Get_model extends CI_Model
 
     }
 
+    function get_cmtuva_info( $a ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $a ) );
+        return json_encode($query->result());
+    }
+
+    function getlastinsertdate_u($a){
+        $str_dat='';
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+                $filname = str_replace("assets/uploads/peg/","",$row->peg);
+                $str_dat= '
+                           <tr id="prod'.$row->cal_id.'">
+                                <td>'.$str_name.'</td>
+                                <td>'.$row->date.'</td>
+                                <td><span title="'.$row->data.'" aria-describedby="tooltip-ijv27znv5a'.$row->cal_id.'" data-selector="tooltip-ijv27znv5a'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                <td><a href="'.base_url($row->peg).'" target="_blank">'.$filname.'</a></td>
+                                <td>'.$row->size.'</td>
+                                <td>'.$row->qty.'</td>
+                                <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$row->jo_id.'">'.$row->endd.'</a></td>
+                                <td style="text-align:center;">
+                                    <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                    <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                </td>
+                            </tr>
+                       ';
+            }
+        }
+        echo $str_dat;
+
+    }
+
     function check_date($a){
-        $query = $this->db->get_where( 'calendar', array( 'date' => $a ) );
+        $query = $this->db->get_where( 'calendar', array( 'date' => $a, 'dept_id' => $this->session->userdata('sess_dept') ) );
         if ( $query->num_rows() > 0 ) {
             return 'Taken';
         }else{
             return 'notTaken';
         }
+    }
+
+    function accounts_get_emp($emp_id){
+        $query_ae = $this->db->get_where( 'employee_list', array( 'emp_id' => $emp_id ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return '<li style="font-size:12px";>'.$row_ae->sur_name.', '.$row_ae->first_name.' '.$row_ae->middle_name.'</li>';
+            }else{
+                return false;
+            }
+        }
+    }
+
+    function accounts_get_client( $client_id ){
+        $query_ae = $this->db->get_where( 'clients', array( 'client_id' => $client_id ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return $row_ae->contact_person;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    function accounts_jo( $disabler ){
+        $str_td_jo = '';
+        $str_ae = '';
+        $str_do = '';
+        $str_bd = '';
+        $str_ce = '';
+        $str_tp = 0;
+        $str_bill_bg = '';
+        $str_bill_bg_class = '';
+        $str_tp_bg = '';
+        $str_tp_bg_class = '';
+        $shared_arr = array();
+
+        $this->db->select( 'jo_id, 	jo_number, contract_no, emp_id, do_contract_no, do_location, project_name, client_company_name, brand, billed_date, bill_location, paid_date, paid_location, shared_to, total_price, ce_number, ce_location, transmittal' );
+        $this->db->from( 'job_order_list' );
+        $this->db->order_by("jo_id", "desc");
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row)
+            {
+                $str_con = '';
+                $str_ae = '';
+                $str_ae .= $this->accounts_get_emp($row->emp_id);
+
+                $shared_arr = explode(",",$row->shared_to);
+                foreach ( $shared_arr as $row_share )
+                {
+                    if( $this->accounts_get_emp($row_share) ){
+                        $str_ae .= $this->accounts_get_emp($row_share);
+                    }
+                }
+
+                if($row->do_contract_no){
+                    $str_do = '<a href="'.base_url($row->do_location).'" target="_blank">'.$row->do_contract_no.'</a><a href="#" id="delete_do" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
+                }else{
+                    $str_do = '<button class="button tiny btn_do twidth" alt="'.$row->jo_id.'" style="'.$disabler.'">Do</button>';
+                }
+
+                if( $row->billed_date && $this->session->userdata('sess_dept') < 2 ){
+
+                    $d = explode(",", $row->billed_date);
+
+                    $now = time(); // or your date as well
+                    $bil_date = strtotime( $d[0] );
+                    $datediff_bill = abs( $now - $bil_date );
+
+                    if( floor( $datediff_bill/(60*60*24) ) <= 45 ){
+                        $str_bill_bg = 'background-color: green; color:white;';
+                    }elseif( ( floor( $datediff_bill/(60*60*24) ) > 45 ) && ( floor( $datediff_bill/(60*60*24) ) <= 60 ) ){
+                        $str_bill_bg = 'background-color: yellow; color:black;';
+                    }elseif( ( floor( $datediff_bill/(60*60*24) ) > 60 ) && ( floor( $datediff_bill/(60*60*24) ) <= 120 ) ){
+                        $str_bill_bg = 'background-color: red; color:white;';
+                    }elseif( floor( $datediff_bill/(60*60*24) ) > 120  ){
+                        $str_bill_bg_class = 'emergency';
+                        $str_bill_bg = '';
+                    }
+                    $str_bd = '<a href="#" class="bill_update" alt="'.$row->jo_id.'">'.$d[1].'<br />'.$d[0].'</a><br /><a href="#" class="delete_bd" alt="'.$row->jo_id.'" style="//margin-left:10px;'.$disabler.'" >[x] Delete</a>';
+                }elseif( $row->billed_date && $this->session->userdata('sess_dept') >= 2 ){
+                    $str_bd = '<a href="'.base_url($row->bill_location).'" target="_blank">'.$row->billed_date.'</a><br /><a href="#" class="delete_bd" alt="'.$row->jo_id.'" style="//margin-left:10px;'.$disabler.'" >[x] Delete</a>';
+                }else{
+                    $str_bd = '<button class="button tiny btn_bd twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">Invoice</button>';
+                }
+
+                if($row->ce_number){
+                    $str_ce = '<a href="'.base_url($row->ce_location).'" target="_blank">'.$row->ce_number.'</a><a href="#" id="delete_ce" alt="'.$row->jo_id.'" style="margin-left:10px;'.$disabler.'" >[x]</a>';
+                }else{
+                    $str_ce = '<button class="button tiny btn_ce twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">CE</button>';
+                }
+
+                if( $row->paid_location != null ){
+                    strrpos($row->paid_location, "/");
+                    $str_pd = '
+                        <ul class="no-bullet">
+                            <li>
+                                <span>'.$row->paid_date.'</span>
+                            </li>
+                            <li>
+                                <a href="'.base_url($row->paid_location).'" style="font-size:12px;">Download OR</a>
+                            </li>
+                            <li>
+                                <button class="button tiny delete_paid twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
+                            </li>
+                        </ul>
+                    ';
+                }else{
+//                    $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
+                    $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
+                }
+
+                if($row->transmittal != NULL){
+                    $now = time(); // or your date as well
+                    $your_date = strtotime( $row->transmittal );
+                    $datediff = abs( $now - $your_date );
+
+                    if( floor( $datediff/(60*60*24) ) <= 45 ){
+                        $str_tp_bg = 'background-color: green; color:white;';
+                    }elseif( ( floor( $datediff/(60*60*24) ) > 45 ) && ( floor( $datediff/(60*60*24) ) <= 60 ) ){
+                        $str_tp_bg = 'background-color: yellow; color:black;';
+                    }elseif( ( floor( $datediff/(60*60*24) ) > 60 ) && ( floor( $datediff/(60*60*24) ) <= 120 ) ){
+                        $str_tp_bg = 'background-color: red; color:white;';
+                    }else{
+                        $str_tp_bg_class = 'emergency';
+                        $str_tp_bg = '';
+                    }
+
+                    $str_tp = $row->transmittal.'<br />Day/s Passed '.floor($datediff/(60*60*24)).'<br/><br/><a style="font-size:2rem;" aria-label="Close" alt="'.$row->jo_id.'" class="del_trans">&#215;</a>';
+                }else{
+                    $str_tp = '<input alt="'.$row->jo_id.'" class="inp_trans" class="twidth" placeholder="Date" style="'.$disabler.'"> <label style="font-size:10px;">press enter to save</label>';
+                }
+
+                if($row->contract_no){
+                    $str_con .= '<ul class="no-bullet">';
+                    foreach( explode(',', $row->contract_no) as $cont ){
+                        $str_con .= '
+                        <li style="font-size:12px";>
+                            '.$cont.'
+                        </li>
+                        ';
+                    }
+                    $str_con .= '</ul>';
+                    $str_con .= '
+                        <input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Cont. Num..">
+                        <span style="font-size:8px;">Press Enter to Save</span>
+                    ';
+                }else{
+                    $str_con = '<input class="inp_contract_no twidth" alt="'.$row->jo_id.'" placeholder="Contract No.">';
+                }
+
+                $str_td_jo .= '
+                    <tr>
+                        <td style="color:'.$row->jo_color.';">'.$row->jo_number.'</td>
+                        <td>'.$str_con.'</td>
+                        <td>
+                            <ul class="no-bullet">
+                                '.$str_ae.'
+                            </ul>
+                        </td>
+                        <td>'.$row->project_name.'</td>
+                        <td>'.$this->accounts_get_client($row->client_company_name).'</td>
+                        <td>'.$row->brand.'</td>
+                        <td>'.$str_ce.'</td>
+                        <td>'.$str_do.'</td>
+                        <td class="'.$str_tp_bg_class.'" align="center" style="text-align: center;'.$str_tp_bg.'">'.$str_tp.'</td>
+                        <td class="'.$str_bill_bg_class.'" align="center" style="text-align: center;'.$str_bill_bg.'">'.$str_bd.'</td>
+                        <td>
+                            '.$str_pd.'
+                        </td>
+                        <td>
+                            <button class="button tiny btn_rem twidth" value="'.$row->total_price.'" alt="'.$row->jo_id.'" style="'.$disabler.'">Remarks</button>
+                        </td>
+                    </tr>
+                ';
+
+                $str_tp_bg = '';
+                $str_tp_bg_class = '';
+                $str_bill_bg = '';
+                $str_bill_bg_class = '';
+            }
+        }
+
+        return $str_td_jo;
+    }
+
+    function get_invoice( $a ){
+        $query_ae = $this->db->get_where( 'job_order_list', array( 'jo_id' => $a['jo_id'] ) );
+        if ($query_ae->num_rows() > 0) {
+            $row_ae = $query_ae->row();
+            if (isset($row_ae)) {
+                return $row_ae->billed_date.','.base_url($row_ae->bill_location).','.$a['jo_id'];
+            }
+        }
+    }
+
+    function dt_calendar( $cal_id ){
+        $str_name = '';//test
+        $str_ret = '';//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+        }
+
+        return $str_ret;
+    }
+
+    function dt_calendar_u( $cal_id ){
+        $str_name = '';//test
+        $str_ret = '';//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change_u" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+        }
+
+        return $str_ret;
+    }
+
+    function get_caltask($cal_id){
+        $str_name = '';//test
+        $arr_ret = array();//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+            $arr_ret = array(
+                'cal_id' => $cal_id,
+                'ename' => $str_name,
+                'eid' => $row->employee_id,
+                'edate' => $row->date,
+                'desc' => $row->data,
+                'process' => $row->endd
+            );
+        }
+
+        return json_encode($arr_ret);
+    }
+
+    function get_caltask_prod($cal_id){
+        $str_name = '';//test
+        $arr_ret = array();//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $filname = str_replace("assets/uploads/peg/","",$row->peg);
+
+            $arr_ret = array(
+                'cal_id' => $cal_id,
+                'ename' => $str_name,
+                'eid' => $row->employee_id,
+                'edate' => $row->date,
+                'desc' => $row->data,
+                'peg' => $row->peg,
+                'flname' => $filname,
+                'size' => $row->size,
+                'quant' => $row->qty,
+                'od' => $row->other_details,
+                'process' => $row->endd
+            );
+        }
+
+        return json_encode($arr_ret);
+    }
+
+    function get_areas( $venue_name ){
+        $str_areas = '<option value="0">Select Area ...</option>';
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'venue' => $venue_name ) );
+        foreach($query->result() as $row){
+            if( $row->area != NULL ){
+                $str_areas .= '
+                    <option value="'.$row->area.','.$row->location_id.'">'.$row->area.'<option>
+                ';
+            }
+        }
+        return $str_areas;
+    }
+
+    function get_areas_rate( $venue_id ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $venue_id ) );
+        foreach($query->result() as $row){
+            echo $row->rate.','.$venue_id.','.$row->street;
+        }
+    }
+
+    function get_cmae( $venue_id ){
+        $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $venue_id ) );
+        return json_encode($query->result());
+    }
+
+    function check_item( $a ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'venue' => $a['inp_venue'], 'area' => $a['inp_area'] ) );
+        return $query->num_rows();
+    }
+
+    function load_qty( $a ){
+        $query = $this->db->get_where( 'stocks', array( 'stock_id' => $a['deduct_select'] ) );
+        foreach($query->result() as $row){
+            echo $row->qty;
+        }
+    }
+
+    function load_added_inventory( $trans_id = null ){
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
+        $this->db->where('trans_id',$trans_id);
+        $query = $this->db->get();
+//        $query = $this->db->get_where( 'stocks_sub', array( 'trans_id' => $trans_id ) );
+        return json_encode($query->result());
     }
 }
