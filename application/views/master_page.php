@@ -40,6 +40,15 @@
 	?>
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1478177725812128";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
 <?php
 	if(isset($homepagess)){
 ?>
@@ -108,12 +117,12 @@
 	});
     jQuery.datetimepicker.setLocale('en');
 
-    jQuery('#bill_date, #bill_date_u, #datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, .inp_trans').datetimepicker({
+    jQuery('#edit_inv_expiration, #inv_expiration,#cmtuva_date,#bill_date, #bill_date_u, #datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u, #paid_datepicker, .inp_trans').datetimepicker({
         timepicker:false,
         format:'m/d/Y'
     });
 
-    jQuery('#creative_start, #creative_deadline, #creative_deadline_u').datetimepicker({
+    jQuery('#prod_deadline_u, #prod_deadline, #creative_start, #creative_deadline, #creative_deadline_u').datetimepicker({
         timepicker:false,
         format:'Y-m-j'
     });

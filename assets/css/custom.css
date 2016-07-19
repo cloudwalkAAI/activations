@@ -169,3 +169,12 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
     background: rgba(0,0,0,0) !important;
 }
 /*end calendar*/
+
+.inv_tabs{
+    width:auto !important;
+    max-width: 100% !important;
+}
+
+.tbl_bdr{
+    border-radius:8px;
+}

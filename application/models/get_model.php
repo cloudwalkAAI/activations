@@ -235,7 +235,7 @@ class Get_model extends CI_Model
     function get_client_list(){
         $this->db->select( 'client_id, company_name, contact_person' );
         $this->db->from( 'clients' );
-        $this->db->group_by( 'company_name' );
+//        $this->db->group_by( 'company_name' );
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -972,8 +972,8 @@ class Get_model extends CI_Model
                     <td>'.$row->deadline.'</td>
                     <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
                     <td style="text-align:center;">
-                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                        <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                        <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
                     </td>
                 </tr>
             ';
@@ -1058,10 +1058,10 @@ class Get_model extends CI_Model
                                 </td>
                                 <td style="text-align:center;">
                                     <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'">
-                                        <img src="'.base_url("assets/img/logos/Edit.png").'" />
+                                        <img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" />
                                     </a>
                                     <a class="del-btn-task" href="#" alt="'.$row->cal_id.'">
-                                        <img src="'.base_url("assets/img/logos/Delete.png").'" />
+                                        <img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" />
                                     </a>
                                 </td>
                            </tr>
@@ -1072,8 +1072,46 @@ class Get_model extends CI_Model
 
     }
 
+    function get_cmtuva_info( $a ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $a ) );
+        return json_encode($query->result());
+    }
+
+    function getlastinsertdate_u($a){
+        $str_dat='';
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $a ) );
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row)
+            {
+                $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                foreach($query_emp->result() as $row_emp){
+                    $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                }
+                $filname = str_replace("assets/uploads/peg/","",$row->peg);
+                $str_dat= '
+                           <tr id="prod'.$row->cal_id.'">
+                                <td>'.$str_name.'</td>
+                                <td>'.$row->date.'</td>
+                                <td><span title="'.$row->data.'" aria-describedby="tooltip-ijv27znv5a'.$row->cal_id.'" data-selector="tooltip-ijv27znv5a'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                <td><a href="'.base_url($row->peg).'" target="_blank">'.$filname.'</a></td>
+                                <td>'.$row->size.'</td>
+                                <td>'.$row->qty.'</td>
+                                <td><span title="'.$row->other_details.'" aria-describedby="tooltip-ijv27znv5'.$row->cal_id.'" data-selector="tooltip-ijv27znv5'.$row->cal_id.'" data-tooltip="" aria-haspopup="true" class="has-tip">Mouseover for More Info</span></td>
+                                <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$row->jo_id.'">'.$row->endd.'</a></td>
+                                <td style="text-align:center;">
+                                    <a class="edit-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                    <a class="del-btn-task-prod" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                </td>
+                            </tr>
+                       ';
+            }
+        }
+        echo $str_dat;
+
+    }
+
     function check_date($a){
-        $query = $this->db->get_where( 'calendar', array( 'date' => $a ) );
+        $query = $this->db->get_where( 'calendar', array( 'date' => $a, 'dept_id' => $this->session->userdata('sess_dept') ) );
         if ( $query->num_rows() > 0 ) {
             return 'Taken';
         }else{
@@ -1174,18 +1212,23 @@ class Get_model extends CI_Model
                     $str_ce = '<button class="button tiny btn_ce twidth" alt="'.$row->jo_id.'"  style="'.$disabler.'">CE</button>';
                 }
 
-                if( $row->paid_location == 'Paid' ){
+                if( $row->paid_location != null ){
+                    strrpos($row->paid_location, "/");
                     $str_pd = '
                         <ul class="no-bullet">
                             <li>
                                 <span>'.$row->paid_date.'</span>
                             </li>
                             <li>
-                                <button class="button tiny btn_pd twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
+                                <a href="'.base_url($row->paid_location).'" style="font-size:12px;">Download OR</a>
+                            </li>
+                            <li>
+                                <button class="button tiny delete_paid twidth alert" alt="'.$row->jo_id.'" value="Unpaid" style="'.$disabler.'">Paid</button>
                             </li>
                         </ul>
                     ';
                 }else{
+//                    $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                     $str_pd = '<button class="button tiny btn_pd twidth success" alt="'.$row->jo_id.'" value="Paid" style="'.$disabler.'">Unpaid</button>';
                 }
 
@@ -1283,7 +1326,23 @@ class Get_model extends CI_Model
                 $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
             }
 
-            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
+        }
+
+        return $str_ret;
+    }
+
+    function dt_calendar_u( $cal_id ){
+        $str_name = '';//test
+        $str_ret = '';//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $str_ret = '<tr><td>'.$str_name.'</td><td>'.$row->date.'</td><td>'.$row->data.'</td><td><a href="#" id="task_change_u" alt="'.$row->cal_id.'">'.$row->endd.'</a></td><td style="text-align:center;"><a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a><a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td></tr>';
         }
 
         return $str_ret;
@@ -1309,5 +1368,83 @@ class Get_model extends CI_Model
         }
 
         return json_encode($arr_ret);
+    }
+
+    function get_caltask_prod($cal_id){
+        $str_name = '';//test
+        $arr_ret = array();//test
+        $query = $this->db->get_where( 'calendar', array( 'cal_id' => $cal_id ) );
+        foreach($query->result() as $row){
+            $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+            foreach($query_emp->result() as $row_emp){
+                $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+            }
+
+            $filname = str_replace("assets/uploads/peg/","",$row->peg);
+
+            $arr_ret = array(
+                'cal_id' => $cal_id,
+                'ename' => $str_name,
+                'eid' => $row->employee_id,
+                'edate' => $row->date,
+                'desc' => $row->data,
+                'peg' => $row->peg,
+                'flname' => $filname,
+                'size' => $row->size,
+                'quant' => $row->qty,
+                'od' => $row->other_details,
+                'process' => $row->endd
+            );
+        }
+
+        return json_encode($arr_ret);
+    }
+
+    function get_areas( $venue_name ){
+        $str_areas = '<option value="0">Select Area ...</option>';
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'venue' => $venue_name ) );
+        foreach($query->result() as $row){
+            if( $row->area != NULL ){
+                $str_areas .= '
+                    <option value="'.$row->area.','.$row->location_id.'">'.$row->area.'<option>
+                ';
+            }
+        }
+        return $str_areas;
+    }
+
+    function get_areas_rate( $venue_id ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $venue_id ) );
+        foreach($query->result() as $row){
+            echo $row->rate.','.$venue_id.','.$row->street;
+        }
+    }
+
+    function get_cmae( $venue_id ){
+        $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $venue_id ) );
+        return json_encode($query->result());
+    }
+
+    function check_item( $a ){
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'venue' => $a['inp_venue'], 'area' => $a['inp_area'] ) );
+        return $query->num_rows();
+    }
+
+    function load_qty( $a ){
+        $query = $this->db->get_where( 'stocks', array( 'stock_id' => $a['deduct_select'] ) );
+        foreach($query->result() as $row){
+            echo $row->qty;
+        }
+    }
+
+    function load_added_inventory( $trans_id = null ){
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
+        $this->db->where('trans_id',$trans_id);
+        $query = $this->db->get();
+//        $query = $this->db->get_where( 'stocks_sub', array( 'trans_id' => $trans_id ) );
+        return json_encode($query->result());
     }
 }

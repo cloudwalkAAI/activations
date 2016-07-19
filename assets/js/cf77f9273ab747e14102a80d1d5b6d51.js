@@ -552,7 +552,7 @@ $('#emp_form_up').ajaxForm({
 			window.location.href = MyNameSpace.config.base_url+'emp';
         },3000);
 
-        // $('#alert_box_emp_success').val();		
+        // $('#alert_box_emp_success').val();
         // $('#empModalupdate').foundation( 'reveal', 'open' );
         // $('#btn_add_emp_u').prop('disabled', false);
     }
@@ -1625,6 +1625,82 @@ $('#search_accounts').keyup(function() {
 });
 /*end for JO-AD list table*/
 
+/*for inventory current table*/
+function reload_table_cur(){
+    var $rows_cur = $('#tbody_current tr');
+    $('#search_current_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_cur.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_cur();
+/*end for inventory current table*/
+
+/*for deduct table*/
+function reload_table_deduct(){
+    var $rows_deduct_items = $('#tbody_deduct tr');
+    $('#search_deduct_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_deduct_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_deduct();
+/*end for deduct table*/
+
+/*for inv add table*/
+function reload_table_inv_add(){
+    var $rows_added_items = $('#tbody_add tr');
+    $('#search_added_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_added_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_inv_add();
+/*end for inv add table*/
+
+/*for inv ret table*/
+function reload_table_inv_ret(){
+    var $rows_returned_items = $('#tbody_inv_return tr');
+    $('#search_returned_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_returned_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_inv_ret();
+/*end for inv ret table*/
+
+/*for summary_items table*/
+function reload_table_summary_items(){
+    var $rows_summary_items = $('#tbodyAppend tr');
+    $('#search_summary_items').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+        alert
+
+        $rows_summary_items.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_summary_items();
+/*end for summary_items table*/
+
 $('#show_table_mom').on('click', function(){
     $('#tbl_mom').toggle( "slide" );
     $('#tbl_other').hide( "slide" );
@@ -1829,21 +1905,6 @@ $('.btn_do').on('click', function(){
     $('#do_Modal').foundation('reveal', 'open');
 });
 
-$('#bton_do').on('click', function(){
-    $('#form_up_do').ajaxForm({
-        type: 'POST',
-        url: MyNameSpace.config.base_url+'admin/upload_do',
-        beforeSubmit: function(arr, jform, option){
-            $('#bton_do').prop('disabled', true);
-        },
-        success:  function(response){
-            console.log(response);
-            //$('#bton_do').prop('disabled', false);
-            //location.reload();
-        }
-    });
-});
-
 $('#delete_do').on('click', function(){
     $.ajax({
         url: MyNameSpace.config.base_url+'admin/del_do',
@@ -1970,6 +2031,299 @@ $('#btn_add_requ_u').on('click', function(){
     });
 });
 
+/*for cmtuva table*/
+$('#cmtuva_btn').on('click', function(e){
+    e.preventDefault();
+    $('#cmtuva_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'cmtuva/add_location',
+        beforeSubmit: function(arr, jform, option){
+            $('#cmtuva_btn').prop('disabled', true);
+        },
+        success:  function(response){
+            // console.log(response);
+            $('#inp_venue').val('');
+            $('#inp_area').val('');
+            $('#inp_street').val('');
+            $('#inp_rates').val('');
+
+            $('#bton_do').prop('disabled', false);
+            $('#cmtuva_tbody').prepend( response );
+            reload_table_cmtuva();
+        }
+    }).submit();
+});
+
+function reload_table_cmtuva(){
+    var $rows_animation = $('#cmtuva_tbody tr');
+    $('#inp_search_cmtuva').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_animation.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+
+    $('.edit-btn-cmtuva').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/edit_cmtuva',
+            type:'post',
+            data: {
+                'venue_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var res = data.replace("[", "");
+                var res1 = res.replace("]", "");
+                var obj = JSON.parse(res1);
+
+                $('#cmt_joid').val( obj.location_id );
+                $('#cmt_venue').val( obj.venue );
+                $('#cmt_area').val( obj.area );
+                $('#cmt_st').val( obj.street );
+                $('#cmt_rate').val( obj.rate );
+
+                $('#cmt_Modal').foundation('reveal', 'open');
+            }
+        });
+    });
+
+    $('.del-btn-cmtuva').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/del_cmtuva',
+            type:'post',
+            data: {
+                'venue_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var row = document.getElementById(data);
+                row.parentNode.removeChild(row);
+
+                reload_table_cmtuva();
+            }
+        });
+    });
+
+    $('#btn_edit_cmt').on('click', function(e){
+        e.preventDefault();
+        $('#cmt_form').ajaxForm({
+            type: 'POST',
+            url: MyNameSpace.config.base_url+'cmtuva/update_information',
+            beforeSubmit: function(arr, jform, option){
+                $('#btn_edit_cmt').prop('disabled', true);
+            },
+            success:  function(response){
+                var json = JSON.parse(response);
+                $('#cmt_Modal').foundation('reveal', 'close');
+                $( 'tr#cmt_' + json['content_id'] ).replaceWith( json['content'] );
+                reload_table_cmtuva();
+            }
+        }).submit();
+    });
+
+}
+reload_table_cmtuva();
+/*end for cmtuva table*/
+
+/*end cmtuva*/
+
+/*cmtuva ae*/
+$('#cmtuva_sel_venue').on('change', function(e){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'cmtuva/load_areas',
+        type:'post',
+        data: {
+            'venue_name' : $(this).val()
+        },
+        success: function(data) {
+            // console.log(data);
+            $('#cmtuva_sel_area').empty();
+            $('#cmtuva_sel_area').append(data);
+            document.getElementById('cmtuva_sel_area').disabled = false;
+        }
+    });
+});
+
+$('#cmtuva_sel_area').on('change', function(e){
+    var val_arr = $(this).val().split(",");
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'cmtuva/load_rate',
+        type:'post',
+        data: {
+            'area' : val_arr[0],
+            'venue_id' : val_arr[1]
+        },
+        success: function(data) {
+            var dtarr = data.split(",");
+            $('#loc_id').val( dtarr[1] );
+            $('#cmtuva_rate').val( dtarr[0] );
+            $('#cmae_street').val( dtarr[2] );
+        }
+    });
+});
+
+$('#cmtuva_duration').on('keyup', function(e){
+    var esp = $('#cmtuva_duration').val() * $('#cmtuva_rate').val();
+    $('#cmtuva_esp').val(esp);
+});
+
+$('#btn_ae_cmtuva_rate').on('click', function(e){
+    e.preventDefault();
+    $('#cmtuva_ae_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'cmtuva/add_ae_location',
+        beforeSubmit: function(arr, jform, option){
+            $('#btn_ae_cmtuva_rate').prop('disabled', true);
+        },
+        success:  function(response){
+            // console.log(response);
+            $('#cmtuva_sel_venue').val(0);
+            $('#cmtuva_sel_area').val(0);
+            $('#cmtuva_sel_area').prop('disabled', true);
+            $('#cmae_street').val('');
+            $('#cmtuva_date').val('');
+            $('#cmtuva_duration').val('');
+            $('#cmtuva_rate').val('');
+            $('#cmtuva_esp').val('');
+            $('#btn_ae_cmtuva_rate').prop('disabled', false);
+            $('tbody#cmae_tbody').prepend( response );
+            reload_table_cmae();
+        }
+    }).submit();
+});
+
+function reload_table_cmae() {
+    var $rows_animation = $('#cmae_tbody tr');
+    $('#inp_search_cmae').keyup(function () {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_animation.show().filter(function () {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+
+    $('.edit-btn-cmtuva-ae').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/edit_cmae',
+            type:'post',
+            data: {
+                'cmae_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var res = data.replace("[", "");
+                var res1 = res.replace("]", "");
+                var obj = JSON.parse(res1);
+                $('#cm_id').val( obj.cmae_id );
+                $('#cmae_sel_venue').val( obj.venue );
+                $('#cmuae_street').val( obj.street );
+                $('#cmae_date').val( obj.date_start );
+                $('#cmae_duration').val( obj.duration );
+                $('#cmae_rate').val( obj.rate );
+                $('#cmae_esp').val( obj.total_rate );
+
+                $('#cmae_Modal').foundation('reveal', 'open');
+            }
+        });
+    });
+
+    $('.del-btn-cmtuva-ae').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/del_cmae',
+            type:'post',
+            data: {
+                'venue_id' : $(this).attr('alt')
+            },
+            success: function(data) {
+                var row = document.getElementById(data);
+                row.parentNode.removeChild(row);
+            }
+        });
+    });
+
+    $('#cmae_sel_venue').on('change', function(e){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/load_areas',
+            type:'post',
+            data: {
+                'venue_name' : $(this).val()
+            },
+            success: function(data) {
+                // console.log(data);
+                $('#cmae_sel_area').empty();
+                $('#cmae_sel_area').append(data);
+                document.getElementById('cmae_sel_area').disabled = false;
+            }
+        });
+    });
+
+    $('#cmae_sel_area').on('change', function(e){
+        var val_arr = $(this).val().split(",");
+
+        $.ajax({
+            url: MyNameSpace.config.base_url+'cmtuva/load_rate',
+            type:'post',
+            data: {
+                'area' : val_arr[0],
+                'venue_id' : val_arr[1]
+            },
+            success: function(data) {
+                var dtarr = data.split(",");
+                $('#cmae_rate').val( dtarr[0] );
+                $('#cmuae_street').val( dtarr[2] );
+            }
+        });
+    });
+
+    $('#cmae_duration').on('keyup', function(e){
+        var esp = $('#cmae_duration').val() * $('#cmae_rate').val();
+        $('#cmae_esp').val(esp);
+    });
+
+    $('#btn_edit_cmae').on('click', function(e){
+        e.preventDefault();
+        $('#cmae_form').ajaxForm({
+            type: 'POST',
+            url: MyNameSpace.config.base_url+'cmtuva/update_cmae',
+            beforeSubmit: function(arr, jform, option){
+                $('#btn_edit_cmae').prop('disabled', true);
+            },
+            success:  function(response){
+                var json = JSON.parse(response);
+                // console.log(json['content_id']);
+                $( 'tr#cmae_' + json['content_id'] ).replaceWith( json['content'] );
+                $('#btn_edit_cmae').prop('disabled', false);
+                $('#cmae_Modal').foundation('reveal', 'close');
+                reload_table_cmae();
+            }
+        }).submit();
+    });
+}
+reload_table_cmae()
+/*cmtuva end ae*/
+
+
+/*inventory*/
+
+function reload_table_inventory() {
+    var $rows_animation = $('#tbody_current tr');
+    $('#search_current_items').keyup(function () {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+        $rows_animation.show().filter(function () {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+
+/*end inventory*/
+
 function req_btn_reload(){
     $('.edit-btn-req').on('click', function(e){
         e.preventDefault();
@@ -2001,7 +2355,7 @@ $('#bton_bill_u').on('click', function(){
             $('#bton_bill_u').prop('disabled', true);
         },
         success:  function(response){
-            console.log(response);
+            // console.log(response);
             //$('#bton_do').prop('disabled', false);
             //location.reload();
         }
@@ -2010,7 +2364,6 @@ $('#bton_bill_u').on('click', function(){
 
 $('.delete_bd').on('click', function(e){
     e.preventDefault();
-    alert('me');
     $.ajax({
         url: MyNameSpace.config.base_url+'admin/del_bd',
         type:'post',
@@ -2120,26 +2473,26 @@ $('.inp_contract_no').keyup(function(event){
 
 //paid
 $('.btn_pd').on('click', function(){
-    //$('#paid_joid').val( $(this).attr('alt') );
+    $('#paid_joid').val( $(this).attr('alt') );
     //$('#paid_datepicker').val( $(this).attr('value') );
     //$('#paid_color').val( $(this).attr('title') );
     //$('#paid_color').css( 'background-color', $(this).attr('title') );
-    //$('#paid_Modal').foundation('reveal', 'open');
-    $.ajax({
-        url: MyNameSpace.config.base_url+'admin/payment',
-        type:'post',
-        data: {
-            'jo_id' : $(this).attr('alt'),
-            'py' : $(this).val()
-        },
-        beforeSubmit: function(arr, jform, option){
-            //$('#temp_name').val('Please Wait...');
-        },
-        success: function(data) {
-            //console.log(data);
-            location.reload();
-        }
-    });
+    $('#paid_Modal').foundation('reveal', 'open');
+    //$.ajax({
+    //    url: MyNameSpace.config.base_url+'admin/payment',
+    //    type:'post',
+    //    data: {
+    //        'jo_id' : $(this).attr('alt'),
+    //        'py' : $(this).val()
+    //    },
+    //    beforeSubmit: function(arr, jform, option){
+    //        //$('#temp_name').val('Please Wait...');
+    //    },
+    //    success: function(data) {
+    //        //console.log(data);
+    //        location.reload();
+    //    }
+    //});
 });
 
 $('#paid_color').on('change', function(){
@@ -2153,28 +2506,359 @@ $('#bton_paid').on('click', function(){
         beforeSubmit: function(arr, jform, option){
             $('#bton_paid').prop('disabled', true);
         },
-        success:  function(response){
+        success:  function(data){
+            location.reload();
+            //var dtarr = data.split(",");
+            //var index = dtarr[2].lastIndexOf("/") + 1;
+            //var filename = dtarr[2].substr(index);
+            //console.log(data);
+        }
+    });
+});
+
+$('.delete_paid').on('click', function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'admin/del_paid',
+        type:'post',
+        data: {
+            'jo_id' : $(this).attr('alt')
+        },
+        beforeSubmit: function(arr, jform, option){
+            //$('#temp_name').val('Please Wait...');
+        },
+        success: function(data) {
+            //console.log(data);
             location.reload();
         }
     });
 });
 
-//$('#delete_paid').on('click', function(){
-//    $.ajax({
-//        url: MyNameSpace.config.base_url+'admin/del_paid',
-//        type:'post',
-//        data: {
-//            'jo_id' : $(this).attr('alt')
-//        },
-//        beforeSubmit: function(arr, jform, option){
-//            //$('#temp_name').val('Please Wait...');
-//        },
-//        success: function(data) {
-//            //console.log(data);
-//            location.reload();
-//        }
-//    });
-//});
+$('#sel_prod_type').on('change', function(e){
+    e.preventDefault();
+    if( $(this).val() == 'Print Production' ){
+        $('.print_production').css('display', 'block');
+    }else{
+        $('.print_production').css('display', 'none');
+    }
+});
+
+/*inventory*/
+$('#btn_add_inv').on('click',function(){
+    $('#inv_form').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'inventory/save_item',
+        success:  function(response){
+
+            var json = $.parseJSON(response);
+
+            if( json['add_current'] != null ){
+                $('#inv_code').val('');
+                $('#inv_name').val('');
+                $('#inv_delivered_by').val('');
+                $('#inv_received_by').val('');
+                $('#inv_description').val('');
+                $('#inv_qty').val('');
+                $('#inv_expiration').val('');
+
+                $('#alert_add_inv').text();
+                $('#alert_add_inv').text("The item(s) has been successfully recorded.");
+
+                $('#tbody_current').prepend( json['add_current'] );
+                $('#tbody_add').prepend( json['add_transaction'] );
+
+                setTimeout( function(){
+                    $('#alert_add_inv').foundation( 'reveal', 'close' );
+                    $('#alert_add_inv').css( 'display', 'none' );
+                }, 3000);
+            }else{
+                $('#alert_add_inv').text();
+                $('#alert_add_inv').text("The 'item code' or 'item name' exists.");
+                $('#alert_add_inv').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_add_inv').css( 'display', 'none' );
+                }, 5000);
+            }
+
+            $('#alert_add_inv').css( 'display', 'block' );
+        }
+    }).submit();
+});
+
+$('#btn_deduct_inv').on('click',function(){
+    $('#inv_form_deduct').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'inventory/deduct_item',
+        success:  function(response){
+            var json = $.parseJSON(response);
+
+            if( json['deduct_tbl'] != null ){
+                $('#deduct_select').val(0);
+                $('#deduct_jo').val(0);
+                $('#deduct_rece').val('');
+                $('#deduct_desc').val('');
+                $('#deduct_total').val(0);
+                $('#deduct_qty_total').val(0);
+                $('#deduct_qty').val(0);
+                $('#alert_deduct_inv').text();
+                $('#alert_deduct_inv').text("The item has been successfully deducted.");
+                $('#alert_deduct_inv').css( 'display', 'block' );
+
+                var result = json['ori_tbl'].split('***');
+
+
+                if ($('tr#ori').length > 0) {
+                    $('tr#ori' + result[1]).replaceWith(result[0]);
+                }
+                $('#tbody_deduct').prepend( json['deduct_tbl'] );
+
+                // $('#tbody_current').prepend( json['ori_tbl'] );
+
+                setTimeout( function(){
+                    $('#alert_deduct_inv').foundation( 'reveal', 'close' );
+                    $('#alert_deduct_inv').css( 'display', 'none' );
+                }, 3000);
+            }else{
+                $('#alert_deduct_inv').text();
+                $('#alert_deduct_inv').text("Fail to deduct the item.");
+                $('#alert_deduct_inv').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_deduct_inv').css( 'display', 'none' );
+                }, 5000);
+            }
+
+            // $('#alert_add_inv').css( 'display', 'block' );
+        }
+    }).submit();
+});
+
+$('#deduct_select').on('change',function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'inventory/load_qty',
+        type:'post',
+        data: {
+            'deduct_select' : $('#deduct_select').val()
+        },
+        success: function(data) {
+            $('#deduct_qty_total').val(data);
+        }
+    });
+});
+
+$('#deduct_qty').on('keyup',function(e){
+    e.preventDefault();
+    var total = 0;
+    if( $('#deduct_qty_total').val() >= $('#deduct_qty').val() ){
+        $('#btn_deduct_inv').attr( 'disabled', false );
+
+        total = $('#deduct_qty_total').val() - $('#deduct_qty').val();
+
+        $('#deduct_total').val(total);
+    }else{
+        $('#btn_deduct_inv').attr('disabled', 'disabled');
+    }
+});
+
+$('#returned_select, #return_by, #return_recieved, #return_desc, #return_qty').on('keyup',function(e){
+    e.preventDefault();
+    if( $('#returned_select').val() != 0 ){
+        if( $('#return_by').val().trim() != '' ){
+            if( $('#return_recieved').val().trim() != '' ){
+                if( $('#return_desc').val().trim() != '' ){
+                    if( $('#return_qty').val().trim() != '' ){
+                        $('#btn_return_inv').attr( 'disabled', false );
+                    }else {
+                        $('#btn_return_inv').attr( 'disabled', 'disabled' );
+                    }
+                }else {
+                    $('#btn_return_inv').attr( 'disabled', 'disabled' );
+                }
+            }else {
+                $('#btn_return_inv').attr( 'disabled', 'disabled' );
+            }
+        }else {
+            $('#btn_return_inv').attr( 'disabled', 'disabled' );
+        }
+    }else {
+        $('#btn_return_inv').attr( 'disabled', 'disabled' );
+    }
+});
+
+$('#returned_select').on('change',function(e){
+    e.preventDefault();
+    $.ajax({
+        url: MyNameSpace.config.base_url+'inventory/load_qty',
+        type:'post',
+        data: {
+            'deduct_select' : $('#returned_select').val()
+        },
+        success: function(data) {
+            $('#return_current_stocks_hide').val(data);
+            $('#return_current_stocks').val(data);
+        }
+    });
+});
+
+$('#return_qty').on('keyup',function(e){
+    e.preventDefault();
+    var total = 0;
+    if( $('#return_qty').val() > 0 ){
+        $('#btn_deduct_inv').attr( 'disabled', false );
+
+        total = parseInt( $('#return_qty').val() ) + parseInt( $('#return_current_stocks_hide').val() );
+
+        $('#return_current_stocks').val(total);
+    }else{
+        total = parseInt( $('#return_current_stocks_hide').val() )
+        $('#return_current_stocks').val(total);
+    }
+});
+
+$('#btn_return_inv').on('click',function(){
+    $('#inv_form_returned').ajaxForm({
+        type: 'POST',
+        url: MyNameSpace.config.base_url+'inventory/return_item',
+        success:  function(response){
+
+            var json = $.parseJSON(response);
+
+            if( json['return_table'] != null ){
+                $('#returned_select').val('0');
+                $('#return_current_stocks_hide').val('0');
+                $('#return_current_stocks').val('0');
+                $('#return_qty').val('0');
+                $('#return_by').val('');
+                $('#return_recieved').val('');
+                $('#return_desc').val('');
+                $('#alert_returned_inv').text();
+                $('#alert_returned_inv').text("The item has been successfully returned.");
+                $('#alert_returned_inv').css( 'display', 'block' );
+
+                var result = json['ori'].split('***');
+                $('tr#ori' + result[1]).replaceWith(result[0]);
+                $('#tbody_inv_return').prepend( json['return_table'] );
+
+                setTimeout( function(){
+                    $('#alert_returned_inv').foundation( 'reveal', 'close' );
+                    $('#alert_returned_inv').css( 'display', 'none' );
+                }, 3000);
+            }else{
+                $('#alert_returned_inv').text();
+                $('#alert_returned_inv').text("Fail to deduct the item.");
+                $('#alert_returned_inv').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_returned_inv').css( 'display', 'none' );
+                }, 5000);
+            }
+        }
+    }).submit();
+});
+
+function edit_inv(){
+    $('.inv_edit').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'inventory/load_add_inv',
+            type:'post',
+            data: {
+                'jo_id' : $(this).attr('alt')
+            },
+            success: function(response) {
+                var res = response.replace("[", "");
+                var res1 = res.replace("]", "");
+                var json = $.parseJSON(res1);
+                // console.log(json);
+                $('#edit_inv_trans_id').val(json['trans_id']);
+                $('#edit_inv_stck_id').val(json['item_id']);
+                $('#edit_inv_code').val(json['item_code']);
+                $('#edit_inv_name').val(json['item_name']);
+                $('#edit_inv_delivered_by').val(json['personel']);
+                $('#edit_inv_received_by').val(json['received_by']);
+                $('#edit_inv_description').val(json['description']);
+                $('#edit_inv_qty').val(json['item_qty']);
+                $('#edit_inv_expiration').val(json['expiration']);
+
+                $('#inv_edit_item').foundation('reveal','open');
+
+                edit_inv();
+            }
+        });
+    });
+
+    $('#btn_edit_inv').on('click',function(){
+        $('#inv_edit_form').ajaxForm({
+            type: 'POST',
+            url: MyNameSpace.config.base_url+'inventory/update_added_item',
+            success:  function(response){
+                var json = $.parseJSON(response);
+                // console.log(response);
+
+                var result = json['add_current'].split('***');
+                $('tr#ori' + result[1]).replaceWith(result[0]);
+
+                var result = json['add_transaction'].split('***');
+                $('tr#add' + result[1]).replaceWith(result[0]);
+                // $('#tbody_inv_return').prepend( json['return_table'] );
+
+                $('#inv_edit_item').foundation('reveal','close');
+            }
+        }).submit();
+    });
+
+    $('.approvalchk').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'inventory/cm_approval',
+            type:'post',
+            data: {
+                'trans_id' : $(this).attr('alt')
+            },
+            success: function(response) {
+
+                var result = response.split('***');
+                $('tr#trans' + result[1]).replaceWith(result[0]);
+                edit_inv();
+            }
+        });
+    });
+
+    $('.releasechk').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'inventory/cm_release',
+            type:'post',
+            data: {
+                'trans_id' : $(this).attr('alt')
+            },
+            success: function(response) {
+
+                var result = response.split('***');
+                $('tr#trans' + result[1]).replaceWith(result[0]);
+                edit_inv();
+            }
+        });
+    });
+}
+edit_inv();
+
+/*end inventory*/
+
+$(".txtboxToFilter").keydown(function (e) {
+    // Allow: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+        // Allow: Ctrl+A, Command+A
+        (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
+        // Allow: home, end, left, right, down, up
+        (e.keyCode >= 35 && e.keyCode <= 40)) {
+        // let it happen, don't do anything
+        return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+    }
+});
 
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {

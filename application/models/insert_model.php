@@ -37,17 +37,19 @@ class Insert_model extends CI_Model
         $this->email->send();
     }
 
-    function email_calendar( $email_a = null, $fullname = null){
+    function email_calendar( $email_a = null, $fullname = null, $joid = null, $details = null){
         // Sender email address
-        $this->email->from( 'roel.r@cloudwalkdigital.com' );
+        $this->email->from( 'info@activationsadvertising.com' );
         // Receiver email address.for single email
         $this->email->to( $email_a, $fullname);
         // Subject of email
-        $this->email->subject('Email Notification!');
+        $this->email->subject('AAI JO Update');
         // Message in email
-        $this->email->message('Please click the link to enter your password '.base_url('/c?p='.md5($email_a)));
+        $this->email->message('A task has been assigned to you '.$fullname.' with JO number '.$joid.'.'.$details );
         // It returns boolean TRUE or FALSE based on success or failure
         $this->email->send();
+
+//        echo $this->email->print_debugger();
     }
 
     function sms_compiler( $reciever_number = null, $message = null, $insid = null ){
@@ -422,8 +424,73 @@ class Insert_model extends CI_Model
                 {
                     $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
                     foreach($query_emp->result() as $row_emp){
+                        $query_emp = $this->db->get_where('job_order_list', array('jo_id' => $insid));
+                        foreach($query_emp->result() as $row_jo){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                            $str_aeinfo = '';
+
+                            $query_aeinfo = $this->db->get_where('employee_list', array('emp_id' => $row_jo->emp_id));
+                            foreach($query_aeinfo->result() as $ae_info){
+                                $str_aeinfo = $ae_info->sur_name.', '.$ae_info->first_name.' '.$ae_info->middle_name;
+                            }
+
+                            $str_details = '
+                                <br>
+                                <br>
+                                Project Name : '.$row_jo->project_name.'<br>
+                                Project Type : '.$row_jo->project_type.'<br>
+                                AE Assigned : '.$str_aeinfo.'<br>
+                                Brand : '.$row_jo->brand.'<br>
+                                Created : '.$row_jo->date_created.'
+                                <br>
+                            ';
+
+                            $this->email_calendar($row_emp->email, $str_name, $row_jo->jo_number, $str_details);
+
+//                        $this->sms_compiler_task('639464187000','Calendar has been updated');
+//                        $this->sms_compiler_task($row_emp->contact_nos,'Calendar has been updated'); //chikka loaded
+                        }
+                    }
+                }
+            }
+            return $insid;
+        } else {
+            return 'exist';
+        }
+    }
+
+    function submit_date_calendar_prod( $calendar, $target = null ){
+        $insid = 0;
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] , 'jo_id' => $calendar['jo_id'] ) );
+        if ($query->num_rows() == 0) {
+
+            $data = array(
+                'jo_id'         => $calendar['jo_id'],
+                'date'          => $calendar['prod_deadline'],
+                'data'          => $calendar['prod_description'],
+                'dept_id'       => $this->session->userdata('sess_dept'),
+                'peg'           => $target,
+                'size'          => $calendar['prod_size'],
+                'qty'           => $calendar['prod_qty'],
+                'other_details' => $calendar['prod_other_details'],
+                'prod_type'     => $calendar['sel_prod_type'],
+                'print_prod'    => json_encode($calendar['chk_prod']),
+                'endd'          => 'Pending',
+                'employee_id'   => $calendar['sel_prod_emp']
+            );
+
+            $this->db->insert('calendar', $data);
+
+            $insid = $this->db->insert_id();
+
+            $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+            if($query->num_rows() > 0){
+                foreach ($query->result() as $row)
+                {
+                    $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                    foreach($query_emp->result() as $row_emp){
                         $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
-                        $this->email_calendar($row_emp->email, $str_name);
+                        $this->email_calendar($row_emp->email, $str_name, $calendar['jo_id']);
 //                        $this->email_calendar('chabi050613@gmail.com', $str_name);
 
 //                        $this->sms_compiler_task('639464187000','Calendar has been updated');
@@ -462,4 +529,268 @@ class Insert_model extends CI_Model
         }
         return $aryRange;
     }
+
+    function add_venue($a){
+        $str_return = '';
+
+        $data = array(
+            'venue'     => $a['inp_venue'],
+            'area'      => $a['inp_area'],
+            'street'    => $a['inp_street'],
+            'rate'      => $a['inp_rates']
+        );
+
+        $this->db->insert( 'cmtuva_location_list', $data );
+
+        $insid = $this->db->insert_id();
+
+        $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $insid ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $str_return = '
+                    <tr id="cmt_'.$row->location_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+            }
+            return $str_return;
+        }
+    }
+
+    function ins_ae_loc($a){
+
+        $dtr = array();
+        $dtr = explode(",",$a['cmtuva_sel_area']);
+
+        $data = array(
+            'loc_id'        => $a['loc_id'],
+            'jo_id'         => $a['jo_id'],
+            'venue'         => $a['cmtuva_sel_venue'],
+            'area'          => $dtr[0],
+            'street'        => $a['cmae_street'],
+            'date_start'    => $a['cmtuva_date'],
+            'duration'      => $a['cmtuva_duration'],
+            'rate'          => $a['cmtuva_rate'],
+            'total_rate'    => $a['cmtuva_esp']
+        );
+
+        $this->db->insert( 'cmtuva_ae_list', $data );
+
+        $insid = $this->db->insert_id();
+
+        $query = $this->db->get_where( 'cmtuva_ae_list', array( 'cmae_id' => $insid ) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+
+                $str_return = '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $dtr[0] ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+            }
+            return $str_return;
+        }
+    }
+/*inventory*/
+    function add_item_to_inventory( $a = null ){
+        $arr_data = array();
+
+        $data = array(
+            'item_code'     => $a['inv_code'],
+            'item_name'     => $a['inv_name'],
+            'description'   => $a['inv_description'],
+            'qty'           => $a['inv_qty'],
+            'expiration'    => $a['inv_expiration'],
+            'date_stored'   => date("m-d-Y H:i:s")
+        );
+
+        $query = $this->db->get_where('stocks', array( 'item_code' => $a['inv_code'], 'item_name' => $a['inv_name'] ));
+
+        if( $query->num_rows() == 0 ){
+            $this->db->insert( 'stocks', $data );
+
+            $insid_current = $this->db->insert_id();
+
+            $arr_data['add_current'] = $this->get_tables_added( $insid_current );
+            $arr_data['add_transaction'] = $this->table_append_add_item( $a, $insid_current );
+        }
+
+        return json_encode($arr_data);
+    }
+
+    function get_tables_added( $inv_id = null){
+        $str_data = '';
+        $query = $this->db->get_where('stocks', array( 'stock_id' => $inv_id ));
+        foreach ( $query->result() as $row ){
+            $str_data = '
+            <tr id="ori'.$row->stock_id.'">
+                <td>'.$row->item_code.'</td>
+                <td>'.$row->item_name.'</td>
+                <td>'.$row->description.'</td>
+                <td>'.$row->qty.'</td>
+                <td>'.$row->expiration.'</td>
+                <td>'.$row->date_stored.'</td>
+            </tr>
+            ';
+        }
+        return $str_data;
+    }
+
+    function table_append_add_item( $a = null, $item_id = null ){
+        $data = array(
+            'item_id'           => $item_id,
+            'sub_description'   => $a['inv_description'],
+            'item_qty'          => $a['inv_qty'],
+            'process'           => 'add',
+            'personel'          => $a['inv_delivered_by'],
+            'received_by'       => $a['inv_received_by'],
+            'transacted_by'     => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+            'transaction_date'  => date("m-d-Y H:i:s")
+        );
+
+        $this->db->insert( 'stocks_sub', $data );
+
+//        return $this->db->insert_id();
+        return $this->inv_join_tables( $this->db->insert_id() );
+    }
+
+    function inv_join_tables( $tbl_id = null ){
+        $str_add_table = '';
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+        $this->db->where('stocks_sub.trans_id',$tbl_id); // Set Filter
+        $res = $this->db->get();
+
+//        return json_encode($res->result());
+        foreach ( $res->result() as $row ){
+            $str_add_table = '<tr id="add"'.$row->trans_id.'><td>'.$row->item_code.'</td><td>'.$row->item_name.'</td><td>'.$row->description.'</td><td>'.$row->item_qty.'</td><td>'.$row->expiration.'</td><td>Delivered by : '.$row->personel.'<br> Received by : '.$row->received_by.'<br> Transacted by : '.$row->transacted_by.'</td><td>'.$row->date_stored.'</td></tr>';
+        }
+
+        return $str_add_table;
+    }
+
+    function deduct_item( $a ){
+        $data = array(
+            'item_id'           => $a['deduct_select'],
+            'jo_id'             => $a['deduct_jo'],
+            'received_by'       => $a['deduct_rece'],
+            'sub_description'   => $a['deduct_desc'],
+            'item_qty'          => $a['deduct_qty'],
+            'process'           => 'deduct',
+            'deducted_by'       => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+            'transacted_by'       => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+            'transaction_date'  => date("m-d-Y H:i:s")
+        );
+
+        $this->db->insert( 'stocks_sub', $data );
+
+        return $this->inv_join_deduct( $this->db->insert_id() );
+    }
+
+    function inv_join_deduct( $tbl_id = null ){
+        $str_add_table = '';
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+        $this->db->where('stocks_sub.trans_id',$tbl_id); // Set Filter
+        $res = $this->db->get();
+
+//        return json_encode($res->result());
+        $row = $res->row();
+//        foreach ( $res->result() as $row ){
+            $str_add_table = '<tr id="trans'.$row->trans_id.'"><td>'.$row->item_name.'</td><td>'.$row->jo_id.'</td><td>'.$row->received_by.'</td><td>'.$row->sub_description.'</td><td>'.$row->item_qty.'</td><td>'.$row->deducted_by.'</td><td>'.$row->transaction_date.'</td></tr>';
+//        }
+
+        return $str_add_table;
+    }
+
+    function return_item_to_inventory( $a ){
+        $data = array(
+            'item_id'           => $a['returned_select'],
+            'received_by'       => $a['return_recieved'],
+            'personel'          => $a['return_by'],
+            'sub_description'   => $a['return_desc'],
+            'item_qty'          => $a['return_qty'],
+            'process'           => 'return',
+            'transacted_by'     => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+            'transaction_date'  => date("m-d-Y H:i:s")
+        );
+
+        $this->db->insert( 'stocks_sub', $data );
+
+        if( $this->db->insert_id() > 0 ){
+            return $this->return_update($a);
+        }
+    }
+
+    function return_update( $a ){
+        $data = array(
+            'qty'          => $a['return_current_stocks']
+        );
+        $this->db->where( 'stock_id', $a['returned_select'] );
+        $this->db->update( 'stocks', $data );
+
+        $arr_date = array();
+
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
+        $this->db->where('stock_id',$a['returned_select']);
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $arr_date['ori'] = '
+                    <tr id="ori'.$row->stock_id.'">
+                        <td>'.$row->item_code.'</td>
+                        <td>'.$row->item_name.'</td>
+                        <td>'.$row->description.'</td>
+                        <td>'.$row->qty.'</td>
+                        <td>'.$row->expiration.'</td>
+                        <td>'.$row->date_stored.'</td>
+                    </tr>***'.$row->stock_id.'
+                ';
+                $arr_date['return_table'] = '
+                    <tr id="ret'.$row->stock_id.'">
+                        <td>'.$row->item_code.' - '.$row->item_name.'</td>
+                        <td>'.$row->personel.'</td>
+                        <td>'.$row->received_by.'</td>
+                        <td>'.$row->description.'</td>
+                        <td>'.$row->item_qty.'</td>
+                        <td>'.$row->transaction_date.'</td>
+                    </tr>
+                ';
+            }
+        }
+        return json_encode($arr_date);
+    }
+/*end inventory*/
 }

@@ -56,7 +56,7 @@ class Cal_model extends CI_Model {
     function get_calendar_data($year, $month){
 
         $query = $this->db->select('jo_id, date, data, employee_id, endd')->from('calendar')
-            ->like('date', "$year-$month", 'after')->where('endd','Pending')->get();
+            ->like('date', "$year-$month", 'after')->where('endd','Pending')->where('dept_id',$this->session->userdata('sess_dept'))->get();
 
         $cal_data = array();
 

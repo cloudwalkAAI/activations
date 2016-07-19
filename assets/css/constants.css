@@ -281,7 +281,7 @@ form#form_client .rightside label a,form#form_client a#btn_save_client{
 }
 
 .hide-normal{
-    display: none;
+    display: none !important;
 }
 
 span{
@@ -711,4 +711,8 @@ thead tr > th { cursor: pointer; cursor: hand; }
 	color: #0063a6;
 	font-family: montserratSemiBold;
 	border: none;
+}
+
+.btn-delete-edit-size{
+	max-width: 20px !important;
 }

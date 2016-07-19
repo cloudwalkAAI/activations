@@ -95,11 +95,12 @@
     <form id="form_up_paid" action="" method="post">
         <input type="hidden" name="paid_joid" id="paid_joid">
         <input type="text" name="paid_datepicker" id="paid_datepicker" placeholder="Date">
-        <select name="paid_color" id="paid_color">
-            <option value="white" style="background-color:white;">Select Color...</option>
-            <option value="red" style="background-color:red;"></option>
-            <option value="green" style="background-color:green;"></option>
-        </select>
+<!--        <select name="paid_color" id="paid_color" style="display:none;">-->
+<!--            <option value="white" style="background-color:white;">Select Color...</option>-->
+<!--            <option value="red" style="background-color:red;"></option>-->
+<!--            <option value="green" style="background-color:green;"></option>-->
+<!--        </select>-->
+        <input type="file" name="paid_file" id="paid_file">
         <button id="bton_paid" class="tiny">Paid</button>
     </form>
     <a class="close-reveal-modal" aria-label="Close">&#215;</a>
