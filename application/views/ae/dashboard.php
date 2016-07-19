@@ -397,11 +397,14 @@
 						$res = $this->db->get();
 
 						foreach ( $res->result() as $row ){
+
 							echo '
 							<tr id="add'.$row->trans_id.'">
 								<td><a class="inv_edit" href="#" alt="'.$row->trans_id.'">'.$row->item_code.'</a></td>
 								<td>'.$row->item_name.'</td>
-								<td>'.$row->description.'</td>
+								<td>'.
+									$row->description.'
+								</td>
 								<td>'.$row->item_qty.'</td>
 								<td>'.$row->expiration.'</td>
 								<td>Delivered by : '.$row->personel.
@@ -488,6 +491,32 @@
 						$res = $this->db->get();
 
 						foreach ( $res->result() as $row ){
+
+							$str_appr_rel = '';
+							if( !$row->approved_by && ($this->session->userdata('sess_dept') == '6') ){
+								$str_appr_rel .= '
+									<label for="chk_approval">Approve : 
+										<input type="checkbox" class="approvalchk" name="chk_approval" id="chk_approval" alt="'.$row->trans_id.'">
+									</label>
+								';
+							}else{
+								$str_appr_rel .= '
+									Approved By : '.$row->approved_by.'
+								';
+								$str_appr_rel .= '<br>';
+							}
+
+							if( !$row->released_by && ($this->session->userdata('sess_dept') == '8') ){
+								$str_appr_rel .= '
+									<label for="chk_approval">Release : 
+										<input type="checkbox" class="releasechk" name="chk_released" id="chk_released" alt="'.$row->trans_id.'">
+									</label>
+								';
+							}else{
+								$str_appr_rel .= '
+									Released By : '.$row->released_by.'
+								';
+							}
 							echo '
 							<tr id="trans'.$row->trans_id.'">
 								<td>'.$row->item_name.'</td>
@@ -495,7 +524,7 @@
 								<td>'.$row->received_by.'</td>
 								<td>'.$row->sub_description.'</td>
 								<td>'.$row->item_qty.'</td>
-								<td>'.$row->deducted_by.'</td>
+								<td>'.$row->deducted_by.'<br>'.$str_appr_rel.'</td>
 								<td>'.$row->transaction_date.'</td>
 							</tr>
 							';
@@ -559,7 +588,7 @@
 						$this->db->select('*'); // Select field
 						$this->db->from('stocks_sub'); // from Table1
 						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
-						$this->db->order_by("stock_id","desc");
+						$this->db->order_by("trans_id","desc");
 						$this->db->where('process','return');
 						$res_inv = $this->db->get();
 						foreach ( $res_inv->result() as $row_inv ){
@@ -569,7 +598,7 @@
 									<td>'.$row_inv->personel.'</td>
 									<td>'.$row_inv->received_by.'</td>
 									<td>'.$row_inv->description.'</td>
-									<td>'.$row_inv->qty.'</td>
+									<td>'.$row_inv->item_qty.'</td>
 									<td>'.$row_inv->transaction_date.'</td>
 								</tr>
 							';

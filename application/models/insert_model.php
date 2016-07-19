@@ -784,7 +784,7 @@ class Insert_model extends CI_Model
                         <td>'.$row->personel.'</td>
                         <td>'.$row->received_by.'</td>
                         <td>'.$row->description.'</td>
-                        <td>'.$row->qty.'</td>
+                        <td>'.$row->item_qty.'</td>
                         <td>'.$row->transaction_date.'</td>
                     </tr>
                 ';

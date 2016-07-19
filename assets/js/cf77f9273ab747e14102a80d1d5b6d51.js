@@ -2806,6 +2806,39 @@ function edit_inv(){
         }).submit();
     });
 
+    $('.approvalchk').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'inventory/cm_approval',
+            type:'post',
+            data: {
+                'trans_id' : $(this).attr('alt')
+            },
+            success: function(response) {
+
+                var result = response.split('***');
+                $('tr#trans' + result[1]).replaceWith(result[0]);
+                edit_inv();
+            }
+        });
+    });
+
+    $('.releasechk').on('click', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: MyNameSpace.config.base_url+'inventory/cm_release',
+            type:'post',
+            data: {
+                'trans_id' : $(this).attr('alt')
+            },
+            success: function(response) {
+
+                var result = response.split('***');
+                $('tr#trans' + result[1]).replaceWith(result[0]);
+                edit_inv();
+            }
+        });
+    });
 }
 edit_inv();
 

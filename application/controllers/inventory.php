@@ -41,4 +41,11 @@ class Inventory extends CI_Controller
         echo $this->custom_model->update_added_item( $this->input->post() );
     }
 
+    function cm_approval(){
+        echo $this->custom_model->update_cm_approval( $this->input->post() );
+    }
+
+    function cm_release(){
+        echo $this->custom_model->update_cm_release( $this->input->post() );
+    }
 }

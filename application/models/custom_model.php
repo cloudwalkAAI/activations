@@ -495,4 +495,86 @@ class Custom_model extends CI_Model
 
         return $str_add_table;
     }
+
+    function update_cm_approval($e){
+        $e_val = $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename').' - '.date("m-d-Y H:i:s");
+
+        $data = array(
+            'approved_by' => $e_val
+        );
+
+        $this->db->where( 'trans_id', $e['trans_id'] );
+        $this->db->update( 'stocks_sub', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+//            return $e_val;
+            return $this->ret_table_approval_released( $e['trans_id'] );
+        }
+    }
+
+    function update_cm_release($e){
+        $e_val = $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename').' - '.date("m-d-Y H:i:s");
+
+        $data = array(
+            'released_by' => $e_val
+        );
+
+        $this->db->where( 'trans_id', $e['trans_id'] );
+        $this->db->update( 'stocks_sub', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+//            return $e_val;
+            return $this->ret_table_approval_released( $e['trans_id'] );
+        }
+    }
+
+    function ret_table_approval_released($eid){
+        $this->db->select('*'); // Select field
+        $this->db->from('stocks_sub'); // from Table1
+        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+        $this->db->where('process','deduct');
+        $this->db->where('trans_id',$eid);
+        $this->db->order_by("trans_id","DESC");
+        $res = $this->db->get();
+
+        foreach ( $res->result() as $row ){
+
+            $str_appr_rel = '';
+            if( !$row->approved_by && ($this->session->userdata('sess_dept') == '6') ){
+                $str_appr_rel .= '
+									<label for="chk_approval">Approve : 
+										<input type="checkbox" class="chk_approval" name="chk_approval" id="chk_approval" alt="'.$row->trans_id.'">
+									</label>
+								';
+            }else{
+                $str_appr_rel .= '
+									Approved By : '.$row->approved_by.'
+								';
+                $str_appr_rel .= '<br>';
+            }
+
+            if( !$row->released_by && ($this->session->userdata('sess_dept') == '8') ){
+                $str_appr_rel .= '
+									<label for="chk_approval">Release : 
+										<input type="checkbox" class="chk_released" name="chk_released" id="chk_released" alt="'.$row->trans_id.'">
+									</label>
+								';
+            }else{
+                $str_appr_rel .= '
+									Released By : '.$row->released_by.'
+								';
+            }
+            return '
+            <tr id="trans'.$row->trans_id.'">
+                <td>'.$row->item_name.'</td>
+                <td>'.$row->jo_id.'</td>
+                <td>'.$row->received_by.'</td>
+                <td>'.$row->sub_description.'</td>
+                <td>'.$row->item_qty.'</td>
+                <td>'.$row->deducted_by.'<br>'.$str_appr_rel.'</td>
+                <td>'.$row->transaction_date.'</td>
+            </tr>***'.$row->trans_id.'
+            ';
+        }
+    }
 }
