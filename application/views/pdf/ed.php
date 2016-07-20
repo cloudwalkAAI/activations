@@ -41,11 +41,11 @@ $info = json_decode($jo_details);
             <td colspan="2">What :  <span style="color:#2a92db;"><?=isset($edcarray->wt) ? ucfirst($edcarray->wt) : '';?></span></td>
             <td colspan="2">Notes :  <span style="color:#000000;"><?=isset($edcarray->wtad) ? ucfirst($edcarray->wtad) : '';?></span></td>
         </tr>
-        <tr>
+        <tr style="display: none;">
             <td colspan="2">When :  <span style="color:#2a92db;"><?=isset($edcarray->wn) ? ucfirst($edcarray->wn) : '';?></span></td>
             <td colspan="2">Notes :  <span style="color:#000000;"><?=isset($edcarray->wnad) ? ucfirst($edcarray->wnad) : '';?></span></td>
         </tr>
-        <tr>
+        <tr style="display: none;">
             <td colspan="2">Where :  <span style="color:#2a92db;"><?=isset($edcarray->we) ? ucfirst($edcarray->we) : '';?></span></td>
             <td colspan="2">Notes :  <span style="color:#000000;"><?=isset($edcarray->weadd) ? ucfirst($edcarray->weadd) : '';?></span></td>
         </tr>
@@ -61,6 +61,56 @@ $info = json_decode($jo_details);
         <tr>
             <td colspan="4"><?=isset($edcarray->espec) ? $edcarray->espec : '';?></td>
         </tr>
+    </table>
+    <hr>
+    <h2>Venue(s)</h2>
+    <table style="width:100%;" border="1">
+        <thead>
+        <tr>
+            <th width="2">Venue</th>
+            <th width="3">Area</th>
+            <th width="3">Address</th>
+            <th width="1">Start date</th>
+            <th width="1">Duration</th>
+            <th width="1">Rate</th>
+            <th width="1">Total</th>
+        </tr>
+        </thead>
+        <tbody id="cmae_tbody">
+        <?php
+        $query = $this->db->order_by('cmae_id', 'DESC')->get_where( 'cmtuva_ae_list', array('jo_id'=>$info->jo_id) );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $arr_cmae = explode(",",$row->area);
+                if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ) {
+                    echo '
+                        <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $arr_cmae[0] ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                    </tr>
+                    ';
+                }else{
+                    echo '
+                    <tr id="cmae_'.$row->cmae_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>'.$row->date_start.'</td>
+                        <td>'.$row->duration.' day(s)</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->total_rate.'</td>
+                    </tr>
+                ';
+                }
+            }
+        }
+        ?>
+        </tbody>
     </table>
 
     <hr>

@@ -441,7 +441,8 @@ class Insert_model extends CI_Model
                                 Project Type : '.$row_jo->project_type.'<br>
                                 AE Assigned : '.$str_aeinfo.'<br>
                                 Brand : '.$row_jo->brand.'<br>
-                                Created : '.$row_jo->date_created.'
+                                Created : '.$row_jo->date_created.'<br>
+                                Description : '.$row_jo->data.'
                                 <br>
                             ';
 
