@@ -2860,6 +2860,78 @@ $(".txtboxToFilter").keydown(function (e) {
     }
 });
 
+$('#btn-add-other').on('click',function(e){
+    e.preventDefault();
+    $("#tbl_man_req").append('<tr><td><input type="text" name="inp_other_man_req[]" id="inp_other_man_req"></td><td><input type="text" name="inp_other_man_req_needed[]" id="inp_other_man_req_needed"></td><td><input type="text" name="inp_other_man_req_rate[]" id="inp_other_man_req_rate"></td></tr>');
+});
+
+$('#submit_man_req').on('click',function(e){
+    e.preventDefault();
+    $('#man_req_form').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/submit_manpower_req',
+        beforeSubmit:function(){
+            $('#submit_man_req').prop('disabled',true);
+        },
+        success:  function(response){
+            if( response > 0){
+                $('#alert_req_man').text();
+                $('#alert_req_man').text("Success.");
+                $('#alert_req_man').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_req_man').css( 'display', 'none' );
+                }, 5000);
+            }else{
+                $('#alert_req_man').text();
+                $('#alert_req_man').text("Fail.");
+                $('#alert_req_man').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_req_man').css( 'display', 'none' );
+                }, 5000);
+            }
+            $('#submit_man_req').prop('disabled',false);
+        }
+    }).submit();
+});
+
+$('#btn_pool').on('click',function(e){
+    e.preventDefault();
+    $('#pool_form').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/submit_manpower_pool',
+        beforeSubmit:function(){
+            $('#btn_pool').prop('disabled',true);
+        },
+        success:  function(response){
+            if( response > 0){
+                $('#pool_percentage').val(response+'%');
+                $('#div_status').text();
+                $('#div_status').text('Status Done');
+                $('#div_status').css('background','#f57e20');
+                $('#alert_man_pool').text();
+                $('#alert_man_pool').text("Success.");
+                $('#alert_man_pool').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_man_pool').css( 'display', 'none' );
+                }, 5000);
+            }else{
+                $('#alert_man_pool').text();
+                $('#alert_man_pool').text("Fail.");
+                $('#alert_man_pool').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_man_pool').css( 'display', 'none' );
+                }, 5000);
+            }
+            $('#btn_pool').prop('disabled',false);
+        }
+    }).submit();
+});
+
+$('#pool_pulled').on('keyup',function(e){
+    var perce = (parseInt($(this).val()) / parseInt($('#pool_overalltotal').val())) * 100;
+    $('#pool_percentage').val(perce);
+});
+
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {
         filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"

@@ -676,5 +676,52 @@
 			</ul>
 		</div>
 <?php
+	}elseif($this->session->userdata('sess_dept') == '5'){
+?>
+		<div class="column large-2 medium-2 small-12 scrollable_area">
+			<ul class="tabs vertical inv_tabs tbl_bdr" data-tab>
+				<li class="tab-title active"><a class="tbl_bdr" href="#panel_manpower">Manpower</a></li>
+				<li class="tab-title"><a class="tbl_bdr" href="#paneljo">Job Order</a></li>
+			</ul>
+		</div>
+		<div class="column large-8 medium-8 small-12 scrollable_area">
+			<div class="tabs-content">
+				<div class="content active" id="panel_manpower">
+					a
+				</div>
+
+				<div class="content" id="paneljo">
+					b
+				</div>
+			</div>
+		</div>
+		<div class="column large-2 medium-2 small-12 scrollable_area">
+			<ul class="no-bullet" id="jo_table_list">
+				<?php
+				$c = '';
+				$b = '';
+
+				foreach( $jo_list as $row) {
+
+					$query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));
+					$row_company = $query_company->row();
+					if (isset($row_company)) {
+						$c = $row_company->company_name;
+					}
+					?>
+					<li class="jolist mb_jolist jo-item-<?php echo $row['jo_id']; ?>" alt="<?php echo $row['jo_id']; ?>" >
+						<div class="small-12 medium-12 large-12 columns">
+							<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'" style="color:'.$row['jo_color'].';">'.$row['project_name'].'</a>'; ?></h6>
+							<h6 class="jolist_crea"><?php echo '<a href="'.base_url('jo/in?a=').$row['jo_id'].'">JO NO.'.$row['jo_number'].'</a>'; ?></h6>
+							<h6 class="jolist_crea"><?php echo $row['date_created']; ?></h6>
+						</div>
+						<div class="clearfix"></div>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
+		</div>
+<?php
 	}
 ?>

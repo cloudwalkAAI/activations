@@ -233,3 +233,20 @@ $('#btn_update_calendar_prod_u').on('click',function(){
         }
     });
 });
+
+$('#btn_hr').on('click',function(){
+    $('#form_hr_tasks').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/submit_date_calendar_hr',
+        beforeSubmit:function(){
+            $('#btn_hr').prop('disabled',true);
+        },
+        success:  function(response){
+            $('#sel_hr_emp').val(0);
+            $('#hr_deadline').val('');
+            $('#hr_description').val('');
+            $('#hr_tbd').prepend( response );
+            $('#modal_hr_tasks').foundation( 'reveal', 'close' );
+        }
+    });
+});

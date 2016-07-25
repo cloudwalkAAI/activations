@@ -577,4 +577,57 @@ class Custom_model extends CI_Model
             ';
         }
     }
+    function manpower_requirement( $a ){
+        $data = array(
+            'ba'            => $a['inp_req_ba_needed'],
+            'ba_rate'       => $a['inp_req_ba_rate'],
+            'pg'            => $a['inp_req_pg_needed'],
+            'pg_rate'       => $a['inp_req_pg_rate'],
+            'sampler'       => $a['inp_req_needed_sampler'],
+            'sampler_rate'  => $a['inp_req_rate_sampler'],
+            'seller'        => $a['inp_req_needed_seller'],
+            'seller_rate'   => $a['inp_req_rate_seller'],
+            'pa'            => $a['inp_req_needed_pa'],
+            'pa_rate'       => $a['inp_req_rate_pa'],
+            'setup'         => $a['inp_req_needed_set'],
+            'setup_rate'    => $a['inp_req_rate_set'],
+            'stylist'       => $a['inp_req_needed_stylist'],
+            'stylist_rate'  => $a['inp_req_rate_stylist'],
+            'dancer'        => $a['inp_req_needed_dancer'],
+            'dancer_rate'   => $a['inp_req_rate_dancer'],
+            'others'        => $a['inp_other_man_req'],
+            'others_needed' => $a['inp_other_man_req_needed'],
+            'others_rate'   => $a['inp_other_man_req_rate']
+        );
+
+        $query = $this->db->get_where( 'hr_requirements', array( 'jo_id' => $a['hid_req_man_id'] ) );
+        if($query->num_rows() > 0){
+            $this->db->where( 'jo_id', $a['hid_req_man_id'] );
+            $this->db->update( 'hr_requirements', $data );
+        }else{
+            $data['jo_id'] = $a['hid_req_man_id'];
+            $this->db->insert('hr_requirements', $data);
+        }
+
+        return $this->db->affected_rows();
+    }
+
+    function manpower_pool( $a ){
+        $data = array(
+            'pool_start'    => $a['pool_start'],
+            'pool_deadline' => $a['pool_deadline'],
+            'pool_pulled'   => $a['pool_pulled']
+        );
+
+        $query = $this->db->get_where( 'hr_pooling', array( 'jo_id' => $a['pooling_joid'] ) );
+        if($query->num_rows() > 0){
+            $this->db->where( 'jo_id', $a['pooling_joid'] );
+            $this->db->update( 'hr_pooling', $data );
+        }else{
+            $data['jo_id'] = $a['pooling_joid'];
+            $this->db->insert('hr_pooling', $data);
+        }
+
+        return ($a['pool_pulled']/$a['pool_overalltotal']) * 100;
+    }
 }

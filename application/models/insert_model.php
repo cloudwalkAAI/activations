@@ -460,6 +460,66 @@ class Insert_model extends CI_Model
         }
     }
 
+    function hr_update_calendar($calendar){
+        $insid = 0;
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['hr_deadline'], 'employee_id' => $calendar['hr_dept_id'] , 'jo_id' => $calendar['jo_id'] ) );
+        if ($query->num_rows() == 0) {
+
+            $data = array(
+                'jo_id'         => $calendar['hr_jo_id'],
+                'date'          => $calendar['hr_deadline'],
+                'data'          => $calendar['hr_description'],
+                'dept_id'       => $calendar['hr_dept_id'],
+                'endd'          => 'Pending',
+                'employee_id'   => $calendar['sel_hr_emp']
+            );
+
+            $this->db->insert('calendar', $data);
+
+            $insid = $this->db->insert_id();
+
+            $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+            if($query->num_rows() > 0){
+                foreach ($query->result() as $row)
+                {
+                    $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                    foreach($query_emp->result() as $row_emp){
+                        $query_emp = $this->db->get_where('job_order_list', array('jo_id' => $insid));
+                        foreach($query_emp->result() as $row_jo){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                            $str_aeinfo = '';
+
+                            $query_aeinfo = $this->db->get_where('employee_list', array('emp_id' => $row_jo->emp_id));
+                            foreach($query_aeinfo->result() as $ae_info){
+                                $str_aeinfo = $ae_info->sur_name.', '.$ae_info->first_name.' '.$ae_info->middle_name;
+                            }
+
+                            $str_details = '
+                                <br>
+                                <br>
+                                Project Name : '.$row_jo->project_name.'<br>
+                                Project Type : '.$row_jo->project_type.'<br>
+                                AE Assigned : '.$str_aeinfo.'<br>
+                                Brand : '.$row_jo->brand.'<br>
+                                Created : '.$row_jo->date_created.'<br>
+                                Description : '.$row_jo->data.'
+                                <br>
+                            ';
+
+                            $this->email_calendar($row_emp->email, $str_name, $row_jo->jo_number, $str_details);
+
+//                        $this->sms_compiler_task('639464187000','Calendar has been updated');
+//                        $this->sms_compiler_task($row_emp->contact_nos,'Calendar has been updated'); //chikka loaded
+                        }
+                    }
+                }
+            }
+            return $insid;
+        } else {
+            return 'exist';
+        }
+    }
+
     function submit_date_calendar_prod( $calendar, $target = null ){
         $insid = 0;
         $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['deadline'], 'employee_id' => $calendar['dept_id'] , 'jo_id' => $calendar['jo_id'] ) );
