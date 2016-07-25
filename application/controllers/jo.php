@@ -497,6 +497,20 @@ class Jo extends CI_Controller{
         }
     }
 
+    function submit_date_calendar_hr(){
+        $result = $this->get_model->check_date( $this->input->post( 'deadline' ) );
+        if ($result == 'notTaken' ) {
+            $res = $this->insert_model->hr_update_calendar( $this->input->post() );
+            if( $res > 0 ){
+                echo $this->get_model->getlastinsertdate( $res );
+            }else{
+                echo $result;
+            }
+        }else{
+            echo $result;
+        }
+    }
+
     function submit_date_calendar_u(){
 //        print_r($this->input->post());
         echo $this->custom_model->update_task( $this->input->post() );
@@ -515,11 +529,6 @@ class Jo extends CI_Controller{
     }
 
     function submit_date_calendar_prod(){
-//        print_r($this->input->post());
-//        return false;
-
-//        $result = $this->get_model->check_date( $this->input->post( 'prod_deadline' ) );
-//        if ($result == 'notTaken' ) {
         $res = 0;
         if(empty($_FILES)) {
             $res = $this->insert_model->submit_date_calendar_prod( $this->input->post() );
@@ -537,10 +546,6 @@ class Jo extends CI_Controller{
         }else{
             echo $res;
         }
-
-//        }else{
-//            echo $result;
-//        }
     }
 
     function search_ae(){
@@ -599,5 +604,13 @@ class Jo extends CI_Controller{
     function jo_update_req(){
 //        print_r($this->input->post());
         echo $this->custom_model->update_req( $this->input->post() );
+    }
+
+    function submit_manpower_req(){
+        echo $this->custom_model->manpower_requirement($this->input->post());
+    }
+
+    function submit_manpower_pool(){
+        echo $this->custom_model->manpower_pool($this->input->post());
     }
 }
