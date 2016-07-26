@@ -147,7 +147,7 @@
         <div id="prod_panel" class="content">
             <?php
             if( $this->session->userdata('sess_dept') == 7 && $this->session->userdata('sess_post') == 1 ) {
-                ?>
+            ?>
                 <div class="row force_right_align">
                     <button class="small" data-reveal-id="modal_prod_tasks">Add Assignment</button>
                 </div>
@@ -349,23 +349,109 @@
     <li class="accordion-navigation">
         <a class="" href="#hr_panel">HR</a>
         <div id="hr_panel" class="content">
+            <?php
+            if( $this->session->userdata('sess_dept') == 5 && $this->session->userdata('sess_post') == 1 ) {
+            ?>
+                <div class="row force_right_align">
+                    <button class="small" data-reveal-id="modal_hr_tasks">Add Assignment</button>
+                </div>
+
+
+                <div id="modal_hr_tasks" class="reveal-modal small" data-reveal aria-labelledby="modal_hr" aria-hidden="true" role="dialog">
+                    <h2 id="modal_hr">Assign a task to</h2>
+
+                    <div id="hr_box" data-alert class="alert-box warning radius hide-normal">
+                        Date exists
+                        <a href="#" class="close">&times;</a>
+                    </div>
+
+                    <form id="form_hr_tasks" action="" method="post">
+                        <input type="hidden" name="hr_dept_id" value="5">
+                        <input type="hidden" name="hr_jo_id" value="<?=$this->input->get('a');?>">
+                        <select name="sel_hr_emp" id="sel_hr_emp">
+                            <option value="0">Select Employee</option>
+                            <?php
+                            $query = $this->db->get_where('employee_list', array('department' => 5));
+
+                            foreach( $query->result() as $row ){
+                                echo '<option value="'.$row->id.'" >'.$row->sur_name.', '.$row->first_name.' '.$row->middle_name.'</option>';
+                            }
+                            ?>
+                            <!--                        <option value="employee">Employee</option>-->
+                        </select>
+                        <input id="hr_task" type="hidden" name="hr_task" value="<?=$this->input->get('a');?>">
+                        <input id="hr_deadline" type="text" name="hr_deadline" class="req" placeholder="Deadline">
+                        <input id="hr_description" type="text" name="hr_description" class="req" placeholder="Description">
+
+                        <div class="row force_right_align">
+                            <button class="button success" id="btn_hr" type="submit">Assign</button>
+                        </div>
+                    </form>
+                    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+                </div>
+            <?php
+            }
+            ?>
             <div class="row">
                 <table class="twidth">
                     <thead>
                     <tr>
                         <td>Assigned to</td>
-                        <td>Start</td>
                         <td>Deadline</td>
                         <td>Description</td>
+                        <td>Process</td>
+                        <?php
+                        if( $this->session->userdata('sess_dept') == 5 && $this->session->userdata('sess_post') == 1 ){
+                        ?>
+                            <td> </td>
+                        <?php
+                        }
+                        ?>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+
+                    <tbody id="hr_tbd">
+                    <?php
+                    $validat = '';
+                    if( $this->session->userdata('sess_dept') == 5 && $this->session->userdata('sess_post') == 1 ){
+                        $validat = 'validated';
+                    }
+                    $str_name = '';//test
+                    $query = $this->db->get_where( 'calendar', array( 'dept_id' => 5, 'jo_id' => $this->input->get('a') ) );
+                    foreach($query->result() as $row){
+
+                        $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                        foreach($query_emp->result() as $row_emp){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                        }
+
+
+                        if($validat == 'validated'){
+                            echo '
+                                <tr id="'.$row->cal_id.'">
+                                    <td>'.$str_name.'</td>
+                                    <td>'.$row->date.'</td>
+                                    <td>'.$row->data.'</td>
+                                    <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
+                                    <td style="text-align:center;">
+                                        <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                        <a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                    </td>
+                                </tr>
+                            ';
+                        }else{
+                            echo '
+                                <tr>
+                                    <td>'.$str_name.'</td>
+                                    <td>'.$row->date.'</td>
+                                    <td>'.$row->data.'</td>
+                                    <td>'.$row->endd.'</td>
+                                    <td> </td>
+                                </tr>
+                            ';
+                        }
+                    }
+                    ?>
                     </tbody>
                 </table>
             </div>
@@ -410,14 +496,48 @@
                         <td>Description</td>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    <tbody id="">
+                    <?php
+                    $validat = '';
+                    if( $this->session->userdata('sess_dept') == 5 && $this->session->userdata('sess_post') == 1 ){
+                        $validat = 'validated';
+                    }
+                    $str_name = '';//test
+                    $query = $this->db->get_where( 'calendar', array( 'dept_id' => 5, 'jo_id' => $this->input->get('a') ) );
+                    foreach($query->result() as $row){
+
+                        $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                        foreach($query_emp->result() as $row_emp){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                        }
+
+
+                        if($validat == 'validated'){
+                            echo '
+                                <tr id="'.$row->cal_id.'">
+                                    <td>'.$str_name.'</td>
+                                    <td>'.$row->date.'</td>
+                                    <td>'.$row->data.'</td>
+                                    <td><a href="#" class="task_change" alt="'.$row->cal_id.'" value="'.$this->input->get('a').'">'.$row->endd.'</a></td>
+                                    <td style="text-align:center;">
+                                        <a class="edit-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                        <a class="del-btn-task" href="#" alt="'.$row->cal_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                                    </td>
+                                </tr>
+                            ';
+                        }else{
+                            echo '
+                                <tr>
+                                    <td>'.$str_name.'</td>
+                                    <td>'.$row->date.'</td>
+                                    <td>'.$row->data.'</td>
+                                    <td>'.$row->endd.'</td>
+                                    <td> </td>
+                                </tr>
+                            ';
+                        }
+                    }
+                    ?>
                     </tbody>
                 </table>
             </div>

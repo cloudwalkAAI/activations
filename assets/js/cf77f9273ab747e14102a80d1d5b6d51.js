@@ -1690,8 +1690,6 @@ function reload_table_summary_items(){
     var $rows_summary_items = $('#tbodyAppend tr');
     $('#search_summary_items').keyup(function() {
         var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
-        alert
-
         $rows_summary_items.show().filter(function() {
             var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
             return !~text.indexOf(val);
@@ -1699,6 +1697,20 @@ function reload_table_summary_items(){
     });
 }
 reload_table_summary_items();
+/*end for summary_items table*/
+
+/*for manpower table*/
+function reload_table_manpower(){
+    var $rows_manpower = $('#tbody_manpower tr');
+    $('#inp_search_manpower').keyup(function() {
+        var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+        $rows_manpower.show().filter(function() {
+            var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+            return !~text.indexOf(val);
+        }).hide();
+    });
+}
+reload_table_manpower();
 /*end for summary_items table*/
 
 $('#show_table_mom').on('click', function(){
@@ -2046,6 +2058,10 @@ $('#cmtuva_btn').on('click', function(e){
             $('#inp_area').val('');
             $('#inp_street').val('');
             $('#inp_rates').val('');
+            $('#inp_eft').val('');
+            $('#inp_tarhits').val('');
+            $('#inp_achits').val('');
+            $('#inp_lsm').val('');
 
             $('#bton_do').prop('disabled', false);
             $('#cmtuva_tbody').prepend( response );
@@ -2083,6 +2099,10 @@ function reload_table_cmtuva(){
                 $('#cmt_area').val( obj.area );
                 $('#cmt_st').val( obj.street );
                 $('#cmt_rate').val( obj.rate );
+                $('#cmt_eft').val( obj.eft );
+                $('#cmt_tarhits').val( obj.target_hits );
+                $('#cmt_achits').val( obj.actual_hits );
+                $('#cmt_lsm').val( obj.lsm );
 
                 $('#cmt_Modal').foundation('reveal', 'open');
             }
@@ -2859,6 +2879,129 @@ $(".txtboxToFilter").keydown(function (e) {
         e.preventDefault();
     }
 });
+/*hr*/
+$('#btn-add-other').on('click',function(e){
+    e.preventDefault();
+    $("#tbl_man_req").append('<tr><td><input type="text" name="inp_other_man_req[]" id="inp_other_man_req"></td><td><input type="text" name="inp_other_man_req_needed[]" id="inp_other_man_req_needed"></td><td><input type="text" name="inp_other_man_req_rate[]" id="inp_other_man_req_rate"></td></tr>');
+});
+
+$('#submit_man_req').on('click',function(e){
+    e.preventDefault();
+    $('#man_req_form').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/submit_manpower_req',
+        beforeSubmit:function(){
+            $('#submit_man_req').prop('disabled',true);
+        },
+        success:  function(response){
+            if( response > 0){
+                $('#alert_req_man').text();
+                $('#alert_req_man').text("Success.");
+                $('#alert_req_man').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_req_man').css( 'display', 'none' );
+                }, 5000);
+            }else{
+                $('#alert_req_man').text();
+                $('#alert_req_man').text("Fail.");
+                $('#alert_req_man').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_req_man').css( 'display', 'none' );
+                }, 5000);
+            }
+            $('#submit_man_req').prop('disabled',false);
+        }
+    }).submit();
+});
+
+$('#btn_pool').on('click',function(e){
+    e.preventDefault();
+    $('#pool_form').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/submit_manpower_pool',
+        beforeSubmit:function(){
+            $('#btn_pool').prop('disabled',true);
+        },
+        success:  function(response){
+            if( response > 0){
+                $('#pool_percentage').val(response+'%');
+                $('#div_status').text();
+                $('#div_status').text('Status Done');
+                $('#div_status').css('background','#f57e20');
+                $('#alert_man_pool').text();
+                $('#alert_man_pool').text("Success.");
+                $('#alert_man_pool').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_man_pool').css( 'display', 'none' );
+                }, 5000);
+            }else{
+                $('#alert_man_pool').text();
+                $('#alert_man_pool').text("Fail.");
+                $('#alert_man_pool').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_man_pool').css( 'display', 'none' );
+                }, 5000);
+            }
+            $('#btn_pool').prop('disabled',false);
+        }
+    }).submit();
+});
+
+$('#pool_pulled').on('keyup',function(e){
+    var perce = (parseInt($(this).val()) / parseInt($('#pool_overalltotal').val())) * 100;
+    $('#pool_percentage').val(perce);
+});
+
+$('#btn_add_manpower').on('click', function(e){
+    $('#additional_manpower').append('<input type="text" class="brdrRad" name="man_name[]" id="man_name" placeholder="Name">'+
+        '<input type="text" class="brdrRad" name="man_contact[]" id="man_contact" placeholder="Contact">');
+});
+
+$('#btn_save_manpower').on('click',function(e){
+    e.preventDefault();
+    $('#manpower_hr_add').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/submit_manpower_save',
+        beforeSubmit:function(){
+            $('#btn_save_manpower').prop('disabled',true);
+        },
+        success:  function(response){
+            if( response > 0){
+                document.getElementById("manpower_hr_add").reset();
+
+                $('#alert_manhr').text();
+                $('#alert_manhr').text("Success.");
+                $('#alert_manhr').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_manhr').css( 'display', 'none' );
+                }, 5000);
+            }else{
+                $('#alert_manhr').text();
+                $('#alert_manhr').text("Fail.");
+                $('#alert_manhr').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_manhr').css( 'display', 'none' );
+                }, 5000);
+            }
+            $('#btn_save_manpower').prop('disabled',false);
+        }
+    }).submit();
+});
+/*end hr*/
+
+function ClearP(){
+    var inputs = document.getElementsByTagName("man_name");
+    for(var i=0;i<inputs.length;i++)
+        inputs[i].value = '';
+}
+
+function ClearC(){
+    var inputs = document.getElementsByTagName("man_contact");
+    for(var i=0;i<inputs.length;i++)
+        inputs[i].value = '';
+}
+
+
 
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {

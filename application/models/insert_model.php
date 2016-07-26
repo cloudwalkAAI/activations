@@ -441,7 +441,68 @@ class Insert_model extends CI_Model
                                 Project Type : '.$row_jo->project_type.'<br>
                                 AE Assigned : '.$str_aeinfo.'<br>
                                 Brand : '.$row_jo->brand.'<br>
-                                Created : '.$row_jo->date_created.'
+                                Created : '.$row_jo->date_created.'<br>
+                                Description : '.$row_jo->data.'
+                                <br>
+                            ';
+
+                            $this->email_calendar($row_emp->email, $str_name, $row_jo->jo_number, $str_details);
+
+//                        $this->sms_compiler_task('639464187000','Calendar has been updated');
+//                        $this->sms_compiler_task($row_emp->contact_nos,'Calendar has been updated'); //chikka loaded
+                        }
+                    }
+                }
+            }
+            return $insid;
+        } else {
+            return 'exist';
+        }
+    }
+
+    function hr_update_calendar($calendar){
+        $insid = 0;
+        $query = $this->db->get_where( 'calendar', array( 'date' => $calendar['hr_deadline'], 'employee_id' => $calendar['hr_dept_id'] , 'jo_id' => $calendar['jo_id'] ) );
+        if ($query->num_rows() == 0) {
+
+            $data = array(
+                'jo_id'         => $calendar['hr_jo_id'],
+                'date'          => $calendar['hr_deadline'],
+                'data'          => $calendar['hr_description'],
+                'dept_id'       => $calendar['hr_dept_id'],
+                'endd'          => 'Pending',
+                'employee_id'   => $calendar['sel_hr_emp']
+            );
+
+            $this->db->insert('calendar', $data);
+
+            $insid = $this->db->insert_id();
+
+            $query = $this->db->get_where( 'calendar', array( 'cal_id' => $insid ) );
+            if($query->num_rows() > 0){
+                foreach ($query->result() as $row)
+                {
+                    $query_emp = $this->db->get_where('employee_list', array('id' => $row->employee_id));
+                    foreach($query_emp->result() as $row_emp){
+                        $query_emp = $this->db->get_where('job_order_list', array('jo_id' => $insid));
+                        foreach($query_emp->result() as $row_jo){
+                            $str_name = $row_emp->sur_name.', '.$row_emp->first_name.' '.$row_emp->middle_name;
+                            $str_aeinfo = '';
+
+                            $query_aeinfo = $this->db->get_where('employee_list', array('emp_id' => $row_jo->emp_id));
+                            foreach($query_aeinfo->result() as $ae_info){
+                                $str_aeinfo = $ae_info->sur_name.', '.$ae_info->first_name.' '.$ae_info->middle_name;
+                            }
+
+                            $str_details = '
+                                <br>
+                                <br>
+                                Project Name : '.$row_jo->project_name.'<br>
+                                Project Type : '.$row_jo->project_type.'<br>
+                                AE Assigned : '.$str_aeinfo.'<br>
+                                Brand : '.$row_jo->brand.'<br>
+                                Created : '.$row_jo->date_created.'<br>
+                                Description : '.$row_jo->data.'
                                 <br>
                             ';
 
@@ -534,10 +595,14 @@ class Insert_model extends CI_Model
         $str_return = '';
 
         $data = array(
-            'venue'     => $a['inp_venue'],
-            'area'      => $a['inp_area'],
-            'street'    => $a['inp_street'],
-            'rate'      => $a['inp_rates']
+            'venue'         => $a['inp_venue'],
+            'area'          => $a['inp_area'],
+            'street'        => $a['inp_street'],
+            'rate'          => $a['inp_rates'],
+            'eft'           => $a['inp_eft'],
+            'target_hits'   => $a['inp_tarhits'],
+            'actual_hits'   => $a['inp_achits'],
+            'lsm'           => $a['inp_lsm']
         );
 
         $this->db->insert( 'cmtuva_location_list', $data );
@@ -553,6 +618,10 @@ class Insert_model extends CI_Model
                         <td>'.ucfirst( $row->area ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
                         <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->target_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->lsm ).'</td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
                                 <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
@@ -793,4 +862,23 @@ class Insert_model extends CI_Model
         return json_encode($arr_date);
     }
 /*end inventory*/
+
+/*hr dashboard*/
+function msave($manpower){
+
+    foreach ($manpower['man_name'] as $key=>$value){
+        if( !empty($value) && !empty($manpower['man_contact'][$key]) ){
+            $data = array(
+                'name'      => $value,
+                'contact'   => $manpower['man_contact'][$key],
+                'agency'    => $manpower['man_agency'],
+                'added_by'  => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+                'added_date'=> date("m-d-Y H:i:s")
+            );
+            $this->db->insert( 'hr_manpower', $data );
+        }
+    }
+    return $this->db->insert_id();
+}
+/*enc hr dashboard*/
 }

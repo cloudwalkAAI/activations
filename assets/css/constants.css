@@ -716,3 +716,19 @@ thead tr > th { cursor: pointer; cursor: hand; }
 .btn-delete-edit-size{
 	max-width: 20px !important;
 }
+
+.brdrRad{
+	border-radius: 10px !important;
+}
+
+.float-right{
+	float: right;
+}
+
+.float-left{
+	float: left;
+}
+
+.ora_col{
+	background-color: #f27f22;
+}
