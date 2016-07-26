@@ -117,6 +117,7 @@ if( isset( $shared_array ) ){
             <?php
             $this->db->select( 'venue' );
             $this->db->from( 'cmtuva_location_list' );
+            $this->db->group_by('venue');
             $query = $this->db->get();
             if ($query->num_rows() > 0) {
                 foreach ($query->result() as $row) {

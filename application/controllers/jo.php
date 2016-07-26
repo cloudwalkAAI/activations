@@ -613,4 +613,8 @@ class Jo extends CI_Controller{
     function submit_manpower_pool(){
         echo $this->custom_model->manpower_pool($this->input->post());
     }
+
+    function submit_manpower_save(){
+        echo $this->insert_model->msave($this->input->post());
+    }
 }

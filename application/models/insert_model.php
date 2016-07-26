@@ -595,10 +595,14 @@ class Insert_model extends CI_Model
         $str_return = '';
 
         $data = array(
-            'venue'     => $a['inp_venue'],
-            'area'      => $a['inp_area'],
-            'street'    => $a['inp_street'],
-            'rate'      => $a['inp_rates']
+            'venue'         => $a['inp_venue'],
+            'area'          => $a['inp_area'],
+            'street'        => $a['inp_street'],
+            'rate'          => $a['inp_rates'],
+            'eft'           => $a['inp_eft'],
+            'target_hits'   => $a['inp_tarhits'],
+            'actual_hits'   => $a['inp_achits'],
+            'lsm'           => $a['inp_lsm']
         );
 
         $this->db->insert( 'cmtuva_location_list', $data );
@@ -614,6 +618,10 @@ class Insert_model extends CI_Model
                         <td>'.ucfirst( $row->area ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
                         <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->target_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->lsm ).'</td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
                                 <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
@@ -854,4 +862,23 @@ class Insert_model extends CI_Model
         return json_encode($arr_date);
     }
 /*end inventory*/
+
+/*hr dashboard*/
+function msave($manpower){
+
+    foreach ($manpower['man_name'] as $key=>$value){
+        if( !empty($value) && !empty($manpower['man_contact'][$key]) ){
+            $data = array(
+                'name'      => $value,
+                'contact'   => $manpower['man_contact'][$key],
+                'agency'    => $manpower['man_agency'],
+                'added_by'  => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+                'added_date'=> date("m-d-Y H:i:s")
+            );
+            $this->db->insert( 'hr_manpower', $data );
+        }
+    }
+    return $this->db->insert_id();
+}
+/*enc hr dashboard*/
 }

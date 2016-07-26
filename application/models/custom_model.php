@@ -328,7 +328,11 @@ class Custom_model extends CI_Model
             'venue'   => $a['cmt_venue'],
             'area'    => $a['cmt_area'],
             'street'  => $a['cmt_st'],
-            'rate'    => $a['cmt_rate']
+            'rate'    => $a['cmt_rate'],
+            'eft'           => $a['cmt_eft'],
+            'target_hits'   => $a['cmt_tarhits'],
+            'actual_hits'   => $a['cmt_achits'],
+            'lsm'           => $a['cmt_lsm']
         );
         $this->db->where( 'location_id', $a['cmt_joid'] );
         $this->db->update( 'cmtuva_location_list', $data );
@@ -342,6 +346,10 @@ class Custom_model extends CI_Model
                         <td>'.ucfirst( $row->area ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
                         <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->target_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->lsm ).'</td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
                                 <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
