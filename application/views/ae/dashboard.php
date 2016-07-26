@@ -170,6 +170,10 @@
 						<label for="inp_area"><textarea type="text" class="radius" name="inp_area" id="inp_area" placeholder="Area"></textarea></label>
 						<label for="inp_street"><textarea type="text" class="radius" name="inp_street" id="inp_street" placeholder="Address"></textarea></label>
 						<label for="inp_rates"><input type="number" class="radius txtboxToFilter" name="inp_rates" id="inp_rates" placeholder="Rates"></label>
+						<label for="inp_eft"><input type="number" class="radius txtboxToFilter" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
+						<label for="inp_tarhits"><input type="number" class="radius txtboxToFilter" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>
+						<label for="inp_achits"><input type="number" class="radius txtboxToFilter" name="inp_achits" id="inp_achits" placeholder="Actual hits"></label>
+						<label for="inp_lsm"><input type="text" class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM"></label>
 						<a id="cmtuva_btn" href="#" class="button tiny twidth">Add</a>
 					</form>
 				</div>
@@ -183,6 +187,10 @@
 							<th width="3">Area</th>
 							<th width="3">Address</th>
 							<th width="1">Rate</th>
+							<th width="1">Estimated foot traffic</th>
+							<th width="1">Target hits</th>
+							<th width="1">Actual hits</th>
+							<th width="1">LSM</th>
 							<th width="1"> </th>
 						</tr>
 					</thead>
@@ -197,6 +205,10 @@
 											<td>'.ucfirst( $row->area ).'</td>
 											<td>'.ucfirst( $row->street ).'</td>
 											<td>Php '.ucfirst( $row->rate ).'</td>
+											<td>'.ucfirst( $row->eft ).'</td>
+											<td>'.ucfirst( $row->target_hits ).'</td>
+											<td>'.ucfirst( $row->actual_hits ).'</td>
+											<td>'.ucfirst( $row->lsm ).'</td>
 											<td style="text-align:center;">
 												<div class="column large-6 medium-6 small-6">
 													<a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
@@ -256,6 +268,10 @@
 					<textarea name="cmt_area" id="cmt_area" cols="30" rows="3" placeholder="Area"></textarea>
 					<textarea name="cmt_st" id="cmt_st" cols="30" rows="3" placeholder="Address"></textarea>
 					<input type="number" class="radius txtboxToFilter" name="cmt_rate" id="cmt_rate" placeholder="Rate">
+					<input type="number" class="radius txtboxToFilter" name="cmt_eft" id="cmt_eft" placeholder="Estimated foot traffic">
+					<input type="number" class="radius txtboxToFilter" name="cmt_tarhits" id="cmt_tarhits" placeholder="Target hits">
+					<input type="number" class="radius txtboxToFilter" name="cmt_achits" id="cmt_achits" placeholder="Actual hits">
+					<input type="text" class="radius" name="cmt_lsm" id="cmt_lsm" placeholder="LSM">
 					<a href="#" id="btn_edit_cmt" class="button medium right">Update</a>
 				</form>
 
@@ -678,22 +694,57 @@
 <?php
 	}elseif($this->session->userdata('sess_dept') == '5'){
 ?>
-		<div class="column large-2 medium-2 small-12 scrollable_area">
-			<ul class="tabs vertical inv_tabs tbl_bdr" data-tab>
-				<li class="tab-title active"><a class="tbl_bdr" href="#panel_manpower">Manpower</a></li>
-				<li class="tab-title"><a class="tbl_bdr" href="#paneljo">Job Order</a></li>
-			</ul>
-		</div>
-		<div class="column large-8 medium-8 small-12 scrollable_area">
-			<div class="tabs-content">
-				<div class="content active" id="panel_manpower">
-					a
-				</div>
+		<div class="column large-3 medium-3 small-12 scrollable_area">
+			Manpower
 
-				<div class="content" id="paneljo">
-					b
-				</div>
+			<div id="alert_manhr" data-alert class="alert-box alert radius hide-normal">
+				Special characters are not allowed
+				<a href="#" class="close">&times;</a>
 			</div>
+			<form id="manpower_hr_add" action="" method="post">
+				<div class="row">
+					<input type="text" style="" class="brdrRad" name="man_agency" id="man_agency" placeholder="Agency">
+				</div>
+				<div class="row" id="additional_manpower" style="border: 2px solid #000000; padding: 13px 6px 0px 6px; margin-bottom: 6px;">
+					<input type="text" class="brdrRad" name="man_name[]" id="man_name" placeholder="Name">
+					<input type="text" class="brdrRad" name="man_contact[]" id="man_contact" placeholder="Contact">
+				</div>
+				<div class="row">
+					<a id="btn_add_manpower" href="#" class="button small brdrRad twidth">Add another field</a>
+				</div>
+				<div class="row">
+					<a id="btn_save_manpower" href="#" class="button small brdrRad ora_col float-right">Save</a>
+				</div>
+			</form>
+		</div>
+		<div class="column large-7 medium-7 small-12 scrollable_area">
+			<input type="search" class="radius" name="inp_search_manpower" id="inp_search_manpower" placeholder="Search">
+			<table class="twidth">
+				<thead>
+				<tr>
+					<td>Manpower</td>
+					<td>Contact</td>
+					<td>Agency</td>
+				</tr>
+				</thead>
+				<tbody id="tbody_manpower">
+
+				<?php
+				$this->db->order_by("manpower_id", "desc");
+				$query = $this->db->get('hr_manpower');
+				foreach ($query->result() as $row)
+				{
+					echo '
+						<tr>
+							<td>'.$row->name.'</td>
+							<td>'.$row->contact.'</td>
+							<td>'.$row->agency.'</td>
+						</tr>
+					';
+				}
+				?>
+				</tbody>
+			</table>
 		</div>
 		<div class="column large-2 medium-2 small-12 scrollable_area">
 			<ul class="no-bullet" id="jo_table_list">

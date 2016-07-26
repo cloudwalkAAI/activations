@@ -224,7 +224,46 @@ if ( in_array( $this->session->userdata('sess_dept'), $hr_da ) ) {
 		<li class="accordion-navigation">
 			<a href="#panelHr3">Line-up</a>
 			<div id="panelHr3" class="content">
-				Panel 3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+				<a href="#" class="button tiny" data-reveal-id="manpModal"></a>
+				<div id="manpModal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+					<h2 id="modalTitle">Assign Manpower</h2>
+					<input type="text" name="inp_designation" id="inp_designation" placeholder="Designation">
+					<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+				</div>
+				<table class="twidth">
+					<thead>
+					<tr>
+						<th>Designation</th>
+						<th>Manpower</th>
+						<th>Contact</th>
+						<th>Agency</th>
+					</tr>
+					</thead>
+					<tbody id="tbody_manp">
+					<?php
+					$this->db->where('jo_id',$this->input->get('a'));
+					$this->db->order_by("lineup_id","DESC");
+					$res = $this->db->get('hr_line_up');
+					foreach ( $res->result() as $row ){
+						$this->db->where('manpower_id',$row->manpower_id);
+						$res_manp = $this->db->get('hr_manpower');
+						$ret_manp = $res_manp->row();
+
+						echo '
+						<tr id="manp'.$row->lineup_id.'">
+							<td>'.$row->designation.'</td>
+							<td>'.$ret_manp->name.'</td>
+							<td>'.$ret_manp->contact.'</td>
+							<td>'.$ret_manp->agency.'</td>
+						</tr>
+						';
+					}
+					?>
+					<tr>
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
 			</div>
 		</li>
 		<li class="accordion-navigation">
