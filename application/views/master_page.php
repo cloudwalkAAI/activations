@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="<?=base_url('assets/css/constants.css');?>">
     <link rel="stylesheet" href="<?=base_url('assets/css/foundation-icons/foundation-icons.css');?>">
 	<link rel="shortcut icon" type="image/png" href="<?= base_url('assets/img/logos/header_logo-c.png')?>"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
     <script>
         var MyNameSpace = {
             config: {

@@ -864,21 +864,63 @@ class Insert_model extends CI_Model
 /*end inventory*/
 
 /*hr dashboard*/
-function msave($manpower){
+    function msave($manpower){
 
-    foreach ($manpower['man_name'] as $key=>$value){
-        if( !empty($value) && !empty($manpower['man_contact'][$key]) ){
-            $data = array(
-                'name'      => $value,
-                'contact'   => $manpower['man_contact'][$key],
-                'agency'    => $manpower['man_agency'],
-                'added_by'  => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
-                'added_date'=> date("m-d-Y H:i:s")
-            );
-            $this->db->insert( 'hr_manpower', $data );
+        foreach ($manpower['man_name'] as $key=>$value){
+            if( !empty($value) && !empty($manpower['man_contact'][$key]) ){
+                $data = array(
+                    'name'      => $value,
+                    'contact'   => $manpower['man_contact'][$key],
+                    'agency'    => $manpower['man_agency'],
+                    'added_by'  => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+                    'added_date'=> date("m-d-Y H:i:s")
+                );
+                $this->db->insert( 'hr_manpower', $data );
+            }
+        }
+        return $this->db->insert_id();
+    }
+    /*enc hr dashboard*/
+
+    function fill_manpower( $v ){
+        $mp_arr = array();
+        $mp_arr = explode( ",", $v['inp_hrid'] );
+        $str_mpower = '';
+
+        foreach ($mp_arr as $hr_data){
+            $query = $this->db->get_where( 'hr_line_up', array( 'manpower_id' => $hr_data, 'jo_id' => $v['inp_hrjoid'] ) );
+            if( $query->num_rows() <= 0 ){
+                $data = array(
+                    'manpower_id'   => $hr_data,
+                    'jo_id'         => $v['inp_hrjoid'],
+                    'designation'   => $v['inp_designation'],
+                    'assigned_by'   => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
+                    'assigned_date' => date("m-d-Y H:i:s")
+                );
+                $this->db->insert( 'hr_line_up', $data );
+
+                $str_mpower .= $this->manpower_assigned_table( $this->db->insert_id() );
+            }
+        }
+        return $str_mpower;
+    }
+
+    function manpower_assigned_table($ins_id){
+        $this->db->where('lineup_id',$ins_id);
+        $res = $this->db->get('hr_line_up');
+        foreach ( $res->result() as $row ){
+            $this->db->where('manpower_id',$row->manpower_id);
+            $res_manp = $this->db->get('hr_manpower');
+            $ret_manp = $res_manp->row();
+
+            return '
+            <tr id="manp'.$row->lineup_id.'">
+                <td>'.$row->designation.'</td>
+                <td>'.$ret_manp->name.'</td>
+                <td>'.$ret_manp->contact.'</td>
+                <td>'.$ret_manp->agency.'</td>
+            </tr>
+            ';
         }
     }
-    return $this->db->insert_id();
-}
-/*enc hr dashboard*/
 }

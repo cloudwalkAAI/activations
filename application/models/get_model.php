@@ -1447,4 +1447,18 @@ class Get_model extends CI_Model
 //        $query = $this->db->get_where( 'stocks_sub', array( 'trans_id' => $trans_id ) );
         return json_encode($query->result());
     }
+
+    function load_hr_emp(){
+        $this->db->select('*');
+        $this->db->from('hr_manpower');
+        $this->db->where("( name LIKE '%".$this->input->get('term')."%')");
+        $this->db->order_by("name","ASC");
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            $data['id'] = $row->manpower_id;
+            $data['value'] = $row->name;
+            $arr[] = $data;
+        }
+        echo json_encode($arr);
+    }
 }
