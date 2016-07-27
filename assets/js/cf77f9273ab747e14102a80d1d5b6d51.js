@@ -2987,21 +2987,64 @@ $('#btn_save_manpower').on('click',function(e){
         }
     }).submit();
 });
+
+$('#btn_hr_choose').on('click',function(e){
+    e.preventDefault();
+    $('#form_ae_hr').ajaxForm({
+        type: 'post',
+        url: MyNameSpace.config.base_url+'jo/assign_manpower',
+        beforeSubmit:function(){
+            $('#btn_hr_choose').prop('disabled',true);
+        },
+        success:  function(response){
+            if( response != null){
+                document.getElementById("form_ae_hr").reset();
+                $('#log').text('');
+
+                $('#tbody_manp').append(response);
+
+                $('#alert_ae_hr').text();
+                $('#alert_ae_hr').text("Success.");
+                $('#alert_ae_hr').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_ae_hr').css( 'display', 'none' );
+                }, 5000);
+            }else{
+                $('#alert_ae_hr').text();
+                $('#alert_ae_hr').text("Fail.");
+                $('#alert_ae_hr').css( 'display', 'block' );
+                setTimeout( function(){
+                    $('#alert_ae_hr').css( 'display', 'none' );
+                }, 5000);
+            }
+            $('#btn_hr_choose').prop('disabled',false);
+        }
+    }).submit();
+});
 /*end hr*/
 
-function ClearP(){
-    var inputs = document.getElementsByTagName("man_name");
-    for(var i=0;i<inputs.length;i++)
-        inputs[i].value = '';
+/*ae hr*/
+function log( message ) {
+    $( "<div>" ).text( message ).prependTo( "#log" );
+    $( "#log" ).scrollTop( 0 );
 }
 
-function ClearC(){
-    var inputs = document.getElementsByTagName("man_contact");
-    for(var i=0;i<inputs.length;i++)
-        inputs[i].value = '';
-}
-
-
+$( "#inp_hremp" ).autocomplete({
+    source: MyNameSpace.config.base_url+'jo/get_hr_manpower',
+    minLength: 2,
+    select: function( event, ui ) {
+        if( !$('#inp_hrid').val() ){
+            $('#inp_hrid').val(ui.item.id)
+        }else{
+            var cont_string = '';
+            cont_string = $('#inp_hrid').val() + ',' + ui.item.id;
+            $('#inp_hrid').val(cont_string);
+        }
+        log( ui.item ?  ui.item.value :
+        "Nothing selected, input was " + this.value );
+    }
+});
+/*end ae hr*/
 
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {

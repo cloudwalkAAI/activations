@@ -200,7 +200,10 @@ if ( in_array( $this->session->userdata('sess_dept'), $hr_da ) ) {
 					$query_pool = $this->db->get_where( 'hr_pooling', array( 'jo_id' => $this->input->get('a') ) );
 					if($query_pool->num_rows() > 0) {
 						$ret_pool = $query_pool->row();
-						$percentage = ($ret_pool->pool_pulled/$overalltotaltobepulled) * 100;
+                        if( $overalltotaltobepulled != 0 ){
+                            $percentage = ($ret_pool->pool_pulled/$overalltotaltobepulled) * 100;
+                        }
+
 						?>
 						<input type="text" name="pool_start" id="pool_start" placeholder="Start of Pooling" value="<?=$ret_pool->pool_start?>">
 						<input type="text" name="pool_deadline" id="pool_deadline" placeholder="Deadline" value="<?=$ret_pool->pool_deadline?>">
@@ -224,46 +227,59 @@ if ( in_array( $this->session->userdata('sess_dept'), $hr_da ) ) {
 		<li class="accordion-navigation">
 			<a href="#panelHr3">Line-up</a>
 			<div id="panelHr3" class="content">
-				<a href="#" class="button tiny" data-reveal-id="manpModal"></a>
-				<div id="manpModal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-					<h2 id="modalTitle">Assign Manpower</h2>
-					<input type="text" name="inp_designation" id="inp_designation" placeholder="Designation">
-					<a class="close-reveal-modal" aria-label="Close">&#215;</a>
-				</div>
-				<table class="twidth">
-					<thead>
-					<tr>
-						<th>Designation</th>
-						<th>Manpower</th>
-						<th>Contact</th>
-						<th>Agency</th>
-					</tr>
-					</thead>
-					<tbody id="tbody_manp">
-					<?php
-					$this->db->where('jo_id',$this->input->get('a'));
-					$this->db->order_by("lineup_id","DESC");
-					$res = $this->db->get('hr_line_up');
-					foreach ( $res->result() as $row ){
-						$this->db->where('manpower_id',$row->manpower_id);
-						$res_manp = $this->db->get('hr_manpower');
-						$ret_manp = $res_manp->row();
+                <div class="row">
+                    <div class="column large-3 medium-3 small-12">
+                        <h4 class="twidth text-center">Assign Manpower</h4>
+                        <div id="alert_ae_hr" data-alert class="alert-box warning round" style="display: none;">
+                            This is an alert - alert that is rounded.
+                            <a href="#" class="close">&times;</a>
+                        </div>
+                        <form id="form_ae_hr" action="" method="post">
+                            <input type="hidden" name="inp_hrjoid" id="inp_hrjoid" value="<?=$this->input->get('a')?>">
+                            <input type="hidden" name="inp_hrid" id="inp_hrid">
+                            <input type="text" name="inp_designation" id="inp_designation" placeholder="Designation" autocomplete="">
+                            <input type="text" name="inp_hremp" id="inp_hremp" placeholder="Name">
+                            <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+                                Selected:
+                                <div id="log" style="min-height:25px; max-width:200px; overflow: auto;" class="ui-widget-content"></div>
+                            </div>
+                            <button id="btn_hr_choose" class="button ora_col brdrRad float-right tiny" style="margin-top: 5px;">Save</button>
+                        </form>
+                    </div>
+                    <div class="column large-9 medium-9 small-12">
+                        <table class="twidth">
+                            <thead>
+                            <tr>
+                                <th>Designation</th>
+                                <th>Manpower</th>
+                                <th>Contact</th>
+                                <th>Agency</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_manp">
+                            <?php
+                            $this->db->where('jo_id',$this->input->get('a'));
+                            $this->db->order_by("lineup_id","DESC");
+                            $res = $this->db->get('hr_line_up');
+                            foreach ( $res->result() as $row ){
+                                $this->db->where('manpower_id',$row->manpower_id);
+                                $res_manp = $this->db->get('hr_manpower');
+                                $ret_manp = $res_manp->row();
 
-						echo '
-						<tr id="manp'.$row->lineup_id.'">
-							<td>'.$row->designation.'</td>
-							<td>'.$ret_manp->name.'</td>
-							<td>'.$ret_manp->contact.'</td>
-							<td>'.$ret_manp->agency.'</td>
-						</tr>
-						';
-					}
-					?>
-					<tr>
-						<td></td>
-					</tr>
-					</tbody>
-				</table>
+                                echo '
+                                <tr id="manp'.$row->lineup_id.'">
+                                    <td>'.$row->designation.'</td>
+                                    <td>'.$ret_manp->name.'</td>
+                                    <td>'.$ret_manp->contact.'</td>
+                                    <td>'.$ret_manp->agency.'</td>
+                                </tr>
+                                ';
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 			</div>
 		</li>
 		<li class="accordion-navigation">
