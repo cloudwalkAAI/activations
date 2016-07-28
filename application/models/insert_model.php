@@ -595,7 +595,9 @@ class Insert_model extends CI_Model
         $str_return = '';
 
         $data = array(
-            'venue'         => $a['inp_venue'],
+            'category'      => ucfirst($a['inp_category']),
+            'subcategory'   => ucfirst($a['inp_subcategory']),
+            'venue'         => ucwords($a['inp_venue']),
             'area'          => $a['inp_area'],
             'street'        => $a['inp_street'],
             'rate'          => $a['inp_rates'],

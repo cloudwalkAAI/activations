@@ -162,10 +162,12 @@
 	}elseif($this->session->userdata('sess_dept') == '6'){
 ?>
 		<div style="padding: 10px;">
-			<div class="column large-2 medium-2 small-12" style=" border: 1px solid; padding: 5px; border-radius:5px;">
+			<div class="column large-2 medium-2 small-12 scrollable_area" style=" border: 1px solid; padding: 5px; border-radius:5px;">
 				<div class="cmtuva_form">
 					<h3 class="twidth text-center">Location</h3>
 					<form id="cmtuva_form" action="" method="post" autocomplete="on">
+						<label for="inp_category"><input type="text" class="radius" name="inp_category" id="inp_category" placeholder="Category"></label>
+						<label for="inp_subcategory"><input type="text" class="radius" name="inp_subcategory" id="inp_subcategory" placeholder="Subcategory"></label>
 						<label for="inp_venue"><input type="text" class="radius" name="inp_venue" id="inp_venue" placeholder="Venue"></label>
 						<label for="inp_area"><textarea type="text" class="radius" name="inp_area" id="inp_area" placeholder="Area"></textarea></label>
 						<label for="inp_street"><textarea type="text" class="radius" name="inp_street" id="inp_street" placeholder="Address"></textarea></label>
@@ -179,7 +181,32 @@
 				</div>
 			</div>
 			<div class="column large-8 medium-8 small-12 scrollable_area">
-				<input type="search" class="radius" name="inp_search_cmtuva" id="inp_search_cmtuva" placeholder="Search">
+                <div class="row">
+                    <div class="column large-6 medium-6 small-12">
+                        <input type="search" class="radius" name="inp_search_cmtuva" id="inp_search_cmtuva" placeholder="Search">
+                    </div>
+                    <div class="column large-3 medium-3 small-12">
+                        <select name="sel_cmtuva_category" id="sel_cmtuva_category">
+                            <option value="0">Select Category</option>
+                            <?php
+                            $this->db->select('category'); // Select field
+                            $this->db->from('cmtuva_location_list'); // from Table1
+                            $this->db->group_by('category');
+                            $query = $this->db->get();
+                            foreach($query->result() as $row){
+                                if( !empty($row->category) ){
+                                    echo '<option value="'.$row->category.'">'.$row->category.'</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="column large-3 medium-3 small-12">
+                        <select name="sel_cmtuva_sub_category" id="sel_cmtuva_sub_category" style="display:none;">
+                            <option value="0">Select Category</option>
+                        </select>
+                    </div>
+                </div>
 				<table class="twidth" id="cmtuva_table">
 					<thead>
 						<tr>

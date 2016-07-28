@@ -2054,6 +2054,8 @@ $('#cmtuva_btn').on('click', function(e){
         },
         success:  function(response){
             // console.log(response);
+            $('#inp_category').val('');
+            $('#inp_subcategory').val('');
             $('#inp_venue').val('');
             $('#inp_area').val('');
             $('#inp_street').val('');
@@ -2070,7 +2072,60 @@ $('#cmtuva_btn').on('click', function(e){
     }).submit();
 });
 
+$('#sel_cmtuva_category').on('change',function(e){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/check_subcategory',
+        type:'post',
+        data: {
+            'category' : $(this).val()
+        },
+        success: function(data) {
+            var json = $.parseJSON(data);
+            console.log(json['cat_table']);
+            if( json['sel_option'] != '<option value="0">Select Category</option>'){
+                $('#sel_cmtuva_sub_category')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append(json['sel_option'])
+                    .val('0');
+
+                $('#sel_cmtuva_sub_category').css('display','block');
+            }else{
+                $('#sel_cmtuva_sub_category').css('display','none');
+            }
+
+            $('#cmtuva_tbody')
+                .empty()
+                .append(json['cat_table']);
+
+            reload_table_cmtuva();
+        }
+    });
+});
+
 function reload_table_cmtuva(){
+
+    $('#sel_cmtuva_sub_category').on('change',function(e){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/loadbycatesub',
+            type:'post',
+            data: {
+                'category' : $('#sel_cmtuva_category').val(),
+                'subcategory' : $(this).val()
+            },
+            success: function(data) {
+                // var json = $.parseJSON(data);
+
+                $('#cmtuva_tbody')
+                    .empty()
+                    .append(data);
+
+                reload_table_cmtuva();
+            }
+        });
+    });
+
     var $rows_animation = $('#cmtuva_tbody tr');
     $('#inp_search_cmtuva').keyup(function() {
         var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
