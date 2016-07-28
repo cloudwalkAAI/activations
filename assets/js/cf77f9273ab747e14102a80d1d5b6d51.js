@@ -2081,7 +2081,6 @@ $('#sel_cmtuva_category').on('change',function(e){
         },
         success: function(data) {
             var json = $.parseJSON(data);
-            console.log(json['cat_table']);
             if( json['sel_option'] != '<option value="0">Select Category</option>'){
                 $('#sel_cmtuva_sub_category')
                     .find('option')
