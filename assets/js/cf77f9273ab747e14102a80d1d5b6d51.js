@@ -2054,14 +2054,19 @@ $('#cmtuva_btn').on('click', function(e){
         },
         success:  function(response){
             // console.log(response);
-            $('#inp_venue').val('');
-            $('#inp_area').val('');
-            $('#inp_street').val('');
-            $('#inp_rates').val('');
-            $('#inp_eft').val('');
-            $('#inp_tarhits').val('');
-            $('#inp_achits').val('');
-            $('#inp_lsm').val('');
+            // $('#inp_category').val('');
+            // $('#inp_subcategory').val('');
+            // $('#inp_venue').val('');
+            // $('#inp_area').val('');
+            // $('#inp_street').val('');
+            // $('#inp_rates').val('');
+            // $('#inp_eft').val('');
+            // $('#inp_tarhits').val('');
+            // $('#inp_achits').val('');
+            // $('#inp_lsm').val('');
+            // $('#inp_cmremarks').val('');
+            // $('#inp_upload').val('');
+            document.getElementById("cmtuva_form").reset();
 
             $('#bton_do').prop('disabled', false);
             $('#cmtuva_tbody').prepend( response );
@@ -2070,7 +2075,59 @@ $('#cmtuva_btn').on('click', function(e){
     }).submit();
 });
 
+$('#sel_cmtuva_category').on('change',function(e){
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/check_subcategory',
+        type:'post',
+        data: {
+            'category' : $(this).val()
+        },
+        success: function(data) {
+            var json = $.parseJSON(data);
+            if( json['sel_option'] != '<option value="0">Select Category</option>'){
+                $('#sel_cmtuva_sub_category')
+                    .find('option')
+                    .remove()
+                    .end()
+                    .append(json['sel_option'])
+                    .val('0');
+
+                $('#sel_cmtuva_sub_category').css('display','block');
+            }else{
+                $('#sel_cmtuva_sub_category').css('display','none');
+            }
+
+            $('#cmtuva_tbody')
+                .empty()
+                .append(json['cat_table']);
+
+            reload_table_cmtuva();
+        }
+    });
+});
+
 function reload_table_cmtuva(){
+
+    $('#sel_cmtuva_sub_category').on('change',function(e){
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/loadbycatesub',
+            type:'post',
+            data: {
+                'category' : $('#sel_cmtuva_category').val(),
+                'subcategory' : $(this).val()
+            },
+            success: function(data) {
+                // var json = $.parseJSON(data);
+
+                $('#cmtuva_tbody')
+                    .empty()
+                    .append(data);
+
+                reload_table_cmtuva();
+            }
+        });
+    });
+
     var $rows_animation = $('#cmtuva_tbody tr');
     $('#inp_search_cmtuva').keyup(function() {
         var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
@@ -2954,7 +3011,8 @@ $('#pool_pulled').on('keyup',function(e){
 
 $('#btn_add_manpower').on('click', function(e){
     $('#additional_manpower').append('<input type="text" class="brdrRad" name="man_name[]" id="man_name" placeholder="Name">'+
-        '<input type="text" class="brdrRad" name="man_contact[]" id="man_contact" placeholder="Contact">');
+        '<input type="text" class="brdrRad" name="man_contact[]" id="man_contact" placeholder="Contact">'+
+    '<input type="text" class="brdrRad" name="man_type[]" id="man_type" placeholder="Manpower Type">');
 });
 
 $('#btn_save_manpower').on('click',function(e){
@@ -2966,8 +3024,13 @@ $('#btn_save_manpower').on('click',function(e){
             $('#btn_save_manpower').prop('disabled',true);
         },
         success:  function(response){
-            if( response > 0){
+            var json = $.parseJSON(response);
+            console.log(json['response']);
+
+            if( json['response'] > 0 ){
                 document.getElementById("manpower_hr_add").reset();
+
+                $('#tbody_manpower').prepend(json['table']);
 
                 $('#alert_manhr').text();
                 $('#alert_manhr').text("Success.");
@@ -3001,7 +3064,7 @@ $('#btn_hr_choose').on('click',function(e){
                 document.getElementById("form_ae_hr").reset();
                 $('#log').text('');
 
-                $('#tbody_manp').append(response);
+                $('#tbody_manp').prepend(response);
 
                 $('#alert_ae_hr').text();
                 $('#alert_ae_hr').text("Success.");

@@ -1461,4 +1461,87 @@ class Get_model extends CI_Model
         }
         echo json_encode($arr);
     }
+
+    function subcategory( $category ){
+        $r_subcategory = array();
+        $str_optio_category = '<option value="0">Select Category</option>';
+        $this->db->select('subcategory'); // Select field
+        $this->db->from('cmtuva_location_list'); // from Table1
+        $this->db->group_by('subcategory');
+        $this->db->where('category', $category);
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            if(!empty($row->subcategory)){
+                $str_optio_category .= '<option value="'.$row->subcategory.'">'.$row->subcategory.'</option>';
+            }
+        }
+        $r_subcategory['sel_option'] = $str_optio_category;
+        $r_subcategory['cat_table'] = $this->categorytable($category);
+        return json_encode($r_subcategory);
+    }
+
+    function categorytable($c = null){
+        $str_table = '';
+        if($c == '0'){
+            $query = $this->db->order_by('location_id', 'DESC')->get('cmtuva_location_list');
+        }else {
+            $query = $this->db->where('category', $c)->order_by('location_id', 'DESC')->get('cmtuva_location_list');
+        }
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $str_table .= '
+                    <tr id="cmt_'.$row->location_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->target_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->lsm ).'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+            }
+        }
+        return $str_table;
+    }
+
+    function subcat($c,$sc){
+        $str_table = '';
+        $r = array('category' => $c, 'subcategory' => $sc);
+        $query = $this->db->where($r)->order_by('location_id', 'DESC')->get( 'cmtuva_location_list' );
+        if($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $str_table .= '
+                    <tr id="cmt_'.$row->location_id.'">
+                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->street ).'</td>
+                        <td>Php '.ucfirst( $row->rate ).'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->target_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->lsm ).'</td>
+                        <td style="text-align:center;">
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                            </div>
+                            <div class="column large-6 medium-6 small-6">
+                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
+                            </div>
+                        </td>
+                    </tr>
+                ';
+            }
+        }
+        return $str_table;
+    }
 }

@@ -591,18 +591,22 @@ class Insert_model extends CI_Model
         return $aryRange;
     }
 
-    function add_venue($a){
+    function add_venue($a,$targ){
         $str_return = '';
 
         $data = array(
-            'venue'         => $a['inp_venue'],
+            'category'      => ucfirst($a['inp_category']),
+            'subcategory'   => ucfirst($a['inp_subcategory']),
+            'venue'         => ucwords($a['inp_venue']),
             'area'          => $a['inp_area'],
             'street'        => $a['inp_street'],
             'rate'          => $a['inp_rates'],
             'eft'           => $a['inp_eft'],
             'target_hits'   => $a['inp_tarhits'],
             'actual_hits'   => $a['inp_achits'],
-            'lsm'           => $a['inp_lsm']
+            'lsm'           => $a['inp_lsm'],
+            'remarks'       => $a['inp_cmremarks'],
+            'images'        => $targ
         );
 
         $this->db->insert( 'cmtuva_location_list', $data );
@@ -612,6 +616,10 @@ class Insert_model extends CI_Model
         $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $insid ) );
         if($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
+                $preview = '';
+                if( !empty($row->images) ){
+                    $preview = '<a href="'.$row->images.'" target="_blank">Preview</a>';
+                }
                 $str_return = '
                     <tr id="cmt_'.$row->location_id.'">
                         <td>'.ucfirst( $row->venue ).'</td>
@@ -622,6 +630,8 @@ class Insert_model extends CI_Model
                         <td>'.ucfirst( $row->target_hits ).'</td>
                         <td>'.ucfirst( $row->actual_hits ).'</td>
                         <td>'.ucfirst( $row->lsm ).'</td>
+                        <td>'.$row->remarks.'</td>
+                        <td><a href="'.$row->images.'" >Preview</a></td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
                                 <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
@@ -865,20 +875,42 @@ class Insert_model extends CI_Model
 
 /*hr dashboard*/
     function msave($manpower){
-
+        $r_manp = array();
+        $str_table = '';
+        $int_table = 0;
         foreach ($manpower['man_name'] as $key=>$value){
             if( !empty($value) && !empty($manpower['man_contact'][$key]) ){
                 $data = array(
                     'name'      => $value,
                     'contact'   => $manpower['man_contact'][$key],
                     'agency'    => $manpower['man_agency'],
+                    'type'      => $manpower['man_type'][$key],
                     'added_by'  => $this->session->userdata('sess_surname').', '.$this->session->userdata('sess_firstname').' '.$this->session->userdata('sess_middlename'),
                     'added_date'=> date("m-d-Y H:i:s")
                 );
                 $this->db->insert( 'hr_manpower', $data );
+                $int_table += $this->db->insert_id();
             }
+            $str_table .= $this->get_manpower_ae_added($this->db->insert_id());
         }
-        return $this->db->insert_id();
+        $r_manp['response'] = $int_table;
+        $r_manp['table'] = $str_table;
+
+        echo json_encode($r_manp);
+    }
+
+    function get_manpower_ae_added ( $insid = null ){
+        $query = $this->db->get_where('hr_manpower', array('manpower_id'=>$insid));
+        $row = $query->row();
+
+        return '
+            <tr>
+                <td>'.$row->name.'</td>
+                <td>'.$row->contact.'</td>
+                <td>'.$row->type.'</td>
+                <td>'.$row->agency.'</td>
+            </tr>
+        ';
     }
     /*enc hr dashboard*/
 
@@ -906,21 +938,22 @@ class Insert_model extends CI_Model
     }
 
     function manpower_assigned_table($ins_id){
-        $this->db->where('lineup_id',$ins_id);
-        $res = $this->db->get('hr_line_up');
-        foreach ( $res->result() as $row ){
-            $this->db->where('manpower_id',$row->manpower_id);
-            $res_manp = $this->db->get('hr_manpower');
-            $ret_manp = $res_manp->row();
+        $res = $this->db->get_where('hr_line_up', array('lineup_id'=>$ins_id));
+        $row = $res->row();
 
-            return '
-            <tr id="manp'.$row->lineup_id.'">
-                <td>'.$row->designation.'</td>
-                <td>'.$ret_manp->name.'</td>
-                <td>'.$ret_manp->contact.'</td>
-                <td>'.$ret_manp->agency.'</td>
-            </tr>
-            ';
-        }
+        $this->db->where('manpower_id',$row->manpower_id);
+        $res_manp = $this->db->get('hr_manpower');
+        $ret_manp = $res_manp->row();
+
+        return '
+        <tr id="manp'.$row->lineup_id.'">
+            <td>'.$row->designation.'</td>
+            <td>'.$ret_manp->name.'</td>
+            <td>'.$ret_manp->contact.'</td>
+            <td>'.$ret_manp->type.'</td>
+            <td>'.$ret_manp->agency.'</td>
+        </tr>
+        ';
+
     }
 }

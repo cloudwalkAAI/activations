@@ -253,6 +253,7 @@ if ( in_array( $this->session->userdata('sess_dept'), $hr_da ) ) {
                                 <th>Designation</th>
                                 <th>Manpower</th>
                                 <th>Contact</th>
+                                <th>Manpower Type</th>
                                 <th>Agency</th>
                             </tr>
                             </thead>
@@ -271,6 +272,7 @@ if ( in_array( $this->session->userdata('sess_dept'), $hr_da ) ) {
                                     <td>'.$row->designation.'</td>
                                     <td>'.$ret_manp->name.'</td>
                                     <td>'.$ret_manp->contact.'</td>
+                                    <td>'.$ret_manp->type.'</td>
                                     <td>'.$ret_manp->agency.'</td>
                                 </tr>
                                 ';
