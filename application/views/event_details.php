@@ -149,6 +149,7 @@ if( isset( $shared_array ) ){
             <th width="1">Duration</th>
             <th width="1">Rate</th>
             <th width="1">Total</th>
+            <th width="1">Image</th>
             <th> </th>
         </tr>
         </thead>
@@ -159,6 +160,12 @@ if( isset( $shared_array ) ){
             foreach ($query->result() as $row) {
                 $arr_cmae = explode(",",$row->area);
                 if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ) {
+                    $query_img = $this->db->get_where( 'cmtuva_location_list', array('location_id'=>$row->loc_id) );
+                    $row_img = $query_img->row();
+                    $preview = '';
+                    if( !empty($row_img->images) ){
+                        $preview = '<a href="'.base_url($row_img->images).'" target="_blank">Preview</a>';
+                    }
                     echo '
                         <tr id="cmae_'.$row->cmae_id.'">
                         <td>'.ucfirst( $row->venue ).'</td>
@@ -168,6 +175,7 @@ if( isset( $shared_array ) ){
                         <td>'.$row->duration.' day(s)</td>
                         <td>Php '.$row->rate.'</td>
                         <td>Php '.$row->total_rate.'</td>
+                        <td>'.$preview.'</td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
                                 <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>

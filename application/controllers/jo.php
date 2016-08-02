@@ -625,4 +625,12 @@ class Jo extends CI_Controller{
     function assign_manpower(){
         echo $this->insert_model->fill_manpower($this->input->post());
     }
+
+    function check_subcategory(){
+        echo $this->get_model->subcategory( $this->input->post('category') );
+    }
+
+    function loadbycatesub(){
+        echo $this->get_model->subcat( $this->input->post('category'), $this->input->post('subcategory') );
+    }
 }
