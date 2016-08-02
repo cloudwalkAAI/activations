@@ -162,7 +162,7 @@
 	}elseif($this->session->userdata('sess_dept') == '6'){
 ?>
 		<div style="padding: 10px;">
-			<div class="column large-2 medium-2 small-12 scrollable_area" style=" border: 1px solid; padding: 5px; border-radius:5px;">
+			<div class="column large-2 medium-2 small-12 x-content-scroller" style=" border: 1px solid; padding: 5px; border-radius:5px;">
 				<div class="cmtuva_form">
 					<h3 class="twidth text-center">Location</h3>
 					<form id="cmtuva_form" action="" method="post" autocomplete="on">
@@ -176,11 +176,13 @@
 						<label for="inp_tarhits"><input type="number" class="radius txtboxToFilter" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>
 						<label for="inp_achits"><input type="number" class="radius txtboxToFilter" name="inp_achits" id="inp_achits" placeholder="Actual hits"></label>
 						<label for="inp_lsm"><input type="text" class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM"></label>
+						<label for="inp_cmremarks"><textarea type="text" class="radius" name="inp_cmremarks" id="inp_cmremarks" placeholder="Area"></textarea></label>
+						<input type="file" name="inp_upload_cmtuva" id="inp_upload_cmtuva" accept="image/*">
 						<a id="cmtuva_btn" href="#" class="button tiny twidth">Add</a>
 					</form>
 				</div>
 			</div>
-			<div class="column large-8 medium-8 small-12 scrollable_area">
+			<div class="column large-8 medium-8 small-12 x-content-scroller" style="overflow-x: scroll;">
                 <div class="row">
                     <div class="column large-6 medium-6 small-12">
                         <input type="search" class="radius" name="inp_search_cmtuva" id="inp_search_cmtuva" placeholder="Search">
@@ -195,7 +197,7 @@
                             $query = $this->db->get();
                             foreach($query->result() as $row){
                                 if( !empty($row->category) ){
-                                    echo '<option value="'.$row->category.'">'.$row->category.'</option>';
+                                    echo '<option value="'.$row->category.'">'.ucfirst($row->category).'</option>';
                                 }
                             }
                             ?>
@@ -218,6 +220,8 @@
 							<th width="1">Target hits</th>
 							<th width="1">Actual hits</th>
 							<th width="1">LSM</th>
+							<th width="1">Remarks</th>
+							<th width="1">Images</th>
 							<th width="1"> </th>
 						</tr>
 					</thead>
@@ -226,6 +230,10 @@
 							$query = $this->db->order_by('location_id', 'DESC')->get( 'cmtuva_location_list' );
 							if($query->num_rows() > 0) {
 								foreach ($query->result() as $row) {
+									$preview = '';
+									if( !empty($row->images) ){
+										$preview = '<a href="'.$row->images.'" target="_blank">Preview</a>';
+									}
 									echo '
 										<tr id="cmt_'.$row->location_id.'">
 											<td>'.ucfirst( $row->venue ).'</td>
@@ -236,6 +244,8 @@
 											<td>'.ucfirst( $row->target_hits ).'</td>
 											<td>'.ucfirst( $row->actual_hits ).'</td>
 											<td>'.ucfirst( $row->lsm ).'</td>
+											<td>'.$row->remarks.'</td>
+											<td>'.$preview.'</td>
 											<td style="text-align:center;">
 												<div class="column large-6 medium-6 small-6">
 													<a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
@@ -253,7 +263,7 @@
 				</table>
 			</div>
 
-			<div class="column large-2 medium-2 small-12 text-right scrollable_area">
+			<div class="column large-2 medium-2 small-12 text-right x-content-scroller">
 				<ul class="no-bullet" id="jo_table_list">
 					<?php
 					$c = '';
@@ -735,6 +745,7 @@
 				<div class="row" id="additional_manpower" style="border: 2px solid #000000; padding: 13px 6px 0px 6px; margin-bottom: 6px;">
 					<input type="text" class="brdrRad" name="man_name[]" id="man_name" placeholder="Name">
 					<input type="text" class="brdrRad" name="man_contact[]" id="man_contact" placeholder="Contact">
+					<input type="text" class="brdrRad" name="man_type[]" id="man_type" placeholder="Manpower Type">
 				</div>
 				<div class="row">
 					<a id="btn_add_manpower" href="#" class="button small brdrRad twidth">Add another field</a>
@@ -751,6 +762,7 @@
 				<tr>
 					<td>Manpower</td>
 					<td>Contact</td>
+					<td>Manpower Type</td>
 					<td>Agency</td>
 				</tr>
 				</thead>
@@ -765,6 +777,7 @@
 						<tr>
 							<td>'.$row->name.'</td>
 							<td>'.$row->contact.'</td>
+							<td>'.$row->type.'</td>
 							<td>'.$row->agency.'</td>
 						</tr>
 					';

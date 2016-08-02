@@ -732,3 +732,26 @@ thead tr > th { cursor: pointer; cursor: hand; }
 .ora_col{
 	background-color: #f27f22;
 }
+
+.x-content-scroller {
+	min-height: 539px;
+	max-height: 539px;
+	overflow-y: auto;
+	overflow-x: scroll;
+}
+
+.file-upload {
+	position: relative;
+	overflow: hidden;
+	margin: 10px; }
+
+.file-upload input.file-input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0); }

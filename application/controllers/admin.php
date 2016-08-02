@@ -15,10 +15,10 @@ class Admin extends CI_Controller
         $target_file = $target_dir . basename($_FILES["do_file"]["name"]);
 
         $name_space = str_replace(" ", "_", $_FILES["do_file"]["tmp_name"]);
-        echo $name_space;
-//        move_uploaded_file($name_space, $target_file);
-//
-//        echo $this->update_model->upload_attachment( $this->input->post(), $target_file );
+//        echo $name_space;
+        move_uploaded_file($name_space, $target_file);
+
+        echo $this->update_model->upload_attachment( $this->input->post(), $target_file );
     }
 
 //    function check_price(){
