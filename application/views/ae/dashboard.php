@@ -172,9 +172,9 @@
 						<label for="inp_area"><textarea type="text" class="radius" name="inp_area" id="inp_area" placeholder="Area"></textarea></label>
 						<label for="inp_street"><textarea type="text" class="radius" name="inp_street" id="inp_street" placeholder="Address"></textarea></label>
 						<label for="inp_rates"><input type="number" class="radius txtboxToFilter" name="inp_rates" id="inp_rates" placeholder="Rates"></label>
-						<label for="inp_eft"><input type="number" class="radius txtboxToFilter" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
-						<label for="inp_tarhits"><input type="text" class="radius txtboxToFilter" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>
-						<label for="inp_achits"><input type="text" class="radius txtboxToFilter" name="inp_achits" id="inp_achits" placeholder="Actual hits"></label>
+						<label for="inp_eft"><input type="text" class="radius" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
+						<label for="inp_tarhits"><input type="text" class="radius" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>
+						<label for="inp_achits"><input type="text" class="radius" name="inp_achits" id="inp_achits" placeholder="Actual hits"></label>
 						<label for="inp_lsm"><input type="text" class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM"></label>
 						<label for="inp_cmremarks"><textarea type="text" class="radius" name="inp_cmremarks" id="inp_cmremarks" placeholder="Remarks"></textarea></label>
 						<input type="file" name="inp_upload_cmtuva" id="inp_upload_cmtuva" accept="image/*">
