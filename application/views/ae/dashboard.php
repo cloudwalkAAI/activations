@@ -231,8 +231,8 @@
 							if($query->num_rows() > 0) {
 								foreach ($query->result() as $row) {
 									$preview = '';
-									if( !empty($row->images) ){
-										$preview = '<a href="'.$row->images.'" target="_blank">Preview</a>';
+									if( !empty($row->u_images) ){
+										$preview = '<a href="'.$row->u_images.'" target="_blank">Preview</a>';
 									}
 									echo '
 										<tr id="cmt_'.$row->location_id.'">
@@ -305,11 +305,14 @@
 					<textarea name="cmt_area" id="cmt_area" cols="30" rows="3" placeholder="Area"></textarea>
 					<textarea name="cmt_st" id="cmt_st" cols="30" rows="3" placeholder="Address"></textarea>
 					<input type="number" class="radius txtboxToFilter" name="cmt_rate" id="cmt_rate" placeholder="Rate">
-					<input type="number" class="radius txtboxToFilter" name="cmt_eft" id="cmt_eft" placeholder="Estimated foot traffic">
-					<input type="number" class="radius txtboxToFilter" name="cmt_tarhits" id="cmt_tarhits" placeholder="Target hits">
-					<input type="number" class="radius txtboxToFilter" name="cmt_achits" id="cmt_achits" placeholder="Actual hits">
+					<input type="number" class="radius" name="cmt_eft" id="cmt_eft" placeholder="Estimated foot traffic">
+					<input type="number" class="radius" name="cmt_tarhits" id="cmt_tarhits" placeholder="Target hits">
+					<input type="number" class="radius" name="cmt_achits" id="cmt_achits" placeholder="Actual hits">
 					<input type="text" class="radius" name="cmt_lsm" id="cmt_lsm" placeholder="LSM">
-					<a href="#" id="btn_edit_cmt" class="button medium right">Update</a>
+					<input type="text" class="radius" name="cmt_rem" id="cmt_rem" placeholder="Remarks">
+					<input type="file" name="cmt_upload_cmtuva" id="cmt_upload_cmtuva" accept="image/*">
+					<img id="current_image" src="" alt="">
+					<a href="#" id="btn_edit_cmt" class="button medium right" style="margin-top:5px;">Update</a>
 				</form>
 
 				<a class="close-reveal-modal" aria-label="Close">&#215;</a>

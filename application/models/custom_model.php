@@ -325,13 +325,15 @@ class Custom_model extends CI_Model
         $arr_cmt_info = array();
 
         $data = array(
-            'venue'   => $a['cmt_venue'],
-            'area'    => $a['cmt_area'],
-            'street'  => $a['cmt_st'],
-            'rate'    => $a['cmt_rate'],
+            'venue'         => $a['cmt_venue'],
+            'area'          => $a['cmt_area'],
+            'street'        => $a['cmt_st'],
+            'rate'          => $a['cmt_rate'],
             'eft'           => $a['cmt_eft'],
             'target_hits'   => $a['cmt_tarhits'],
             'actual_hits'   => $a['cmt_achits'],
+            'remarks'       => $a['cmt_rem'],
+            'u_images'        => $a['cmt_upload_cmtuva'],
             'lsm'           => $a['cmt_lsm']
         );
         $this->db->where( 'location_id', $a['cmt_joid'] );

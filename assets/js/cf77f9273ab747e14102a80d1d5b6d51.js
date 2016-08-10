@@ -2160,6 +2160,8 @@ function reload_table_cmtuva(){
                 $('#cmt_tarhits').val( obj.target_hits );
                 $('#cmt_achits').val( obj.actual_hits );
                 $('#cmt_lsm').val( obj.lsm );
+                $('#cmt_rem').val( obj.remarks );
+                $('#current_image').attr('src', obj.u_images );
 
                 $('#cmt_Modal').foundation('reveal', 'open');
             }
