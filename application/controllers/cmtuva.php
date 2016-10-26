@@ -14,14 +14,23 @@ class Cmtuva extends CI_Controller
 
     /*CMTUVA Dashboard*/
     function add_location(){
+        $target_dir = '';
+        $target_file = '';
+        $name_space = '';
+
         if( $this->get_model->check_item( $this->input->post() ) <= 0){
 
-            $target_dir = "assets/uploads/cmtuva/";
-            $target_file = $target_dir . basename($_FILES["inp_upload_cmtuva"]["name"]);
+            if (!empty($_FILES['inp_upload_cmtuva']['name'])) {
 
-            $name_space = str_replace(" ", "_", $_FILES["inp_upload_cmtuva"]["tmp_name"]);
+                $target_dir = "assets/uploads/cmtuva/";
+                $target_file = $target_dir . basename($_FILES["inp_upload_cmtuva"]["name"]);
 
-            move_uploaded_file($name_space, $target_file);
+                $name_space = str_replace(" ", "_", $_FILES["inp_upload_cmtuva"]["tmp_name"]);
+
+                move_uploaded_file($name_space, $target_file);
+            }else{
+                $target_file = null;
+            }
 
             echo $this->insert_model->add_venue( $this->input->post(), $target_file );
         }

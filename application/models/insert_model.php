@@ -631,7 +631,7 @@ class Insert_model extends CI_Model
                         <td>'.ucfirst( $row->actual_hits ).'</td>
                         <td>'.ucfirst( $row->lsm ).'</td>
                         <td>'.$row->remarks.'</td>
-                        <td><a href="'.$row->u_images.'" >Preview</a></td>
+                        <td>'.$preview.'</td>
                         <td style="text-align:center;">
                             <div class="column large-6 medium-6 small-6">
                                 <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>

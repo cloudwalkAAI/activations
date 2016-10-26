@@ -306,8 +306,8 @@
 					<textarea name="cmt_st" id="cmt_st" cols="30" rows="3" placeholder="Address"></textarea>
 					<input type="number" class="radius txtboxToFilter" name="cmt_rate" id="cmt_rate" placeholder="Rate">
 					<input type="number" class="radius" name="cmt_eft" id="cmt_eft" placeholder="Estimated foot traffic">
-					<input type="number" class="radius" name="cmt_tarhits" id="cmt_tarhits" placeholder="Target hits">
-					<input type="number" class="radius" name="cmt_achits" id="cmt_achits" placeholder="Actual hits">
+					<input type="text" class="radius" name="cmt_tarhits" id="cmt_tarhits" placeholder="Target hits">
+					<input type="text" class="radius" name="cmt_achits" id="cmt_achits" placeholder="Actual hits">
 					<input type="text" class="radius" name="cmt_lsm" id="cmt_lsm" placeholder="LSM">
 					<input type="text" class="radius" name="cmt_rem" id="cmt_rem" placeholder="Remarks">
 					<input type="file" name="cmt_upload_cmtuva" id="cmt_upload_cmtuva" accept="image/*">
@@ -329,7 +329,6 @@
 				<li class="tab-title"><a class="tbl_bdr" href="#panel41">Returned Items(s)</a></li>
 				<li class="tab-title"><a class="tbl_bdr" href="#panel51">Summary</a></li>
 			</ul>
-
 		</div>
 		<div class="column large-8 medium-8 small-12 scrollable_area">
 			<div class="tabs-content">
