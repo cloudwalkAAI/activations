@@ -7,6 +7,25 @@ $info = json_decode($jo_details);
             <img class="img-responsive" src="<?= base_url( 'assets/img/profile/'.$info->emp_info[0]->img_loc ) ?>" onError="this.onerror=null;this.src='<?= base_url( 'assets/img/profile/default.jpg' ) ?>';" alt="">
         </div>
         <?php
+
+
+        if( isset( $shared_array ) ){
+            if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( $this->session->userdata('sess_id') == $did ) ) {
+                $str_display = 'style="display:block;"';
+                $str_disa = '';
+            }else{
+                $str_display = 'style="display:none;"';
+                $str_disa = 'disabled';
+            }
+        }else{
+            if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) ) {
+                $str_display = 'style="display:block;"';
+                $str_disa = '';
+            }else{
+                $str_display = 'style="display:none;"';
+                $str_disa = 'disabled';
+            }
+        }
         echo '<h3>'.$info->emp_info[0]->sur_name.', '.$info->emp_info[0]->first_name.' '.$info->emp_info[0]->middle_name.'</h3>';
         ?>
         <!--<h6>Position</h6>-->
@@ -268,24 +287,6 @@ $info = json_decode($jo_details);
                         if (isset($row)) {
                             $shared_array = explode( ',', $row->shared_to );
                             $did = $row->emp_id;
-                        }
-                    }
-
-                    if( isset( $shared_array ) ){
-                        if ( in_array( $this->session->userdata('sess_id'), $shared_array ) || ( $this->session->userdata('sess_id') == $did ) ) {
-                            $str_display = 'style="display:block;"';
-                            $str_disa = '';
-                        }else{
-                            $str_display = 'style="display:none;"';
-                            $str_disa = 'disabled';
-                        }
-                    }else{
-                        if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) ) {
-                            $str_display = 'style="display:block;"';
-                            $str_disa = '';
-                        }else{
-                            $str_display = 'style="display:none;"';
-                            $str_disa = 'disabled';
                         }
                     }
                     ?>

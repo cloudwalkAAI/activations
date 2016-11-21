@@ -325,16 +325,27 @@ class Custom_model extends CI_Model
         $arr_cmt_info = array();
 
         $data = array(
-            'venue'         => $a['cmt_venue'],
-            'area'          => $a['cmt_area'],
-            'street'        => $a['cmt_st'],
-            'rate'          => $a['cmt_rate'],
-            'eft'           => $a['cmt_eft'],
-            'target_hits'   => $a['cmt_tarhits'],
-            'actual_hits'   => $a['cmt_achits'],
-            'remarks'       => $a['cmt_rem'],
-            'u_images'        => $a['cmt_upload_cmtuva'],
-            'lsm'           => $a['cmt_lsm']
+            'area'              => $a['cmt_area'],
+            'sub_Area'          => $a['cmt_Subarea'],
+            'venue'             => $a['cmt_venue'],
+            'street'            => $a['cmt_st'],
+            'lsm'               => $a['cmt_lsm'],
+            'rate'              => $a['cmt_rate'],
+            'rate_Max'          => $a['cmt_rateMax'],
+            'eft'               => $a['cmt_eft'],
+            'eft_male'          => $a['cmt_eft_m'],
+            'eft_female'        => $a['cmt_eft_f'],
+            'actual_hits'       => $a['cmt_achits'],
+            'actual_hits_f'     => $a['cmt_achits_f'],
+            'actual_dry_m'      => $a['cmt_dry_male'],
+            'actual_dry_f'      => $a['cmt_dry_female'],
+            'actual_exper_m'    => $a['cmt_exper_male'],
+            'actual_exper_f'    => $a['cmt_exper_female'],
+            'contact_person'    => $a['cmt_cname'],
+            'contact_email'     => $a['cmt_email'],
+            'contact_number'    => $a['cmt_phone'],
+            'remarks'           => $a['cmt_rem'],
+            'u_images'          => $a['cmt_upload_cmtuva']
         );
         $this->db->where( 'location_id', $a['cmt_joid'] );
         $this->db->update( 'cmtuva_location_list', $data );
@@ -342,24 +353,39 @@ class Custom_model extends CI_Model
         $query = $this->db->get_where( 'cmtuva_location_list', array( 'location_id' => $a['cmt_joid'] ) );
         if($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
+                $preview = '';
+                if( !empty($row->images) ){
+                    $preview = '<a href="'.$row->images.'" target="_blank">Preview</a>';
+                }
                 $arr_cmt_info['content'] = '
                     <tr id="cmt_'.$row->location_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->category ).'</td>
+                        <td>'.ucfirst( $row->subcategory ).'</td>
                         <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->sub_Area ).'</td>
+                        <td>'.ucfirst( $row->venue ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
-                        <td>Php '.ucfirst( $row->rate ).'</td>
-                        <td>'.ucfirst( $row->eft ).'</td>
-                        <td>'.ucfirst( $row->target_hits ).'</td>
-                        <td>'.ucfirst( $row->actual_hits ).'</td>
                         <td>'.ucfirst( $row->lsm ).'</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->rate_Max.'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->eft_male ).'</td>
+                        <td>'.ucfirst( $row->eft_female ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits_f ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_m ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_f ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_m ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_f ).'</td>
+                        <td>'.ucfirst( $row->contact_person ).'</td>
+                        <td>'.$row->contact_email.'</td>
+                        <td>'.ucfirst( $row->contact_number ).'</td>
+                        <td>'.$row->remarks.'</td>
+                        <td>'.$preview.'</td>
                         <td style="text-align:center;">
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                            </div>
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
-                            </div>
+                                    <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
                         </td>
+                        <td><a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td>
                     </tr>
                 ';
 

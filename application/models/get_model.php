@@ -1488,25 +1488,41 @@ class Get_model extends CI_Model
             $query = $this->db->where('category', $c)->order_by('location_id', 'DESC')->get('cmtuva_location_list');
         }
         if($query->num_rows() > 0) {
+            $str_table .= '<tr><td colspan="26" class="text-center">No. of Brgys '.$query->num_rows().'</td></tr>';
             foreach ($query->result() as $row) {
+                $preview = '';
+                if( !empty($row->images) ){
+                    $preview = '<a href="'.$row->images.'" target="_blank">Preview</a>';
+                }
                 $str_table .= '
                     <tr id="cmt_'.$row->location_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->category ).'</td>
+                        <td>'.ucfirst( $row->subcategory ).'</td>
                         <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->sub_Area ).'</td>
+                        <td>'.ucfirst( $row->venue ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
-                        <td>Php '.ucfirst( $row->rate ).'</td>
-                        <td>'.ucfirst( $row->eft ).'</td>
-                        <td>'.ucfirst( $row->target_hits ).'</td>
-                        <td>'.ucfirst( $row->actual_hits ).'</td>
                         <td>'.ucfirst( $row->lsm ).'</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->rate_Max.'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->eft_male ).'</td>
+                        <td>'.ucfirst( $row->eft_female ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits_f ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_m ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_f ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_m ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_f ).'</td>
+                        <td>'.ucfirst( $row->contact_person ).'</td>
+                        <td>'.$row->contact_email.'</td>
+                        <td>'.ucfirst( $row->contact_number ).'</td>
+                        <td>'.$row->remarks.'</td>
+                        <td>'.$preview.'</td>
                         <td style="text-align:center;">
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                            </div>
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
-                            </div>
+                                    <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
                         </td>
+                        <td><a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td>
                     </tr>
                 ';
             }
@@ -1519,25 +1535,41 @@ class Get_model extends CI_Model
         $r = array('category' => $c, 'subcategory' => $sc);
         $query = $this->db->where($r)->order_by('location_id', 'DESC')->get( 'cmtuva_location_list' );
         if($query->num_rows() > 0) {
+            $str_table .= '<tr><td colspan="26" class="text-center">No. of Brgys '.$query->num_rows().'</td></tr>';
             foreach ($query->result() as $row) {
+                $preview = '';
+                if( !empty($row->images) ){
+                    $preview = '<a href="'.$row->images.'" target="_blank">Preview</a>';
+                }
                 $str_table .= '
                     <tr id="cmt_'.$row->location_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->category ).'</td>
+                        <td>'.ucfirst( $row->subcategory ).'</td>
                         <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->sub_Area ).'</td>
+                        <td>'.ucfirst( $row->venue ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
-                        <td>Php '.ucfirst( $row->rate ).'</td>
-                        <td>'.ucfirst( $row->eft ).'</td>
-                        <td>'.ucfirst( $row->target_hits ).'</td>
-                        <td>'.ucfirst( $row->actual_hits ).'</td>
                         <td>'.ucfirst( $row->lsm ).'</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->rate_Max.'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->eft_male ).'</td>
+                        <td>'.ucfirst( $row->eft_female ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits_f ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_m ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_f ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_m ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_f ).'</td>
+                        <td>'.ucfirst( $row->contact_person ).'</td>
+                        <td>'.$row->contact_email.'</td>
+                        <td>'.ucfirst( $row->contact_number ).'</td>
+                        <td>'.$row->remarks.'</td>
+                        <td>'.$preview.'</td>
                         <td style="text-align:center;">
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                            </div>
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
-                            </div>
+                                    <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
                         </td>
+                        <td><a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td>
                     </tr>
                 ';
             }

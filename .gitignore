@@ -14,3 +14,5 @@ application/config/config.php
 *.xml
 assets/uploads/bill/core.pdf
 assets/uploads/paid/core.pdf
+application/config/config.php
+application/config/database.php

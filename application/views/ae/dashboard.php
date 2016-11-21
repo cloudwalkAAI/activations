@@ -168,14 +168,30 @@
 					<form id="cmtuva_form" action="" method="post" autocomplete="on">
 						<label for="inp_category"><input type="text" class="radius" name="inp_category" id="inp_category" placeholder="Category"></label>
 						<label for="inp_subcategory"><input type="text" class="radius" name="inp_subcategory" id="inp_subcategory" placeholder="Subcategory"></label>
-						<label for="inp_venue"><input type="text" class="radius" name="inp_venue" id="inp_venue" placeholder="Venue"></label>
-						<label for="inp_area"><textarea type="text" class="radius" name="inp_area" id="inp_area" placeholder="Area"></textarea></label>
+                        <label for="inp_area"><textarea type="text" class="radius" name="inp_area" id="inp_area" placeholder="Area"></textarea></label>
+                        <label for="inp_SubArea"><textarea type="text" class="radius" name="inp_SubArea" id="inp_SubArea" placeholder="Subarea"></textarea></label>
+                        <label for="inp_venue"><input type="text" class="radius" name="inp_venue" id="inp_venue" placeholder="Venue"></label>
 						<label for="inp_street"><textarea type="text" class="radius" name="inp_street" id="inp_street" placeholder="Address"></textarea></label>
-						<label for="inp_rates"><input type="number" class="radius txtboxToFilter" name="inp_rates" id="inp_rates" placeholder="Rates"></label>
-						<label for="inp_eft"><input type="text" class="radius" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
-						<label for="inp_tarhits"><input type="text" class="radius" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>
-						<label for="inp_achits"><input type="text" class="radius" name="inp_achits" id="inp_achits" placeholder="Actual hits"></label>
-						<label for="inp_lsm"><input type="text" class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM"></label>
+                        <label for="inp_lsm"><input type="text" class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM"></label>
+                        <label>Rates</label>
+                        <label for="inp_ratesMin"><input type="number" class="radius txtboxToFilter" name="inp_ratesMin" id="inp_ratesMin" placeholder="Min Rate"></label>
+                        <label for="inp_ratesMax"><input type="number" class="radius txtboxToFilter" name="inp_ratesMax" id="inp_ratesMax" placeholder="Max Rate"></label>
+                        <label>Estimated Foot Traffic</label>
+                        <label for="inp_eft"><input type="text" class="radius" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
+                        <label for="inp_eft_male"><input type="text" class="radius" name="inp_eft_male" id="inp_eft_male" placeholder="EFT Male"></label>
+                        <label for="inp_eft_female"><input type="text" class="radius" name="inp_eft_female" id="inp_eft_female" placeholder="EFT Female"></label>
+<!--                        <label for="inp_tarhits"><input type="text" class="radius" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>-->
+                        <label>Actual Hits</label>
+                        <label for="inp_achits_m"><input type="text" class="radius" name="inp_achits_m" id="inp_achits_m" placeholder="Actual hits (Male)"></label>
+                        <label for="inp_achits_f"><input type="text" class="radius" name="inp_achits_f" id="inp_achits_f" placeholder="Actual hits (Female)"></label>
+                        <label for="inp_dry_male"><input type="text" class="radius" name="inp_dry_male" id="inp_dry_male" placeholder="Dry Sampling (Male)"></label>
+                        <label for="inp_dry_female"><input type="text" class="radius" name="inp_dry_female" id="inp_dry_female" placeholder="Dry Sampling (Female)"></label>
+                        <label for="inp_exper_male"><input type="text" class="radius" name="inp_exper_male" id="inp_exper_male" placeholder="Experiential (Male)"></label>
+                        <label for="inp_exper_female"><input type="text" class="radius" name="inp_exper_female" id="inp_exper_female" placeholder="Experiential (Female)"></label>
+                        <label>Contact Details</label>
+                        <label for="inp_cname"><input type="text" class="radius" name="inp_cname" id="inp_cname" placeholder="Name"></label>
+                        <label for="inp_email"><input type="text" class="radius" name="inp_email" id="inp_email" placeholder="Email"></label>
+                        <label for="inp_phone"><input type="text" class="radius" name="inp_phone" id="inp_phone" placeholder="Phone"></label>
 						<label for="inp_cmremarks"><textarea type="text" class="radius" name="inp_cmremarks" id="inp_cmremarks" placeholder="Remarks"></textarea></label>
 						<input type="file" name="inp_upload_cmtuva" id="inp_upload_cmtuva" accept="image/*">
 						<a id="cmtuva_btn" href="#" class="button tiny twidth">Add</a>
@@ -212,23 +228,44 @@
 				<table class="twidth" id="cmtuva_table">
 					<thead>
 						<tr>
-							<th width="2">Venue</th>
-							<th width="3">Area</th>
-							<th width="3">Address</th>
-							<th width="1">Rate</th>
-							<th width="1">Estimated foot traffic</th>
-							<th width="1">Target hits</th>
-							<th width="1">Actual hits</th>
-							<th width="1">LSM</th>
-							<th width="1">Remarks</th>
-							<th width="1">Images</th>
-							<th width="1"> </th>
+							<th>Category</th>
+							<th>Subcategory</th>
+							<th>Area</th>
+							<th>Subarea</th>
+                            <th>Venue</th>
+                            <th>Address</th>
+                            <th>LSM</th>
+                            <th>Min Rate</th>
+                            <th>Max Rate</th>
+                            <th colspan="3">Estimated foot traffic</th>
+                            <th colspan="6">Actual hits</th>
+							<th colspan="3">Contact Details</th>
+							<th>Remarks</th>
+							<th>Images</th>
+							<th colspan="2"> </th>
+						</tr>
+						<tr>
+							<th colspan="9"> </th>
+                            <th>Combined</th>
+                            <th>Male</th>
+                            <th>Female</th>
+                            <th>Male</th>
+                            <th>Female</th>
+                            <th>Dry Sampling Male</th>
+                            <th>Dry Sampling Female</th>
+                            <th>Experiential Sampling Male</th>
+                            <th>Experiential Sampling Female</th>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Contact No.</th>
+							<th colspan="4"> </th>
 						</tr>
 					</thead>
 					<tbody id="cmtuva_tbody">
 						<?php
 							$query = $this->db->order_by('location_id', 'DESC')->get( 'cmtuva_location_list' );
 							if($query->num_rows() > 0) {
+								echo '<tr><td colspan="26" class="text-center">No. of Brgys '.$query->num_rows().'</td></tr>';
 								foreach ($query->result() as $row) {
 									$preview = '';
 									if( !empty($row->u_images) ){
@@ -236,25 +273,34 @@
 									}
 									echo '
 										<tr id="cmt_'.$row->location_id.'">
-											<td>'.ucfirst( $row->venue ).'</td>
-											<td>'.ucfirst( $row->area ).'</td>
-											<td>'.ucfirst( $row->street ).'</td>
-											<td>Php '.ucfirst( $row->rate ).'</td>
-											<td>'.ucfirst( $row->eft ).'</td>
-											<td>'.ucfirst( $row->target_hits ).'</td>
-											<td>'.ucfirst( $row->actual_hits ).'</td>
-											<td>'.ucfirst( $row->lsm ).'</td>
-											<td>'.$row->remarks.'</td>
-											<td>'.$preview.'</td>
-											<td style="text-align:center;">
-												<div class="column large-6 medium-6 small-6">
-													<a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-												</div>
-												<div class="column large-6 medium-6 small-6">
-													<a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
-												</div>
-											</td>
-										</tr>
+                                            <td>'.ucfirst( $row->category ).'</td>
+                                            <td>'.ucfirst( $row->subcategory ).'</td>
+                                            <td>'.ucfirst( $row->area ).'</td>
+                                            <td>'.ucfirst( $row->sub_Area ).'</td>
+                                            <td>'.ucfirst( $row->venue ).'</td>
+                                            <td>'.ucfirst( $row->street ).'</td>
+                                            <td>'.ucfirst( $row->lsm ).'</td>
+                                            <td>Php '.$row->rate.'</td>
+                                            <td>Php '.$row->rate_Max.'</td>
+                                            <td>'.ucfirst( $row->eft ).'</td>
+                                            <td>'.ucfirst( $row->eft_male ).'</td>
+                                            <td>'.ucfirst( $row->eft_female ).'</td>
+                                            <td>'.ucfirst( $row->actual_hits ).'</td>
+                                            <td>'.ucfirst( $row->actual_hits_f ).'</td>
+                                            <td>'.ucfirst( $row->actual_dry_m ).'</td>
+                                            <td>'.ucfirst( $row->actual_dry_f ).'</td>
+                                            <td>'.ucfirst( $row->actual_exper_m ).'</td>
+                                            <td>'.ucfirst( $row->actual_exper_f ).'</td>
+                                            <td>'.ucfirst( $row->contact_person ).'</td>
+                                            <td>'.$row->contact_email.'</td>
+                                            <td>'.ucfirst( $row->contact_number ).'</td>
+                                            <td>'.$row->remarks.'</td>
+                                            <td>'.$preview.'</td>
+                                            <td style="text-align:center;">
+                                                        <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
+                                            </td>
+                                            <td><a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td>
+                                        </tr>
 									';
 								}
 							}
@@ -291,7 +337,7 @@
 				</ul>
 			</div>
 
-			<div id="cmt_Modal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+			<div id="cmt_Modal" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
 				<h2 id="modalTitle" class="text-center">Update the information.</h2>
 
 				<div id="alert_cmt" data-alert class="alert-box alert radius hide-normal">
@@ -300,19 +346,44 @@
 				</div>
 
 				<form id="cmt_form" action="" method="post">
-					<input type="hidden" class="radius" id="cmt_joid" name="cmt_joid" value="">
-					<input type="text" class="radius" name="cmt_venue" id="cmt_venue" placeholder="Venue">
-					<textarea name="cmt_area" id="cmt_area" cols="30" rows="3" placeholder="Area"></textarea>
-					<textarea name="cmt_st" id="cmt_st" cols="30" rows="3" placeholder="Address"></textarea>
-					<input type="number" class="radius txtboxToFilter" name="cmt_rate" id="cmt_rate" placeholder="Rate">
-					<input type="number" class="radius" name="cmt_eft" id="cmt_eft" placeholder="Estimated foot traffic">
-					<input type="text" class="radius" name="cmt_tarhits" id="cmt_tarhits" placeholder="Target hits">
-					<input type="text" class="radius" name="cmt_achits" id="cmt_achits" placeholder="Actual hits">
-					<input type="text" class="radius" name="cmt_lsm" id="cmt_lsm" placeholder="LSM">
-					<input type="text" class="radius" name="cmt_rem" id="cmt_rem" placeholder="Remarks">
-					<input type="file" name="cmt_upload_cmtuva" id="cmt_upload_cmtuva" accept="image/*">
-					<img id="current_image" src="" alt="">
-					<a href="#" id="btn_edit_cmt" class="button medium right" style="margin-top:5px;">Update</a>
+                    <div class="row">
+                        <div class="columns small-4 medium-4 large-4">
+                            <input type="hidden" class="radius" id="cmt_joid" name="cmt_joid" value="">
+                            <textarea name="cmt_area" id="cmt_area" cols="30" rows="3" placeholder="Area"></textarea>
+                            <textarea name="cmt_Subarea" id="cmt_Subarea" cols="30" rows="3" placeholder="Subarea"></textarea>
+                            <input type="text" class="radius" name="cmt_venue" id="cmt_venue" placeholder="Venue">
+                            <textarea name="cmt_st" id="cmt_st" cols="30" rows="3" placeholder="Address"></textarea>
+                            <input type="text" class="radius" name="cmt_lsm" id="cmt_lsm" placeholder="LSM">
+                            <input type="number" class="radius txtboxToFilter" name="cmt_rate" id="cmt_rate" placeholder="Rate Min">
+                            <input type="number" class="radius txtboxToFilter" name="cmt_rateMax" id="cmt_rateMax" placeholder="Rate Max">
+                        </div>
+                        <div class="columns small-4 medium-4 large-4">
+                            <label>Estimated Foot Traffic</label>
+                            <input type="text" class="radius" name="cmt_eft" id="cmt_eft" placeholder="Estimated foot traffic">
+                            <input type="text" class="radius" name="cmt_eft_m" id="cmt_eft_m" placeholder="EFT Male">
+                            <input type="text" class="radius" name="cmt_eft_f" id="cmt_eft_f" placeholder="EFT Female">
+                            <label>Actual Hits</label>
+                            <label for="cmt_achits"><input type="text" class="radius" name="cmt_achits" id="cmt_achits" placeholder="Actual hits (Male)"></label>
+                            <label for="cmt_achits_f"><input type="text" class="radius" name="cmt_achits_f" id="cmt_achits_f" placeholder="Actual hits (Female)"></label>
+                            <label for="cmt_dry_male"><input type="text" class="radius" name="cmt_dry_male" id="cmt_dry_male" placeholder="Dry Sampling (Male)"></label>
+                            <label for="cmt_dry_female"><input type="text" class="radius" name="cmt_dry_female" id="cmt_dry_female" placeholder="Dry Sampling (Female)"></label>
+                            <label for="cmt_exper_male"><input type="text" class="radius" name="cmt_exper_male" id="cmt_exper_male" placeholder="Experiential (Male)"></label>
+                            <label for="cmt_exper_female"><input type="text" class="radius" name="cmt_exper_female" id="cmt_exper_female" placeholder="Experiential (Female)"></label>
+                        </div>
+                        <div class="columns small-4 medium-4 large-4">
+                            <label>Contact Details</label>
+                            <label for="cmt_cname"><input type="text" class="radius" name="cmt_cname" id="cmt_cname" placeholder="Name"></label>
+                            <label for="cmt_email"><input type="text" class="radius" name="cmt_email" id="cmt_email" placeholder="Email"></label>
+                            <label for="cmt_phone"><input type="text" class="radius" name="cmt_phone" id="cmt_phone" placeholder="Phone"></label>
+                            <input type="text" class="radius" name="cmt_rem" id="cmt_rem" placeholder="Remarks">
+                            <input type="file" name="cmt_upload_cmtuva" id="cmt_upload_cmtuva" accept="image/*">
+                            <img id="current_image" src="" alt="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a href="#" id="btn_edit_cmt" class="button medium right" style="margin-top:5px;">Update</a>
+                    </div>
+
 				</form>
 
 				<a class="close-reveal-modal" aria-label="Close">&#215;</a>

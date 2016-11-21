@@ -77,5 +77,65 @@ class Cmtuva extends CI_Controller
         echo $this->custom_model->update_cmae($this->input->post());
     }
 
+    function ac_category(){
+        $this->db->select('category');
+        $this->db->from('cmtuva_location_list');
+        $this->db->where("( category LIKE '%".$this->input->get('term')."%')");
+        $this->db->group_by('category');
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            $data[] = $row->category;
+        }
+        echo json_encode($data);
+    }
+
+    function AC_SubCategory(){
+        $this->db->select('subcategory');
+        $this->db->from('cmtuva_location_list');
+        $this->db->where("( subcategory LIKE '%".$this->input->get('term')."%')");
+        $this->db->group_by('subcategory');
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            $data[] = $row->subcategory;
+        }
+        echo json_encode($data);
+    }
+
+    function AC_Area(){
+        $this->db->select('area');
+        $this->db->from('cmtuva_location_list');
+        $this->db->where("( area LIKE '%".$this->input->get('term')."%')");
+        $this->db->group_by('area');
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            $data[] = $row->area;
+        }
+        echo json_encode($data);
+    }
+
+    function AC_SubArea(){
+        $this->db->select('sub_Area');
+        $this->db->from('cmtuva_location_list');
+        $this->db->where("( sub_Area LIKE '%".$this->input->get('term')."%')");
+        $this->db->group_by('sub_Area');
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            $data[] = $row->sub_Area;
+        }
+        echo json_encode($data);
+    }
+
+    function AC_Venue(){
+        $this->db->select('venue');
+        $this->db->from('cmtuva_location_list');
+        $this->db->where("( venue LIKE '%".$this->input->get('term')."%')");
+        $this->db->group_by('venue');
+        $query = $this->db->get();
+        foreach($query->result() as $row){
+            $data[] = $row->venue;
+        }
+        echo json_encode($data);
+    }
+
     /*AE CMTUVA End*/
 }

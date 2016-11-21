@@ -1199,18 +1199,25 @@ function reload_animation_table( response_id ){
     });
 }
 
-$('#btn_add_pt').on('click', function(){
+$('.btn_add_pt').on('click', function(){
+    var ptVal = '';
+    if( $('#other_pt').val() == null ){
+        ptVal = $('#other_pt2').val();
+    }else {
+        ptVal = $('#other_pt').val();
+    }
     $.ajax({
         url: MyNameSpace.config.base_url+'jo/add_pt',
         type:'post',
         data: {
-            'pt_added' : $('#other_pt').val()
+            'pt_added' : ptVal
         },
         success: function(data) {
-            ////console.log(data);
-            $('#other_pt').val('')
-            $('#pt_list').empty();
-            $('#pt_list').append(data);
+            // console.log(data);
+            $('#other_pt').val('');
+            $('#other_pt2').val('');
+            $('.pt_list').empty();
+            $('.pt_list').append(data);
         }
     });
 });
@@ -2044,6 +2051,63 @@ $('#btn_add_requ_u').on('click', function(){
 });
 
 /*for cmtuva table*/
+$( "#inp_category" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/ac_category',
+    minLength: 2,
+    select: function( event, ui ) {
+        $( "#inp_category" ).val(ui.item.value);
+    }
+} );
+
+$( "#inp_subcategory" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/AC_SubCategory',
+    minLength: 2,
+    select: function( event, ui ) {
+        $( "#inp_subcategory" ).val(ui.item.value);
+    }
+} );
+
+$( "#inp_area" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/AC_Area',
+    minLength: 2,
+    select: function( event, ui ) {
+        $( "#inp_area" ).val(ui.item.value);
+    }
+} );
+
+$( "#cmt_area" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/AC_Area',
+    minLength: 2,
+    select: function( event, ui ) {
+        console.log(ui.item.value);
+        $( "#cmt_area" ).val(ui.item.value);
+    }
+} );
+
+$( "#inp_SubArea" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/AC_SubArea',
+    minLength: 2,
+    select: function( event, ui ) {
+        $( "#inp_SubArea" ).val(ui.item.value);
+    }
+} );
+
+$( "#cmt_Subarea" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/AC_SubArea',
+    minLength: 2,
+    select: function( event, ui ) {
+        $( "#cmt_Subarea" ).val(ui.item.value);
+    }
+} );
+
+$( "#inp_venue" ).autocomplete({
+    source: MyNameSpace.config.base_url+'cmtuva/AC_Venue',
+    minLength: 2,
+    select: function( event, ui ) {
+        $( "#inp_venue" ).val(ui.item.value);
+    }
+} );
+
 $('#cmtuva_btn').on('click', function(e){
     e.preventDefault();
     $('#cmtuva_form').ajaxForm({
@@ -2152,14 +2216,25 @@ function reload_table_cmtuva(){
                 var obj = JSON.parse(res1);
 
                 $('#cmt_joid').val( obj.location_id );
-                $('#cmt_venue').val( obj.venue );
                 $('#cmt_area').val( obj.area );
+                $('#cmt_Subarea').val( obj.sub_Area );
+                $('#cmt_venue').val( obj.venue );
                 $('#cmt_st').val( obj.street );
-                $('#cmt_rate').val( obj.rate );
-                $('#cmt_eft').val( obj.eft );
-                $('#cmt_tarhits').val( obj.target_hits );
-                $('#cmt_achits').val( obj.actual_hits );
                 $('#cmt_lsm').val( obj.lsm );
+                $('#cmt_rate').val( obj.rate );
+                $('#cmt_rateMax').val( obj.rate_Max );
+                $('#cmt_eft').val( obj.eft );
+                $('#cmt_eft_m').val( obj.eft_male );
+                $('#cmt_eft_f').val( obj.eft_female );
+                $('#cmt_achits').val( obj.actual_hits );
+                $('#cmt_achits_f').val( obj.actual_hits_f );
+                $('#cmt_dry_male').val( obj.actual_dry_m );
+                $('#cmt_dry_female').val( obj.actual_dry_f );
+                $('#cmt_exper_male').val( obj.actual_exper_m );
+                $('#cmt_exper_female').val( obj.	actual_exper_f );
+                $('#cmt_cname').val( obj.contact_person );
+                $('#cmt_email').val( obj.contact_email	 );
+                $('#cmt_phone').val( obj.contact_number	 );
                 $('#cmt_rem').val( obj.remarks );
                 $('#current_image').attr('src', obj.u_images );
 

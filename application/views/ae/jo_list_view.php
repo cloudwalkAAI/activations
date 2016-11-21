@@ -19,7 +19,7 @@
 						<a href="#" class="close">&times;</a>
 					</div>
 					<form id="form_jo" action="" method="post">
-						<div class="large-11 columns large-centered">
+						<div class="row large-centered">
 							<label> Project type</label>
                             <table id="pt_list" class="pt_list twidth">
                                 <?= $project_type ?>
@@ -29,7 +29,7 @@
                                 <input type="text" class="twidth" id="other_pt" placeholder="Input other project type">
                             </div>
                             <div class="column large-4 medium-4 small-4" style="position: relative;z-index: 999;">
-                                <a href="#" id="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
+                                <a href="#" class="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
                             </div>
 						</div>	
 						<div class="large-11 columns large-centered">
@@ -161,10 +161,10 @@
 			</table>
 
 			<div class="column large-8 medium-8 small-8" style="position: relative;z-index: 999;">
-				<input type="text" class="twidth" id="other_pt" placeholder="Input other project type">
+				<input type="text" class="twidth" id="other_pt2" placeholder="Input other project type">
 			</div>
 			<div class="column large-4 medium-4 small-4" style="position: relative;z-index: 999;">
-				<a href="#" id="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
+				<a href="#" class="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
 			</div>
 		</div>
 		<div class="large-11 columns large-centered">

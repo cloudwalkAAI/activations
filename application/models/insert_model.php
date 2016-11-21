@@ -75,6 +75,8 @@ class Insert_model extends CI_Model
     }
 
     function insert_jo( $a ){
+//        print_r(implode(',',$a['inp_projtype']));
+//        return false;
         $insid = 0;
         $data = array(
             'emp_id'                => $this->session->userdata('sess_id'),
@@ -97,7 +99,7 @@ class Insert_model extends CI_Model
             $this->db->where('jo_id', $insid);
             $this->db->update('job_order_list', $data_update);
 
-            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list. Thank you!',$insid);
+//            $this->sms_compiler('639464187000','A Job Order has been created please check the Job order list. Thank you!',$insid);
 
         }
 
@@ -597,14 +599,27 @@ class Insert_model extends CI_Model
         $data = array(
             'category'      => ucfirst($a['inp_category']),
             'subcategory'   => ucfirst($a['inp_subcategory']),
-            'venue'         => ucwords($a['inp_venue']),
             'area'          => $a['inp_area'],
+            'sub_Area'      => $a['inp_SubArea'],
+            'venue'         => ucwords($a['inp_venue']),
             'street'        => $a['inp_street'],
-            'rate'          => $a['inp_rates'],
-            'eft'           => $a['inp_eft'],
-            'target_hits'   => $a['inp_tarhits'],
-            'actual_hits'   => $a['inp_achits'],
             'lsm'           => $a['inp_lsm'],
+            'rate'          => $a['inp_ratesMin'],
+            'rate_Max'      => $a['inp_ratesMax'],
+            'eft'           => $a['inp_eft'],
+            'eft_male'      => $a['inp_eft_male'],
+            'eft_female'    => $a['inp_eft_female'],
+            'actual_hits'   => $a['inp_achits_m'],
+            'actual_hits_f'   => $a['inp_achits_f'],
+            'actual_dry_m'   => $a['inp_dry_male'],
+            'actual_dry_f'   => $a['inp_dry_female'],
+            'actual_exper_m'   => $a['inp_exper_male'],
+            'actual_exper_f'   => $a['inp_exper_female'],
+            'contact_person'   => $a['inp_cname'],
+            'contact_email'   => $a['inp_email'],
+            'contact_number'   => $a['inp_phone'],
+//            'target_hits'   => $a['inp_tarhits'],
+//            'target_hits'   => $a['inp_tarhits'],
             'remarks'       => $a['inp_cmremarks'],
             'u_images'        => $targ
         );
@@ -622,24 +637,33 @@ class Insert_model extends CI_Model
                 }
                 $str_return = '
                     <tr id="cmt_'.$row->location_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
+                        <td>'.ucfirst( $row->category ).'</td>
+                        <td>'.ucfirst( $row->subcategory ).'</td>
                         <td>'.ucfirst( $row->area ).'</td>
+                        <td>'.ucfirst( $row->sub_Area ).'</td>
+                        <td>'.ucfirst( $row->venue ).'</td>
                         <td>'.ucfirst( $row->street ).'</td>
-                        <td>Php '.ucfirst( $row->rate ).'</td>
-                        <td>'.ucfirst( $row->eft ).'</td>
-                        <td>'.ucfirst( $row->target_hits ).'</td>
-                        <td>'.ucfirst( $row->actual_hits ).'</td>
                         <td>'.ucfirst( $row->lsm ).'</td>
+                        <td>Php '.$row->rate.'</td>
+                        <td>Php '.$row->rate_Max.'</td>
+                        <td>'.ucfirst( $row->eft ).'</td>
+                        <td>'.ucfirst( $row->eft_male ).'</td>
+                        <td>'.ucfirst( $row->eft_female ).'</td>
+                        <td>'.ucfirst( $row->actual_hits ).'</td>
+                        <td>'.ucfirst( $row->actual_hits_f ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_m ).'</td>
+                        <td>'.ucfirst( $row->actual_dry_f ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_m ).'</td>
+                        <td>'.ucfirst( $row->actual_exper_f ).'</td>
+                        <td>'.ucfirst( $row->contact_person ).'</td>
+                        <td>'.$row->contact_email.'</td>
+                        <td>'.ucfirst( $row->contact_number ).'</td>
                         <td>'.$row->remarks.'</td>
                         <td>'.$preview.'</td>
                         <td style="text-align:center;">
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                            </div>
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
-                            </div>
+                                    <a class="edit-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
                         </td>
+                        <td><a class="del-btn-cmtuva" href="#" alt="'.$row->location_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a></td>
                     </tr>
                 ';
             }
