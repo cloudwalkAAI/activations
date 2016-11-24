@@ -23,28 +23,28 @@
 |
 */
 
-$allowed_domains = array('www.aai2015.com', 'aai.cloudwalkdigital.com', 'www.aai2016.com' ,'localhost/activations');
-$default_domain  = 'www.aai2015.com';
+//$allowed_domains = array('www.aai2015.com', 'aai.cloudwalkdigital.com', 'www.aai2016.com' ,'localhost/activations');
+//$default_domain  = 'www.aai2015.com';
+//
+//if (in_array($_SERVER['HTTP_HOST'], $allowed_domains, TRUE))
+//{
+//    $domain = $_SERVER['HTTP_HOST'];
+//}
+//else
+//{
+//    $domain = $default_domain;
+//}
+//
+//if ( ! empty($_SERVER['HTTPS']))
+//{
+//    $config['base_url'] = 'https://'.$domain;
+//}
+//else
+//{
+//    $config['base_url'] = 'http://'.$domain;
+//}
 
-if (in_array($_SERVER['HTTP_HOST'], $allowed_domains, TRUE))
-{
-    $domain = $_SERVER['HTTP_HOST'];
-}
-else
-{
-    $domain = $default_domain;
-}
-
-if ( ! empty($_SERVER['HTTPS']))
-{
-    $config['base_url'] = 'https://'.$domain;
-}
-else
-{
-    $config['base_url'] = 'http://'.$domain;
-}
-
-//$config['base_url'] = '';
+$config['base_url'] = 'http://www.aai2015.com';
 
 /*
 |--------------------------------------------------------------------------
