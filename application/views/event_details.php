@@ -468,7 +468,7 @@ if( isset( $shared_array ) ){
         <a href="#" class="close">&times;</a>
     </div>
 
-    <form id="requ_form" action="" method="post">
+    <form id="requ_form">
         <input type="hidden" name="rq_joid" value="<?= $this->input->get('a') ?>">
         <div class="row">
             <select name="rq_dept" id="sel_dept_ad">

@@ -1,3 +1,4 @@
+var checkAddedClients = new Array();
 function reload_date_picker(){
 
     jQuery('#datepicker_deadline, #datepicker_details, #inp_birthday, #datepicker_emp, #inp_birthday_u').datetimepicker({
@@ -233,6 +234,9 @@ $('#btn_save_jo_edit').on('click',function(){
 $('#form_jo').ajaxForm({
     type: 'POST',
     url: MyNameSpace.config.base_url+'jo/add_jo',
+    data: {
+        clientsID: sessionStorage.getItem('ClientIDs')
+    },
     beforeSubmit: function(arr, jform, option){
         $('#btn_save_jo').prop('disabled', true);
 
@@ -277,6 +281,8 @@ $('#form_jo').ajaxForm({
         }
     },
     success:  function(response){
+        // console.log(response);
+        // return false;
         //var rep1 = response.replace("[","");
         //var rep2 = rep1.replace("]","");
         var json = $.parseJSON(response);
@@ -308,7 +314,8 @@ $('#form_jo').ajaxForm({
             '</li>';
 
         $(lidata).appendTo("#jo_table_list");
-        window.location.href = MyNameSpace.config.base_url + "jo";
+
+        window.location.href = MyNameSpace.config.base_url + "jo/in?a=" + json.jo_id;
     }
 
 });
@@ -922,17 +929,21 @@ $('#btn_mom_submit').on('click', function(){
         },
         success:  function(response){
             if( response == 'success' ){
-                $("#alert_box_mom_form_success").removeClass("success");
-                $("#alert_box_mom_form_success").removeClass("alert");
-                $("#alert_box_mom_form_success").addClass("warning");
-                $('#alert_box_mom_form_fail').hide();
-                $('#alert_box_mom_form_success').show();
+                // $("#alert_box_mom_form_success").removeClass("success");
+                // $("#alert_box_mom_form_success").removeClass("alert");
+                // $("#alert_box_mom_form_success").addClass("warning");
+                // $('#alert_box_mom_form_fail').hide();
+                // $('#alert_box_mom_form_success').show();
+                $('#momSuccessModal').text('');
+                $('#momSuccessModal').text('Saved');
+                $('#momSuccessModal').foundation('reveal','open');
             }else{
-                $("#alert_box_mom_form_fail").removeClass("success");
-                $("#alert_box_mom_form_fail").removeClass("alert");
-                $("#alert_box_mom_form_fail").addClass("warning");
-                $('#alert_box_mom_form_success').hide();
-                $('#alert_box_mom_form_fail').show();
+                // $("#alert_box_mom_form_fail").removeClass("success");
+                // $("#alert_box_mom_form_fail").removeClass("alert");
+                // $("#alert_box_mom_form_fail").addClass("warning");
+                $('#momSuccessModal').text('');
+                $('#momSuccessModal').text('Fail to save');
+                $('#momSuccessModal').foundation('reveal','open');
             }
             $('#btn_mom_submit').prop('disabled', false);
         }
@@ -951,17 +962,13 @@ $('#btn_save_ed').on('click', function(){
         },
         success:  function(response){
             if( response == 'success' ){
-                $("#alert_box_ed_form_success").removeClass("success");
-                $("#alert_box_ed_form_success").removeClass("alert");
-                $("#alert_box_ed_form_success").addClass("warning");
-                $('#alert_box_ed_form_fail').hide();
-                $('#alert_box_ed_form_success').show();
+                $('#momSuccessModal').text('');
+                $('#momSuccessModal').text('Saved');
+                $('#momSuccessModal').foundation('reveal','open');
             }else{
-                $("#alert_box_ed_form_fail").removeClass("success");
-                $("#alert_box_ed_form_fail").removeClass("alert");
-                $("#alert_box_ed_form_fail").addClass("warning");
-                $('#alert_box_ed_form_success').hide();
-                $('#alert_box_ed_form_fail').show();
+                $('#momSuccessModal').text('');
+                $('#momSuccessModal').text('Fail to save');
+                $('#momSuccessModal').foundation('reveal','open');
             }
             $('#btn_save_ed').prop('disabled', false);
         }
@@ -1165,6 +1172,8 @@ $('#btn_add_requ').on('click', function(){
                 }, 3000 );
             }
             $('#btn_add_requ').prop('disabled', false);
+
+
         }
     });
 });
@@ -1180,6 +1189,7 @@ function reload_req_table( response_id ){
             $("#tbody_req").empty();
             $(data).appendTo("#tbl_req > tbody");
             search_req_reload();
+            req_btn_reload();
         }
     });
 }
@@ -2498,6 +2508,24 @@ function req_btn_reload(){
             }
         });
     });
+
+    $('.del-btn-req').on('click', function(e){
+        e.preventDefault();
+        var element = $(this);
+        var reqid = $(this).attr('alt');
+        $.ajax({
+            url: MyNameSpace.config.base_url+'jo/del_req',
+            type:'post',
+            data: {
+                'req_id' :reqid
+            },
+            success: function(data) {
+                if( data > 0 ){
+                    element.closest('tr').remove();
+                }
+            }
+        });
+    });
 }
 req_btn_reload();
 
@@ -3185,6 +3213,43 @@ $( "#inp_hremp" ).autocomplete({
     }
 });
 /*end ae hr*/
+// var checkAddedClients = new Array();
+
+$('.ExistingClient').on('click',function(e){
+    e.preventDefault();
+
+    var con = $(this).attr('alt');
+    var cval = $('select#inp_client').val();
+
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/whereClient',
+        type:'post',
+        data: {
+            'val' : cval,
+            'confirm' : con
+        },
+        beforeSend: function(a,b,c){
+            if(checkAddedClients.indexOf(cval) >= 0){
+                return false;
+            }
+        },
+        success: function(data) {
+            checkAddedClients.push(cval);
+            sessionStorage.setItem("ClientIDs", JSON.stringify(checkAddedClients));
+            if(con == 'addExistingClient'){
+                    $('tbody#TbodyCreateJOClients').prepend(data);
+            }
+            RCFT();
+        }
+    });
+});
+
+function RCFT(){
+    $('.removeClientFromTable').on('click',function(e){
+        e.preventDefault();
+        $('tbody#TbodyCreateJOClients #TempClientTable_'+$(this).attr('alt')).remove();
+    });
+}
 
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {

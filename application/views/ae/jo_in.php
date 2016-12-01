@@ -265,7 +265,7 @@ $info = json_decode($jo_details);
                     <?= $mvrf_view ?>
                 </div>
             </li>
-            <li class="accordion-navigation acd">
+            <li class="accordion-navigation acd hide-normal">
                 <a href="#accordion_references">References<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="accordion_references" class="content">
                     <?= $reference ?>

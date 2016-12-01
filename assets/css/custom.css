@@ -178,3 +178,7 @@ table tr.even, table tr.alt, table tr:nth-of-type(even) {
 .tbl_bdr{
     border-radius:8px;
 }
+
+.ui-tooltip {
+    white-space: pre-wrap;
+}

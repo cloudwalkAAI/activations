@@ -3,13 +3,13 @@
 		<h5>Clients</h5>		
 	</div>
 </div>
-<div class="row jopart">
+<div class="row jopart" style="margin-top: 5vh;">
 		<div class="large-12 columns">
 		<?php
 			if( $this->session->userdata('status') == 1 && $this->session->userdata('sess_role') == 'admin' || $this->session->userdata('sess_role') == 'employee' ){
 		?>
 				<?php if( $this->session->userdata('sess_dept') <= 2 ){ ?>
-					<a data-reveal-id="joModal" class="right plussign">&#43;</a>
+<!--					<a data-reveal-id="joModal" class="right plussign">&#43;</a>-->
 				<?php } ?>
 
 				<div id="joModal" class="reveal-modal medium" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">

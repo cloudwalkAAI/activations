@@ -49,11 +49,6 @@
 			Fail to save.
 			<a href="#" class="close">&times;</a>
 		</div>
-
-		<div id="alert_box_mom_form_success" data-alert class="alert-box warning radius hide-normal">
-			Saved Successfully.
-			<a href="#" class="close">&times;</a>
-		</div>
 		<form id="mom_form" action="" data-abide>
 			<input type="hidden" id="inp_joid" name="inp_joid" value="<?= $this->input->get( 'a' ) ?>">
 			<div class="large-5 columns large-offset-1">
@@ -142,9 +137,21 @@
 			<div class="large-12 columns">
 				<textarea class="cc" name="editor_next" id="editor_next" rows="10" cols="30" <?=$str_disa?>><?=isset($md->steps) ? $md->steps : '';?></textarea>
 			</div>
+
+			<div id="alert_box_mom_form_success" data-alert class="alert-box warning radius hide-normal">
+				Saved Successfully.
+				<a href="#" class="close">&times;</a>
+			</div>
+
 			<div class="large-12 columns">
 				<button id="btn_mom_submit" class="right mar10" type="button" <?=$str_display?>><i class="fi-plus small"></i> Save</button>
 			</div>
 		</form>
+
+
+		<div id="momSuccessModal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+			<h2 id="momSuccessModalTitle">Success</h2>
+			<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+		</div>
 	</div>
 </div>

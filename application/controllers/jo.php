@@ -9,6 +9,7 @@ class Jo extends CI_Controller{
         $this->load->model('insert_model');
         $this->load->model('get_model');
         $this->load->model('cal_model');
+        $this->load->model('del_model');
         $this->load->helper('download');
         $this->load->library('m_pdf');
 //        $this->load->library('pagination');
@@ -64,8 +65,10 @@ class Jo extends CI_Controller{
     }
 
     function add_jo(){
-        $insid = $this->insert_model->insert_jo( $this->input->post() );
-        echo $this->get_model->get_ae_jo_w( $insid );
+//        echo json_encode($this->input->post());
+        $insid1 = $this->insert_model->insert_client( json_encode($this->input->post()) );
+        $insid = $this->insert_model->insert_jo( $this->input->post(),$insid1 );
+        echo $this->get_model->get_ae_jo_w( $insid, $insid1 );
     }
 
     function update_jo(){
@@ -601,6 +604,11 @@ class Jo extends CI_Controller{
         echo $this->get_model->get_req( $this->input->post() );
     }
 
+    function del_req(){
+//        echo $this->input->post('req_id');
+        echo $this->custom_model->DeleteRequestFromEvent( $this->input->post('req_id') );
+    }
+
     function jo_update_req(){
 //        print_r($this->input->post());
         echo $this->custom_model->update_req( $this->input->post() );
@@ -632,5 +640,9 @@ class Jo extends CI_Controller{
 
     function loadbycatesub(){
         echo $this->get_model->subcat( $this->input->post('category'), $this->input->post('subcategory') );
+    }
+
+    function whereClient(){
+        echo $this->get_model->GetClient($this->input->post());
     }
 }

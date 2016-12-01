@@ -74,15 +74,33 @@ class Insert_model extends CI_Model
 
     }
 
-    function insert_jo( $a ){
+    function insert_jo( $a, $newClient ){
 //        print_r(implode(',',$a['inp_projtype']));
-//        return false;
+
+        $branding = '';
+        $compileIDs = array();
+        $compileIDs = json_decode($a['clientsID']);
+
+        $srep = str_replace('\"','',$newClient);
+        $srep1 = str_replace('"','',$srep);
+
+        if(isset($compileIDs)){
+            array_push($compileIDs,$srep1);
+        }
+
+        if( $a['inp_brand'] == null ){
+            $branding = $a['inp_brand'];
+        }else{
+            $branding = implode(',',$a['inp_brand']);
+        }
+
         $insid = 0;
         $data = array(
             'emp_id'                => $this->session->userdata('sess_id'),
             'project_type'          => implode(',',$a['inp_projtype']),
             'client_company_name'   => $a['inp_client'],
-            'brand'                 => implode(',',$a['inp_brand']),
+            'clientids'             => json_encode($compileIDs),
+            'brand'                 => $branding,
             'project_name'          => $a['inp_projname'],
             'jo_color'              => 'red',
             'date_created'          => date("m-d-Y H:i:s")
@@ -108,8 +126,11 @@ class Insert_model extends CI_Model
 
     function insert_client( $a ){
         $dtarr = json_decode($a);
+        $insid= '';
         $i = 0;
-//        print_r( $dtarr->inp_contactperson[0] );
+//        echo json_encode( $dtarr->inp_contactperson );
+
+        if( json_encode( $dtarr->inp_contactperson ) == '[""]' ){ return false; }
 
         foreach( $dtarr->inp_contactperson as $rcount ){
             $data = array(
@@ -123,7 +144,11 @@ class Insert_model extends CI_Model
             );
             $this->db->insert('clients', $data);
 
-            $insid = $this->db->insert_id();
+            if( $insid == '' ){
+                $insid = '"'.$this->db->insert_id().'"';
+            }else{
+                $insid .= ',"'.$this->db->insert_id().'"';
+            }
 
             $data = array(
                 'client_id'              => $insid,

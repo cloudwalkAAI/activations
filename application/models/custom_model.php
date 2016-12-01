@@ -666,4 +666,10 @@ class Custom_model extends CI_Model
 
         return ($a['pool_pulled']/$a['pool_overalltotal']) * 100;
     }
+
+    function DeleteRequestFromEvent( $id ){
+//        return $id;
+        $this->db->delete('event_requirement', array('req_id' => $id));
+        return $this->db->affected_rows();
+    }
 }

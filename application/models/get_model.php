@@ -186,7 +186,8 @@ class Get_model extends CI_Model
 
             $jolist_array['project_name'] = $row->project_name;
             $jolist_array['project_type'] = $row->project_type;
-            $jolist_array['client_company_name'] = $this->get_company( $row->client_company_name );
+//            $jolist_array['client_company_name'] = $this->get_company( $row->client_company_name );
+            $jolist_array['client_company_name'] = $this->get_clientsByID( $row->clientids );
             $jolist_array['brand'] = $row->brand;
 
             if( !is_null( $row->billed_date ) ){
@@ -206,6 +207,25 @@ class Get_model extends CI_Model
         }
 
         return json_encode( $jolist_array );
+    }
+
+    function get_clientsByID($c){
+        $arr = array();
+        $arr = json_decode($c);
+
+        $strClients = '';
+        if (isset($arr)){
+            foreach ($arr as $client){
+                $query = $this->db->get_where('clients', array( 'client_id' => $client ));
+                $row = $query->row();
+
+                if (isset($row))
+                {
+                    $strClients .= '<span class="ui-tooltip" title="Company Name :'.$row->company_name.' <br/>Birth date :'.$row->birth_date.' <br/>Email :'.$row->email.'">'.$row->contact_person.'</span><br >';
+                }
+            }
+        }
+        return $strClients;
     }
 
     function get_company($c){
@@ -968,9 +988,9 @@ class Get_model extends CI_Model
             $result .= '
                 <tr id="req'.$row->req_id.'">
                     <td>'.$row->department_name.'</td>
-                    <td><span title="'.$row->deliverables.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td><span class="ui-tooltip" title="'.$row->deliverables.'">Hover for More Info</span></td>
                     <td>'.$row->deadline.'</td>
-                    <td><span title="'.$row->next_steps.'" aria-describedby="tooltip-ijv27znv5" data-selector="tooltip-ijv27znv5" data-tooltip="" aria-haspopup="true" class="has-tip">Hover for More Info</span></td>
+                    <td><span class="ui-tooltip" title="'.$row->next_steps.'">Hover for More Info</span></td>
                     <td style="text-align:center;">
                         <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
                         <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
@@ -1575,5 +1595,34 @@ class Get_model extends CI_Model
             }
         }
         return $str_table;
+    }
+
+    function GetClient($a){
+        $resArray = array();
+
+        $this->db->select( 'client_id, company_name, contact_person' );
+        $this->db->from( 'clients' );
+        $this->db->where( 'client_id', $a['val'] );
+//        $this->db->group_by( 'company_name' );
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0)
+        {
+            $row = $query->row();
+
+            return '
+            <tr id="TempClientTable_'.$row->client_id.'">
+                <td>
+                '.$row->contact_person.'
+                </td>
+                <td>
+                <a href="#" class="removeClientFromTable" alt="'.$row->client_id.'">Delete</a>
+                </td>
+            </tr>
+            ';
+        }
+
+
+//        return json_encode($resArray);
     }
 }

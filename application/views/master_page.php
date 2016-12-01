@@ -87,7 +87,8 @@
 <script src="<?=base_url('assets/js/foundation.min.js');?>"></script>
 <script src="<?=base_url('assets/js/foundation/foundation.offcanvas.js');?>"></script>
 <script src="<?=base_url('assets/js/jquery.form.js');?>"></script>
-<script src="<?=base_url('assets/js/jquery-ui.min.js');?>"></script>
+<!--<script src="--><?//=base_url('assets/js/jquery-ui.min.js');?><!--"></script>-->
+<script src="http://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
 <script src="<?=base_url('assets/js/cf77f9273ab747e14102a80d1d5b6d51.js');?>"></script>
 <script src="<?=base_url('assets/js/calendar.js');?>"></script>
 <script src="<?=base_url('assets/js/sorttable.js');?>"></script>
@@ -160,7 +161,11 @@
     <?php
    }
  ?>
-    
+    $( document ).tooltip({
+        content:function(){
+            return this.getAttribute("title");
+        }
+    });
 
 </script>
 

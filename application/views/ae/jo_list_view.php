@@ -12,56 +12,131 @@
 					<a data-reveal-id="joModal" class="right plussign">&#43;</a>
 				<?php } ?>
 
-				<div id="joModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">
+				<div id="joModal" class="reveal-modal large" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="border-radius: 13px;">
 					<h2 id="modalTitle" class="text-center">Create New Job Order</h2>
 					<div id="alert_box" data-alert class="alert-box warning radius hide-normal">
 						Special characters are not allowed
 						<a href="#" class="close">&times;</a>
 					</div>
 					<form id="form_jo" action="" method="post">
+
+						<div class="row large-centered">
+							<label for="inp_projname">Project Name
+								<input type="text" id="inp_projname" name="inp_projname" placeholder="Project Name" />
+							</label>
+						</div>
+
 						<div class="row large-centered">
 							<label> Project type</label>
                             <table id="pt_list" class="pt_list twidth">
                                 <?= $project_type ?>
                             </table>
 
-                            <div class="column large-8 medium-8 small-8" style="position: relative;z-index: 999;">
+                            <div class="columns large-9 medium-9 small-9" style="position: relative;z-index: 999;">
                                 <input type="text" class="twidth" id="other_pt" placeholder="Input other project type">
                             </div>
-                            <div class="column large-4 medium-4 small-4" style="position: relative;z-index: 999;">
-                                <a href="#" class="btn_add_pt" class="button tiny twidth"><i class="fi-plus small"></i> Add</a>
+                            <div class="columns large-3 medium-3 small-3" style="position: relative;z-index: 999;">
+                                <a href="#" class="btn_add_pt button tiny twidth"><i class="fi-plus small"></i> Add</a>
                             </div>
-						</div>	
-						<div class="large-11 columns large-centered">
-							<span>Client
+						</div>
+
+						<div class="row large-centered">
+							<div class="columns large-9 medium-9 small-9">
 								<select name="inp_client" id="inp_client">
-									<option value="0">Select...</option>
+									<option value="0">Select Client...</option>
 									<?php
-										foreach($client_list as $row){
-											echo '
+									foreach($client_list as $row){
+										echo '
 												<option value="'.$row['client_id'].'">'.$row['contact_person'].'</option>
 											';
-										}
+									}
 									?>
 								</select>
-							</span>
-						</div>	
-						<div class="large-11 columns large-centered">
+							</div>
+							<div class="columns large-3 medium-3 small-3">
+								<a href="#" class="button tiny twidth ExistingClient" alt="addExistingClient"><i class="fi-plus small"></i> Add Client</a>
+							</div>
+						</div>
+
+						<div class="row">
+							<table class="twidth">
+								<thead>
+								<tr>
+									<th>Client's name</th>
+									<th> </th>
+								</tr>
+								</thead>
+								<tbody id="TbodyCreateJOClients">
+								</tbody>
+							</table>
+						</div>
+
+						<div class="row large-centered">
 							<label for="inp_brand" id="hd" class="hide">Brand
-<!--								<select name="inp_brand" id="inp_brand">-->
-<!--									<option value="0">Select...</option>-->
-<!--								</select>-->
+								<!--								<select name="inp_brand" id="inp_brand">-->
+								<!--									<option value="0">Select...</option>-->
+								<!--								</select>-->
 								<table id="client_brands" class="twidth">
 
 								</table>
 							</label>
 						</div>
-						<div class="large-11 columns large-centered">
-							<label for="inp_projname">Project Name
-								<input type="text" id="inp_projname" name="inp_projname" placeholder="Project Name" />
-							</label>
+
+						<div class="row">
+							<dl class="accordion" data-accordion>
+								<dd class="accordion-navigation">
+									<a href="#NewClient">Add New Client</a>
+									<div id="NewClient" class="content">
+										<div class="large-6 columns" style="border-right: 2px solid #cfd0d2;">
+											<div class="large-12 columns">
+												<label for="inp_companyname">Company Name
+													<input type="text" id="inp_companyname" name="inp_companyname" placeholder="Company Name" />
+												</label>
+											</div>
+											<div class="large-12 columns">
+												<label for="inp_contactperson">Contact Person
+													<input type="text" id="inp_contactperson" name="inp_contactperson[]" placeholder="Contact Person" />
+												</label>
+											</div>
+											<div class="large-12 columns">
+												<label for="inp_contactnumber">Contact Number
+													<input type="text" id="inp_contactnumber" class="inp_contactnumber" name="inp_contactnumber[]" placeholder="Contact Number" />
+												</label>
+											</div>
+											<div class="large-12 columns">
+												<label for="inp_birthday">Birth Date
+													<input type="text" id="inp_birthday" name="inp_birthday[]" placeholder="Birth Date" />
+												</label>
+											</div>
+											<div class="large-12 columns">
+												<label for="inp_email">Email Address
+													<input type="text" id="inp_email" name="inp_email[]" placeholder="Email Address" />
+												</label>
+											</div>
+											<div class="input_fields_wrap_client">
+
+											</div>
+											<a href="#" class="add_client_button tiny bar_color1 twidth button">Add Client</a>
+										</div>
+										<div class="large-6 columns rightside">
+											<div class="large-12 columns" style="height: 283px;overflow: auto;">
+												<label>Brands</label>
+												<label class="input_fields_wrap">
+													<div><input type="text" class="cls_brand" name="ta_brand[]"></div>
+												</label>
+											</div>
+											<div class="large-12 columns">
+												<label>
+													<a href="#" class="add_brand_button tiny bar_color1 twidth button radius">+ Add Brands</a>
+												</label>
+											</div>
+										</div>
+									</div>
+								</dd>
+							</dl>
 						</div>
-						<div class="large-11 columns large-centered">
+						<br>
+						<div class="row large-centered">
 							<button id="btn_save_jo" type="submit" class="button medium expand">Create Job Order</button>
 						</div>
 					</form>
