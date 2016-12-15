@@ -35,7 +35,13 @@ if( isset( $shared_array ) ){
     }
 }
 ?>
+<style>
+    .select2-container {
+        width: 100% !important;
+        margin: 5px 0;
+    }
 
+</style>
 <form id="event_details_form" action="" method="post" data-abide>
     <input type="hidden" name="jo_id" value="<?= $this->input->get('a') ?>">
     <table class="twidth">
@@ -140,9 +146,7 @@ if ( ( $this->session->userdata('sess_dept') == 6 ) ) {
 <!--        <input type="text" class="text-right" name="cmtuva_esp" id="cmtuva_esp" readonly>-->
 <!--        <button id="btn_ae_cmtuva_rate" class="button twidth text-center success">Add</button>-->
         <label for="inp_category">
-            <select class="radius" name="inp_category" id="inp_category" placeholder="Category">
-                <option value="0">Select Category</option>
-                <option value="1">Micinfo</option>
+            <select class="radius" name="inp_category" id="inp_category">
             </select>
         </label>
         <label for="inp_subcategory">
@@ -196,80 +200,19 @@ if ( ( $this->session->userdata('sess_dept') == 6 ) ) {
         <label for="inp_exper_female"><input type="number" class="radius" name="inp_exper_female" id="inp_exper_female" placeholder="Experiential (Female)"></label>
     </form>
 </div>
-<div class="column large-9 medium-9 small-12 scrollable_area">
+<div class="column large-9 medium-9 small-12 ">
 <?php
 }else{
-    echo '<div class="column large-12 medium-12 small-12 scrollable_area">';
+    echo '<div class="column large-12 medium-12 small-12">';
 }
 ?>
     <input type="search" class="radius" name="inp_search_cmae" id="inp_search_cmae" placeholder="Search">
-    <table class="twidth" id="cmae_table">
-        <thead>
-        <tr>
-            <th width="2">Venue</th>
-            <th width="3">Area</th>
-            <th width="3">Address</th>
-            <th width="1">Start date</th>
-            <th width="1">Duration</th>
-            <th width="1">Rate</th>
-            <th width="1">Total</th>
-            <th width="1">Image</th>
-            <th> </th>
-        </tr>
-        </thead>
-        <tbody id="cmae_tbody">
-        <?php
-        $query = $this->db->order_by('cmae_id', 'DESC')->get_where( 'cmtuva_ae_list', array('jo_id'=>$this->input->get('a')) );
-        if($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                $arr_cmae = explode(",",$row->area);
-                if( ( $this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ) {
-                    $query_img = $this->db->get_where( 'cmtuva_location_list', array('location_id'=>$row->loc_id) );
-                    $row_img = $query_img->row();
-                    $preview = '';
-                    if( !empty($row_img->images) ){
-                        $preview = '<a href="'.base_url($row_img->images).'" target="_blank">Preview</a>';
-                    }
-                    echo '
-                        <tr id="cmae_'.$row->cmae_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
-                        <td>'.ucfirst( $arr_cmae[0] ).'</td>
-                        <td>'.ucfirst( $row->street ).'</td>
-                        <td>'.$row->date_start.'</td>
-                        <td>'.$row->duration.' day(s)</td>
-                        <td>Php '.$row->rate.'</td>
-                        <td>Php '.$row->total_rate.'</td>
-                        <td>'.$preview.'</td>
-                        <td style="text-align:center;">
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="edit-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
-                            </div>
-                            <div class="column large-6 medium-6 small-6">
-                                <a class="del-btn-cmtuva-ae" href="#" alt="'.$row->cmae_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
-                            </div>
-                        </td>
-                    </tr>
-                    ';
-                }else{
-                    echo '
-                    <tr id="cmae_'.$row->cmae_id.'">
-                        <td>'.ucfirst( $row->venue ).'</td>
-                        <td>'.ucfirst( $row->area ).'</td>
-                        <td>'.ucfirst( $row->street ).'</td>
-                        <td>'.$row->date_start.'</td>
-                        <td>'.$row->duration.' day(s)</td>
-                        <td>Php '.$row->rate.'</td>
-                        <td>Php '.$row->total_rate.'</td>
-                    </tr>
-                ';
-                }
-            }
-        }
-        ?>
-        </tbody>
+    <table id="filterTable" >
     </table>
+<!--    <div class="row">-->
+        <button class="button right">Save</button>
+<!--    </div>-->
 </div>
-
 <div id="cmae_Modal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
     <h2 id="modalTitle" class="text-center">Update the info.</h2>
 
