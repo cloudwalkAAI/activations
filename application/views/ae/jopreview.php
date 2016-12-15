@@ -99,113 +99,113 @@ $info = json_decode($jo_details);
                     <?php
                 }
                 ?>
-				<div class="row">
-					<table id="tbl_mom" class="hide large-12 columns">
-						<tr>
-							<th>Minutes of the Meeting</th>
-						</tr>
-						<tr>
-							<td>Date of revision</td>
-						</tr>
-						<?php
-							$get_date_mom = json_decode( $mom_dates );
-							if( isset( $get_date_mom ) ){
-								foreach( $get_date_mom as $id => $ddates ){
-									echo '
+                <div class="row">
+                    <table id="tbl_mom" class="hide large-12 columns">
+                        <tr>
+                            <th>Minutes of the Meeting</th>
+                        </tr>
+                        <tr>
+                            <td>Date of revision</td>
+                        </tr>
+                        <?php
+                        $get_date_mom = json_decode( $mom_dates );
+                        if( isset( $get_date_mom ) ){
+                            foreach( $get_date_mom as $id => $ddates ){
+                                echo '
 										<tr>
 											<td><a class="loadmombydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
 										</tr>
 									';
-								}
-							}
-						?>
-					</table>
+                            }
+                        }
+                        ?>
+                    </table>
 
-					<table id="tbl_event_details" class="hide large-12 columns">
-						<tr>
-							<th>Event Details</th>
-						</tr>
-						<tr>
-							<td>Dates of Revision</td>
-						</tr>
-						<?php
-						$get_date_ed = json_decode( $detail_dates );
-						if( isset( $get_date_ed ) ){
-							foreach( $get_date_ed as $ided => $ddatesed ){
-								echo '
+                    <table id="tbl_event_details" class="hide large-12 columns">
+                        <tr>
+                            <th>Event Details</th>
+                        </tr>
+                        <tr>
+                            <td>Dates of Revision</td>
+                        </tr>
+                        <?php
+                        $get_date_ed = json_decode( $detail_dates );
+                        if( isset( $get_date_ed ) ){
+                            foreach( $get_date_ed as $ided => $ddatesed ){
+                                echo '
 										<tr>
 											<td><a class="loadedbydate" href="#" alt="' . $ided . '">' . $ddatesed . '</a></td>
 										</tr>
 									';
-							}
-						}
-						?>
-					</table>
+                            }
+                        }
+                        ?>
+                    </table>
 
-					<table id="tbl_setup" class="hide large-12 columns">
-						<tr>
-							<th>Setup Details</th>
-						</tr>
-						<tr>
-							<td>Dates of Revision</td>
-						</tr>
-						<?php
-						$get_date_setup = json_decode( $setup_dates );
-						if( isset( $get_date_setup ) ){
-							foreach( $get_date_setup as $id => $ddates ){
-								echo '
+                    <table id="tbl_setup" class="hide large-12 columns">
+                        <tr>
+                            <th>Setup Details</th>
+                        </tr>
+                        <tr>
+                            <td>Dates of Revision</td>
+                        </tr>
+                        <?php
+                        $get_date_setup = json_decode( $setup_dates );
+                        if( isset( $get_date_setup ) ){
+                            foreach( $get_date_setup as $id => $ddates ){
+                                echo '
 										<tr>
 											<td><a class="loadsetupbydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
 										</tr>
 									';
-							}
-						}
-						?>
-					</table>
+                            }
+                        }
+                        ?>
+                    </table>
 
-					<table id="tbl_mvrf" class="hide large-12 columns">
-						<tr>
-							<th>MVRF</th>
-						</tr>
-						<tr>
-							<td>Dates of Revision</td>
-						</tr>
-						<?php
-						$get_date_mvrf = json_decode( $mvrf_dates );
-						if( isset( $get_date_mvrf ) ){
-							foreach( $get_date_mvrf as $id => $ddates ){
-								echo '
+                    <table id="tbl_mvrf" class="hide large-12 columns">
+                        <tr>
+                            <th>MVRF</th>
+                        </tr>
+                        <tr>
+                            <td>Dates of Revision</td>
+                        </tr>
+                        <?php
+                        $get_date_mvrf = json_decode( $mvrf_dates );
+                        if( isset( $get_date_mvrf ) ){
+                            foreach( $get_date_mvrf as $id => $ddates ){
+                                echo '
 										<tr>
 											<td><a class="loadmvrfbydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
 										</tr>
 									';
-							}
-						}
-						?>
-					</table>
+                            }
+                        }
+                        ?>
+                    </table>
 
-					<table id="tbl_other" class="hide large-12 columns">
-						<tr>
-							<th>Other</th>
-						</tr>
-						<tr>
-							<td>Dates of Revision</td>
-						</tr>
-						<?php
-						$get_date_other = json_decode( $other_dates );
-						if( isset( $get_date_other ) ){
-							foreach( $get_date_other as $id => $ddates ){
-								echo '
+                    <table id="tbl_other" class="hide large-12 columns">
+                        <tr>
+                            <th>Other</th>
+                        </tr>
+                        <tr>
+                            <td>Dates of Revision</td>
+                        </tr>
+                        <?php
+                        $get_date_other = json_decode( $other_dates );
+                        if( isset( $get_date_other ) ){
+                            foreach( $get_date_other as $id => $ddates ){
+                                echo '
 										<tr>
 											<td><a class="loadotherbydate" href="#" alt="' . $id . '">' . $ddates . '</a></td>
 										</tr>
 									';
-							}
-						}
-						?>
-					</table>
+                            }
+                        }
+                        ?>
+                    </table>
 
-				</div>
+                </div>
             </div>
         </div>
     </div>
@@ -274,31 +274,7 @@ $info = json_decode($jo_details);
             <li class="accordion-navigation acd">
                 <a href="#accordion_other">Others<img class="img-responsive right" src="<?= base_url('assets/img/logos/arrowdown.png')?>"></a>
                 <div id="accordion_other" class="content">
-                    <?php
-                    $other = json_decode($other_details);
-
-                    $shared_array = array();
-                    $this->db->select( 'shared_to, emp_id' );
-                    $this->db->from( 'job_order_list' );
-                    $this->db->where( 'jo_id', $this->input->get( 'a' ));
-                    $query = $this->db->get();
-                    if ($query->num_rows() > 0) {
-                        $row = $query->row();
-                        if (isset($row)) {
-                            $shared_array = explode( ',', $row->shared_to );
-                            $did = $row->emp_id;
-                        }
-                    }
-                    ?>
-                    <div id="alert_box_oth" data-alert class="alert-box alert radius hide-normal">
-                        Special characters are not allowed
-                        <a href="#" class="close">&times;</a>
-                    </div>
-                    <form id="other_form" action="" method="post">
-                        <input type="hidden" name="otherid" value="<?=$this->input->get('a')?>">
-                        <textarea name="ta_Other" id="ta_Other" cols="30" rows="10" <?=$str_disa?>><?=isset($other->texts) ? $other->texts : '';?></textarea>
-                        <button id="btn_other_submit" type="button" <?=$str_display?>>Save</button>
-                    </form>
+                    <?=isset($other->texts) ? $other->texts : '';?>
                 </div>
             </li>
             <li class="accordion-navigation acd">
@@ -309,7 +285,7 @@ $info = json_decode($jo_details);
             </li>
         </ul>
         <div class="row text-center">
-            <a href="#" class="button alert" id="executionDone" alt="<?=$this->input->get('a')?>">Complete</a>
+            <a href="#" class="button alert" id="executionDone" alt="<?=$this->input->get('a')?>">Incomplete</a>
         </div>
         <div id="ConfirmExecution" class="reveal-modal tiny text-center" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
             <h2 id="modalTitle">Update Success</h2>

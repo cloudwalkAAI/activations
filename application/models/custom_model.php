@@ -672,4 +672,18 @@ class Custom_model extends CI_Model
         $this->db->delete('event_requirement', array('req_id' => $id));
         return $this->db->affected_rows();
     }
+
+    function ExecutionUpdate( $a ){
+        $data = array(
+            'execution' => 0
+        );
+        $this->db->where( 'jo_id', $a );
+        $this->db->update( 'job_order_list', $data );
+
+        if( $this->db->affected_rows() > 0 ){
+            return 'updated';
+        }else{
+            return 'failed';
+        }
+    }
 }

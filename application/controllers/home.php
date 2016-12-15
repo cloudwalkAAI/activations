@@ -33,11 +33,15 @@ class Home extends CI_Controller {
             }
 			$data['active_menu'] = 'dashboard';
             $data['active_submenu'] = null;
-            $data['jo_list'] = $this->get_model->get_ae_jo();
+            $data['jo_list'] = $this->get_model->get_ae_jo( 1 );
             $data['calendar'] = $this->cal_model->generate($year, $month);
             $data['navigator'] = $this->load->view('nav', $data, TRUE);
-            $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
 
+            if ($this->session->userdata('sess_dept') == '8'){
+                $data['content'] = $this->load->view('inventory/inventory', $data, TRUE);
+            }else{
+                $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
+            }
             $this->load->view('master_page', $data);
         }else{
 			redirect('login');

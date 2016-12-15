@@ -1,6 +1,5 @@
 <?php
 //    print_r($this->session->userdata('sess_dept'));
-
     if( $this->session->userdata('sess_dept') <= 2 ){
 ?>
 <div class="row aaidashboard">
@@ -17,7 +16,8 @@
 			<section role="tabpanel" aria-hidden="false" class="content active" id="panel2-1">
 				<ul class="button-group even-3">
 					<li><a href="<?=base_url('jo?id='.$this->session->userdata('sess_id'))?>" class="button text-left"><span><img src="<?=base_url('assets/img/logos/JO.png');?>" /></span>Job Order</a></li>
-					<li><a href="<?=base_url('jo/production')?>" class="button text-left"><span><img src="<?=base_url('assets/img/logos/Prod.png');?>" /></span>Production</a></li>					
+					<li><a href="<?=base_url('summary')?>" class="button text-left"><span><img src="<?=base_url('assets/img/logos/JO.png');?>" /></span>Job Order Summary</a></li>
+					<li><a href="<?=base_url('jo/production')?>" class="button text-left"><span><img src="<?=base_url('assets/img/logos/Prod.png');?>" /></span>Production</a></li>
 					<li>
 						<a href="<?=base_url('jo/mvrf')?>" class="button text-left" style="line-height: 0px;">
 							<div class="large-2 columns" style="padding: 0;">
@@ -392,6 +392,9 @@
 <?php
 	}elseif($this->session->userdata('sess_dept') == '8'){
 ?>
+        <div class="row text-center">
+            <h3><?=strtoupper($category)?></h3>
+        </div>
 		<div class="column large-2 medium-2 small-12 scrollable_area">
 			<ul class="tabs vertical inv_tabs tbl_bdr" data-tab>
 				<li class="tab-title active"><a class="tbl_bdr" href="#panel11">Current Item(s)</a></li>
@@ -419,6 +422,7 @@
 						<tbody id="tbody_current">
 						<?php
 						$this->db->order_by("stock_id","desc");
+                        $this->db->where('category', $category); // from Table1
 						$query = $this->db->get('stocks');
 						foreach ( $query->result() as $row ){
 							echo '
@@ -453,7 +457,7 @@
 						</div>
 
 						<form id="inv_form" action="" method="post" autocomplete="on">
-
+                            <input type="hidden" name="inv_category" value="<?=$category?>">
 							<div class="column large-6 medium-6 small-12">
 								<input type="text" class="radius" name="inv_code" id="inv_code" placeholder="Code">
 								<input type="text" class="radius" name="inv_name" id="inv_name" placeholder="Name">
@@ -517,6 +521,7 @@
 						<?php
 						$this->db->select('*'); // Select field
 						$this->db->from('stocks_sub'); // from Table1
+						$this->db->where('stocks_sub.category', $category); // from Table1
 						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
 						$this->db->order_by("stock_id","desc");
 						$this->db->where('process','add');
@@ -565,6 +570,7 @@
 							<select name="deduct_select" id="deduct_select">
 								<option value="0">Select Item</option>
 								<?php
+                                $this->db->where('category', $category);
 								$query = $this->db->get('stocks');
 								foreach ( $query->result() as $row ){
 									echo '
@@ -611,6 +617,7 @@
 						<?php
 						$this->db->select('*'); // Select field
 						$this->db->from('stocks_sub'); // from Table1
+                        $this->db->where('stocks_sub.category', $category); // from Table1
 						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
 						$this->db->where('process','deduct');
 						$this->db->order_by("trans_id","DESC");
@@ -679,6 +686,7 @@
 							<select name="returned_select" id="returned_select">
 								<option value="0">Select Item</option>
 								<?php
+                                $this->db->where('category', $category); // from Table1
 								$query = $this->db->get('stocks');
 								foreach ( $query->result() as $row ){
 									echo '
@@ -713,9 +721,10 @@
 						<?php
 						$this->db->select('*'); // Select field
 						$this->db->from('stocks_sub'); // from Table1
-						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
-						$this->db->order_by("trans_id","desc");
-						$this->db->where('process','return');
+                        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER'); // Join table1 with table2 based on the foreign key
+                        $this->db->order_by("trans_id","desc");
+                        $this->db->where('stocks_sub.category', $category); // from Table1
+                        $this->db->where('process','return');
 						$res_inv = $this->db->get();
 						foreach ( $res_inv->result() as $row_inv ){
 							echo '
@@ -749,8 +758,9 @@
 						<tbody id="tbodyAppend" class="tbodyAppend">
 						<?php
 						$this->db->select('*'); // Select field
-						$this->db->from('stocks_sub'); // from Table1
-						$this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
+                        $this->db->from('stocks_sub'); // from Table1
+                        $this->db->where('stocks_sub.category', $category); // from Table1
+                        $this->db->join('stocks','stocks_sub.item_id = stocks.stock_id','INNER');
 						$this->db->order_by("trans_id","desc");
 						$query = $this->db->get();
 						foreach ( $query->result() as $row ){
@@ -781,7 +791,6 @@
 				$b = '';
 
 				foreach( $jo_list as $row) {
-
 					$query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));
 					$row_company = $query_company->row();
 					if (isset($row_company)) {
@@ -864,7 +873,6 @@
 				<?php
 				$c = '';
 				$b = '';
-
 				foreach( $jo_list as $row) {
 
 					$query_company = $this->db->get_where('clients', array('client_id' => $row['client_company_name']));

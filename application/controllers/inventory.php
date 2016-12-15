@@ -48,4 +48,59 @@ class Inventory extends CI_Controller
     function cm_release(){
         echo $this->custom_model->update_cm_release( $this->input->post() );
     }
+
+    function products(){
+        $data['active_menu'] = 'dashboard';
+        $data['active_submenu'] = null;
+        $data['jo_list'] = $this->get_model->get_ae_jo( 1 );
+        $data['category'] = 'product';
+//        $data['calendar'] = $this->cal_model->generate($year, $month);
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
+        $this->load->view('master_page', $data);
+    }
+
+    function booths(){
+        $data['active_menu'] = 'dashboard';
+        $data['active_submenu'] = null;
+        $data['jo_list'] = $this->get_model->get_ae_jo( 1 );
+        $data['category'] = 'booths';
+//        $data['calendar'] = $this->cal_model->generate($year, $month);
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
+        $this->load->view('master_page', $data);
+    }
+
+    function deliveries(){
+        $data['active_menu'] = 'dashboard';
+        $data['active_submenu'] = null;
+        $data['jo_list'] = $this->get_model->get_ae_jo( 1 );
+        $data['category'] = 'deliveries';
+//        $data['calendar'] = $this->cal_model->generate($year, $month);
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
+        $this->load->view('master_page', $data);
+    }
+
+    function internals(){
+        $data['active_menu'] = 'dashboard';
+        $data['active_submenu'] = null;
+        $data['jo_list'] = $this->get_model->get_ae_jo( 1 );
+        $data['category'] = 'internals';
+//        $data['calendar'] = $this->cal_model->generate($year, $month);
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
+        $this->load->view('master_page', $data);
+    }
+
+    function approvals(){
+        $data['active_menu'] = 'dashboard';
+        $data['active_submenu'] = null;
+        $data['jo_list'] = $this->get_model->get_ae_jo( 1 );
+        $data['category'] = 'approvals';
+//        $data['calendar'] = $this->cal_model->generate($year, $month);
+        $data['navigator'] = $this->load->view('nav', $data, TRUE);
+        $data['content'] = $this->load->view('ae/dashboard', $data, TRUE);
+        $this->load->view('master_page', $data);
+    }
 }

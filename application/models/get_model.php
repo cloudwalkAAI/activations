@@ -2,22 +2,11 @@
 
 class Get_model extends CI_Model
 {
-    function get_ae_jo( $empid = '' ){
-        $this->db->order_by("jo_id","desc"); 
+    function get_ae_jo( $summary = null ){
+        $this->db->order_by("jo_id","desc");
+        $this->db->where('execution', $summary);
         $query = $this->db->get( 'job_order_list' );
         return $query->result_array();
-//        return false;
-//        if( $this->session->userdata('sess_dept') < 2 ){
-//            $this->db->order_by("jo_id","desc");
-//            $query = $this->db->get_where( 'job_order_list', array( 'emp_id' => $empid ) );
-//            return $query->result_array();
-//        }elseif( $this->session->userdata('sess_dept') != '2' ){
-//            $this->db->order_by("jo_id","desc");
-//            $query = $this->db->get( 'job_order_list' );
-//            return $query->result_array();
-//        }else{
-//            return false;
-//        }
     }
 
     function get_ae_jo_query( $empid, $a, $b){
@@ -995,6 +984,33 @@ class Get_model extends CI_Model
                         <a class="edit-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Edit.png").'" /></a>
                         <a class="del-btn-req" href="#" alt="'.$row->req_id.'"><img class="btn-delete-edit-size" src="'.base_url("assets/img/logos/Delete.png").'" /></a>
                     </td>
+                </tr>
+            ';
+        }
+        return $result;
+    }
+
+    function RequireTableNoEdit( $a ){
+        $result = "";
+//        $breaks = array("<br />","<br>","<br/>");
+
+        $this->db->order_by("req_id","desc");
+
+        if( isset( $a['reqid'] ) ){
+            $query = $this->db->get_where( 'event_requirement', array( 'jo_id' => $a['reqid'] ) );
+        }else{
+            $query = $this->db->get_where( 'event_requirement', array( 'jo_id' => $a ) );
+        }
+
+        foreach( $query->result() as $row ){
+//            $text = str_ireplace($breaks, "\r\n", $row->deliverables);
+//            $text1 = str_ireplace($breaks, "\r\n", $row->next_steps);
+            $result .= '
+                <tr id="req'.$row->req_id.'">
+                    <td>'.$row->department_name.'</td>
+                    <td><span class="ui-tooltip" title="'.$row->deliverables.'">Hover for More Info</span></td>
+                    <td>'.$row->deadline.'</td>
+                    <td><span class="ui-tooltip" title="'.$row->next_steps.'">Hover for More Info</span></td>
                 </tr>
             ';
         }

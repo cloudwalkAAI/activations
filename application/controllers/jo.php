@@ -10,6 +10,7 @@ class Jo extends CI_Controller{
         $this->load->model('get_model');
         $this->load->model('cal_model');
         $this->load->model('del_model');
+        $this->load->model('custom_model');
         $this->load->helper('download');
         $this->load->library('m_pdf');
 //        $this->load->library('pagination');
@@ -22,7 +23,7 @@ class Jo extends CI_Controller{
 //        if( $this->session->userdata('sess_dept') == '2' ){
 //            $arr = $this->get_model->get_ae_jo( $this->input->get('id') );
 //        }else{
-            $arr = $this->get_model->get_ae_jo();
+            $arr = $this->get_model->get_ae_jo( 1 );
 //        }
 
         if( $this->session->userdata('sess_id') ){
@@ -644,5 +645,9 @@ class Jo extends CI_Controller{
 
     function whereClient(){
         echo $this->get_model->GetClient($this->input->post());
+    }
+
+    function UpdateExecution(){
+        echo $this->custom_model->ExecutionUpdate( $this->input->post('exval') );
     }
 }

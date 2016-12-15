@@ -3251,6 +3251,26 @@ function RCFT(){
     });
 }
 
+$('#executionDone').on('click',function(e){
+    e.preventDefault();
+    var exval = $(this).attr('alt');
+    $.ajax({
+        url: MyNameSpace.config.base_url+'jo/UpdateExecution',
+        type:'post',
+        data: {
+            'exval' : exval
+        },
+        success: function(data) {
+            if( data == 'updated' ){
+                $('#ConfirmExecution').foundation('reveal', 'open');
+
+                setTimeout(function(){ $('#ConfirmExecution').foundation('reveal', 'close'); }, 2000);
+
+            }
+        }
+    });
+});
+
 if($('textarea').length >= 1) {
     CKEDITOR.replace( 'editor_campaign_overview', {
         filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"

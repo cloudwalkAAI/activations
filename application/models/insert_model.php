@@ -749,6 +749,7 @@ class Insert_model extends CI_Model
         $arr_data = array();
 
         $data = array(
+            'category'     => $a['inv_category'],
             'item_code'     => $a['inv_code'],
             'item_name'     => $a['inv_name'],
             'description'   => $a['inv_description'],

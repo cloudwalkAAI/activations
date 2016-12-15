@@ -108,6 +108,10 @@ if( isset( $shared_array ) ){
 </form>
 <hr>
 <h4>Venue(s)</h4>
+
+<?php
+if ( ( $this->session->userdata('sess_dept') == $did ) ) {
+?>
 <div class="column large-3 medium-3 small-12">
     <form id="cmtuva_ae_form" action="" method="post" <?=($this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ? 'style="display:block;"':'style="display:none;"';?>>
         <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
@@ -138,6 +142,11 @@ if( isset( $shared_array ) ){
     </form>
 </div>
 <div class="column large-9 medium-9 small-12 scrollable_area">
+<?php
+}else{
+    echo '<div class="column large-12 medium-12 small-12 scrollable_area">';
+}
+?>
     <input type="search" class="radius" name="inp_search_cmae" id="inp_search_cmae" placeholder="Search">
     <table class="twidth" id="cmae_table">
         <thead>
@@ -249,7 +258,14 @@ if( isset( $shared_array ) ){
     <input type="search" class="radius tbl_bdr" name="search_deduct_items" id="search_deduct_items" placeholder="Search">
 </div>
 <div class="column large-2 medium-2 small-12 right-align">
-    <button class="button tiny" data-reveal-id="inv_deduct_item" <?=$str_display;?>>Deduct item</button>
+    <?php
+    if( ( $this->session->userdata('sess_dept') == 8 ) ) {
+    ?>
+        <button class="button tiny" data-reveal-id="inv_deduct_item" <?=$str_display;?>>Deduct item</button>
+    <?php
+    }
+    ?>
+
 </div>
 
 <div id="inv_deduct_item" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
