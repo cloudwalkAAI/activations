@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="<?=base_url('assets/css/foundation-icons/foundation-icons.css');?>">
 	<link rel="shortcut icon" type="image/png" href="<?= base_url('assets/img/logos/header_logo-c.png')?>"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?=base_url('assets/js/ion.rangeSlider-2.1.5/css/ion.rangeSlider.css');?>" />
+    <link rel="stylesheet" href="<?=base_url('assets/js/ion.rangeSlider-2.1.5/css/ion.rangeSlider.skinFlat.css');?>" />
     <script>
         var MyNameSpace = {
             config: {
@@ -22,8 +25,10 @@
             }
         }
     </script>
-    <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>    
-    <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>    
+    <script type="text/javascript" src="<?= base_url('assets/js/jquery-1.11.3.min.js');?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="<?=base_url('assets/js/vendor/modernizr.js');?>"></script>
+    <script src="<?=base_url('assets/js/ion.rangeSlider-2.1.5/js/ion-rangeSlider/ion.rangeSlider.min.js');?>"></script>
 <!--    <script src="--><?//=base_url('assets/js/ckeditorjs/ckeditor.js');?><!--"></script>-->
     <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
 	<?php
