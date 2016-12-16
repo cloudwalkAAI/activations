@@ -247,13 +247,13 @@ form#form_client .rightside label a,form#form_client a#btn_save_client{
 }
 
 .jo-in .jo-maincontent ul.accordion li.acd a{
-	background: #fff;
-    color: #2993dd;
-	font-family:montserratSemiBold;
-	padding-left: 0;
-    font-size: 1.5em;
-    border-bottom: 1px solid #e1e1e1;
-    border-radius: 0px;
+    /*background: #fff;*/
+    /*color: #2993dd;*/
+    /*font-family:montserratSemiBold;*/
+    /*padding-left: 0;*/
+    /*font-size: 1.5em;*/
+    /*border-bottom: 1px solid #e1e1e1;*/
+    /*border-radius: 0px;*/
 }
 
 .jo-sidebar{

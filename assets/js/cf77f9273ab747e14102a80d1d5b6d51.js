@@ -3293,9 +3293,9 @@ if($('textarea').length >= 1) {
     CKEDITOR.replace( 'setup_particular', {
         filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
     } );
-    CKEDITOR.replace( 'ta_mvrf', {
-        filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
-    } );
+    // CKEDITOR.replace( 'ta_mvrf', {
+    //     filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
+    // } );
     CKEDITOR.replace( 'ta_Other', {
         filebrowserUploadUrl: MyNameSpace.config.base_url+"upload/ckeditor_upload"
     } );

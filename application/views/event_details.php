@@ -118,101 +118,119 @@ if( isset( $shared_array ) ){
 <?php
 if ( ( $this->session->userdata('sess_dept') == 6 ) ) {
 ?>
-<div class="column large-3 medium-3 small-12">
-    <form id="cmtuva_ae_form" action="" method="post" <?=($this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ? 'style="display:block;"':'style="display:none;"';?>>
-        <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
-        <input type="hidden" id="loc_id" name="loc_id" value="">
-<!--        <select name="cmtuva_sel_venue" id="cmtuva_sel_venue">-->
-<!--            <option value="0">Select Venue ...</option>-->
-<!--            --><?php
-//            $this->db->select( 'venue' );
-//            $this->db->from( 'cmtuva_location_list' );
-//            $this->db->group_by('venue');
-//            $query = $this->db->get();
-//            if ($query->num_rows() > 0) {
-//                foreach ($query->result() as $row) {
-//                    echo '<option value="'.ucfirst($row->venue).'">'.ucfirst($row->venue).'</option>';
-//                }
-//            }
-//            ?>
-<!--        </select>-->
-<!--        <select name="cmtuva_sel_area" id="cmtuva_sel_area" disabled>-->
-<!--            <option value="0">Select Area ...</option>-->
-<!--        </select>-->
-<!--        <textarea name="cmae_street" id="cmae_street" cols="30" rows="3"></textarea>-->
-<!--        <input type="text" name="cmtuva_date" id="cmtuva_date" placeholder="Start date">-->
-<!--        <input type="text" class="txtboxToFilter text-right" name="cmtuva_duration" id="cmtuva_duration" placeholder="Duration">-->
-<!--        <input type="text" name="cmtuva_rate" id="cmtuva_rate" class="twidth text-right" placeholder="0" readonly>-->
-<!--        <input type="text" class="text-right" name="cmtuva_esp" id="cmtuva_esp" readonly>-->
-<!--        <button id="btn_ae_cmtuva_rate" class="button twidth text-center success">Add</button>-->
-        <label for="inp_category">
-            <select class="radius" name="inp_category" id="inp_category">
-            </select>
-        </label>
-        <label for="inp_subcategory">
-            <select class="radius" name="inp_subcategory" id="inp_subcategory" placeholder="Subcategory">
-                <option value="0">Select Subcategory</option>
-                <option value="1">Micinfo</option>
-            </select>
-        </label>
-        <label for="inp_area">
-            <select class="radius" name="inp_area" id="inp_area" placeholder="Area">
-                <option value="0">Select Area</option>
-                <option value="1">Test1</option>
-            </select>
-        </label>
-        <label for="inp_SubArea">
-            <select class="radius" name="inp_SubArea" id="inp_SubArea" placeholder="Subarea">
-                <option value="0">Select Subarea</option>
-                <option value="1">Test1</option>
-            </select>
-        </label>
-        <label for="inp_venue">
-            <select class="radius" name="inp_venue" id="inp_venue" placeholder="Venue">
-                <option value="0">Select Venue</option>
-            </select>
-        </label>
-        <label for="inp_street">
-            <select class="radius" name="inp_street" id="inp_street" placeholder="Address">
-                <option value="0">Select Street</option>
-            </select>
-        </label>
-        <label for="inp_lsm">
-            <select class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM">
-                <option value="0">Select LSM</option>
-            </select>
-        </label>
-        <label>Rates</label>
-        <label for="inp_ratesMin">
-            <input type="number" class="radius txtboxToFilter sliderRange" name="inp_ratesMin" id="inp_ratesMin" placeholder="Min Rate">
-        </label>
-        <label>Estimated Foot Traffic</label>
-        <label for="inp_eft"><input type="number" class="radius" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
-        <label for="inp_eft_male"><input type="number" class="radius" name="inp_eft_male" id="inp_eft_male" placeholder="EFT Male"></label>
-        <label for="inp_eft_female"><input type="number" class="radius" name="inp_eft_female" id="inp_eft_female" placeholder="EFT Female"></label>
-        <!--                        <label for="inp_tarhits"><input type="text" class="radius" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>-->
-        <label>Actual Hits</label>
-        <label for="inp_achits_m"><input type="number" class="radius" name="inp_achits_m" id="inp_achits_m" placeholder="Actual hits (Male)"></label>
-        <label for="inp_achits_f"><input type="number" class="radius" name="inp_achits_f" id="inp_achits_f" placeholder="Actual hits (Female)"></label>
-        <label for="inp_dry_male"><input type="number" class="radius" name="inp_dry_male" id="inp_dry_male" placeholder="Dry Sampling (Male)"></label>
-        <label for="inp_dry_female"><input type="number" class="radius" name="inp_dry_female" id="inp_dry_female" placeholder="Dry Sampling (Female)"></label>
-        <label for="inp_exper_male"><input type="number" class="radius" name="inp_exper_male" id="inp_exper_male" placeholder="Experiential (Male)"></label>
-        <label for="inp_exper_female"><input type="number" class="radius" name="inp_exper_female" id="inp_exper_female" placeholder="Experiential (Female)"></label>
-    </form>
+
+
+
+<div class="column large-12 medium-12 small-12">
+
+    <div class="off-canvas-wrap" data-offcanvas>
+        <div class="inner-wrap">
+
+            <a class="left-off-canvas-toggle btn tiny radius" href="#" >Advanced Filter</a>
+
+            <!-- Off Canvas Menu -->
+            <aside class="left-off-canvas-menu">
+                <!-- whatever you want goes here -->
+                <form id="cmtuva_ae_form" action="" method="post" <?=($this->session->userdata('sess_dept') <= 2 ) && ( $this->session->userdata('sess_id') == $did ) || ( $this->session->userdata('sess_dept') == 6 ) ? 'style="display:block;"':'style="display:none;"';?>>
+                    <input type="hidden" name="jo_id" value="<?=$this->input->get('a');?>">
+                    <input type="hidden" id="loc_id" name="loc_id" value="">
+                    <!--        <select name="cmtuva_sel_venue" id="cmtuva_sel_venue">-->
+                    <!--            <option value="0">Select Venue ...</option>-->
+                    <!--            --><?php
+                    //            $this->db->select( 'venue' );
+                    //            $this->db->from( 'cmtuva_location_list' );
+                    //            $this->db->group_by('venue');
+                    //            $query = $this->db->get();
+                    //            if ($query->num_rows() > 0) {
+                    //                foreach ($query->result() as $row) {
+                    //                    echo '<option value="'.ucfirst($row->venue).'">'.ucfirst($row->venue).'</option>';
+                    //                }
+                    //            }
+                    //            ?>
+                    <!--        </select>-->
+                    <!--        <select name="cmtuva_sel_area" id="cmtuva_sel_area" disabled>-->
+                    <!--            <option value="0">Select Area ...</option>-->
+                    <!--        </select>-->
+                    <!--        <textarea name="cmae_street" id="cmae_street" cols="30" rows="3"></textarea>-->
+                    <!--        <input type="text" name="cmtuva_date" id="cmtuva_date" placeholder="Start date">-->
+                    <!--        <input type="text" class="txtboxToFilter text-right" name="cmtuva_duration" id="cmtuva_duration" placeholder="Duration">-->
+                    <!--        <input type="text" name="cmtuva_rate" id="cmtuva_rate" class="twidth text-right" placeholder="0" readonly>-->
+                    <!--        <input type="text" class="text-right" name="cmtuva_esp" id="cmtuva_esp" readonly>-->
+                    <!--        <button id="btn_ae_cmtuva_rate" class="button twidth text-center success">Add</button>-->
+                    <label for="inp_category">
+                        <select class="radius" name="inp_category" id="inp_category" placeholder="category">
+                            <option value="0">Select Category</option>
+                        </select>
+                    </label>
+                    <label for="inp_subcategory">
+                        <select class="radius" name="inp_subcategory" id="inp_subcategory" placeholder="Subcategory">
+                            <option value="0">Select Subcategory</option>
+                        </select>
+                    </label>
+                    <label for="inp_area">
+                        <select class="radius" name="inp_area" id="inp_area" placeholder="Area">
+                            <option value="0">Select Area</option>
+                        </select>
+                    </label>
+                    <label for="inp_SubArea">
+                        <select class="radius" name="inp_SubArea" id="inp_SubArea" placeholder="Subarea">
+                            <option value="0">Select Subarea</option>
+                        </select>
+                    </label>
+                    <label for="inp_venue">
+                        <select class="radius" name="inp_venue" id="inp_venue" placeholder="Venue">
+                            <option value="0">Select Venue</option>
+                        </select>
+                    </label>
+                    <label for="inp_street">
+                        <select class="radius" name="inp_street" id="inp_street" placeholder="Address">
+                            <option value="0">Select Street</option>
+                        </select>
+                    </label>
+                    <label for="inp_lsm">
+                        <select class="radius" name="inp_lsm" id="inp_lsm" placeholder="LSM">
+                            <option value="0">Select LSM</option>
+                        </select>
+                    </label>
+                    <label>Rates</label>
+                    <label for="inp_ratesMin">
+                        <input type="number" class="radius txtboxToFilter sliderRange" name="inp_ratesMin" id="inp_ratesMin" placeholder="Min Rate">
+                    </label>
+                    <label>Estimated Foot Traffic</label>
+                    <label for="inp_eft"><input type="number" class="radius" name="inp_eft" id="inp_eft" placeholder="Estimated foot traffic"></label>
+                    <label for="inp_eft_male"><input type="number" class="radius" name="inp_eft_male" id="inp_eft_male" placeholder="EFT Male"></label>
+                    <label for="inp_eft_female"><input type="number" class="radius" name="inp_eft_female" id="inp_eft_female" placeholder="EFT Female"></label>
+                    <!--                        <label for="inp_tarhits"><input type="text" class="radius" name="inp_tarhits" id="inp_tarhits" placeholder="Target hits"></label>-->
+                    <label>Actual Hits</label>
+                    <label for="inp_achits_m"><input type="number" class="radius" name="inp_achits_m" id="inp_achits_m" placeholder="Actual hits (Male)"></label>
+                    <label for="inp_achits_f"><input type="number" class="radius" name="inp_achits_f" id="inp_achits_f" placeholder="Actual hits (Female)"></label>
+                    <label for="inp_dry_male"><input type="number" class="radius" name="inp_dry_male" id="inp_dry_male" placeholder="Dry Sampling (Male)"></label>
+                    <label for="inp_dry_female"><input type="number" class="radius" name="inp_dry_female" id="inp_dry_female" placeholder="Dry Sampling (Female)"></label>
+                    <label for="inp_exper_male"><input type="number" class="radius" name="inp_exper_male" id="inp_exper_male" placeholder="Experiential (Male)"></label>
+                    <label for="inp_exper_female"><input type="number" class="radius" name="inp_exper_female" id="inp_exper_female" placeholder="Experiential (Female)"></label>
+                </form>
+            </aside>
+
+            <!-- main content goes here -->
+            <table id="filterTable" class="display nowrap">
+
+
+            </table>
+            <div class="right">
+<!--                <button class="button">Clear</button>-->
+                <button id="save_filtered_table" class="button">Save</button>
+            </div>
+
+
+            <!-- close the off-canvas menu -->
+            <a class="exit-off-canvas"></a>
+
+        </div>
+    </div>
 </div>
-<div class="column large-9 medium-9 small-12 ">
 <?php
-}else{
-    echo '<div class="column large-12 medium-12 small-12">';
 }
 ?>
-    <input type="search" class="radius" name="inp_search_cmae" id="inp_search_cmae" placeholder="Search">
-    <table id="filterTable" >
-    </table>
-<!--    <div class="row">-->
-        <button class="button right">Save</button>
-<!--    </div>-->
-</div>
 <div id="cmae_Modal" class="reveal-modal tiny" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
     <h2 id="modalTitle" class="text-center">Update the info.</h2>
 

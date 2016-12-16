@@ -15,40 +15,127 @@
     c.init = function() {
         fetchData();
         bindEvents();
+        initIonSlider();
+    };
+
+    // create Datatable
+    function initDataTable(isFresh) {
+        var defaultColumns = [
+            {
+                title: 'ID',
+                data: 'location_id',
+                visible: false
+            },
+            {
+                title : 'Category',
+                data : 'category'
+            },
+            {
+                title : 'Subcategory',
+                data : 'category'
+            },
+            {
+                title : 'Venue',
+                data : 'venue'
+            },
+            {
+                title : 'Area',
+                data : 'area'
+            },
+            {
+                title : 'Subarea',
+                data : 'sub_Area'
+            },
+            {
+                title : 'Address',
+                data : 'street'
+            },
+            {
+                title : 'Min Rate',
+                data : 'rate'
+            },
+            {
+                title : 'Max Rate',
+                data : 'rate_Max'
+            },
+            {
+                title : 'EFT Combined',
+                data : 'eft'
+            },
+            {
+                title : 'EFT Male',
+                data : 'eft_male'
+            },
+            {
+                title : 'EFT Female',
+                data : 'eft_female'
+            },
+            {
+                title : 'Target Hits',
+                data : 'target_hits'
+            },
+            {
+                title : 'Actual Hits',
+                data : 'actual_hits'
+            },
+            {
+                title : 'Actual Hits Female',
+                data : 'actual_hits_f'
+            },
+            {
+                title : 'Actual Dry Male',
+                data : 'actual_dry_m'
+            },
+            {
+                title : 'Actual Dry Female',
+                data : 'actual_dry_f'
+            },
+            {
+                title : 'Actual Dry Male',
+                data : 'actual_exper_m'
+            },
+            {
+                title : 'Actual Dry Female',
+                data : 'actual_exper_f'
+            },
+            {
+                title : 'LSM',
+                data : 'lsm'
+            },
+            {
+                title : 'Image',
+                data : 'u_images'
+            },
+        ]
+
+        if(!isFresh) {
+            defaultColumns.push({
+                title : 'Actions',
+                data : 'cmae_id',
+                render : function(data) {
+                    return '<a class="del-btn-jois" href="javascript:void(0)" data-id="'+data+'"><img class="btn-delete-edit-size" src="/assets/img/logos/Delete.png" /></a>';
+                    // return '<button class="button" data-id="'+data+'">DELETE</button>'
+                }
+            });
+        };
 
         c.dataTable = $('#filterTable').DataTable({
-            columns: [
-                {
-                    title : 'Venue',
-                    data : 'venue'
-                },
-                {
-                    title : 'Area',
-                    data : 'area'
-                },
-                {
-                    title : 'Address',
-                    data : 'street'
-                },
-                {
-                    title : 'Rate',
-                    data : 'rate'
-                },
-                {
-                    title : 'Image',
-                    data : 'u_images'
-                },
-                {
-                    title : 'Actions',
-                    data : 'id',
-                    render : function(data) {
-                        return '<a class="del-btn-cmtuva" href="#" data-id="'+data+'" ><img class="btn-delete-edit-size" src="/assets/img/logos/Delete.png" /></a>';
-                        // return '<button class="button" data-id="'+data+'">DELETE</button>'
-                    }
-                }
-            ]
+            "scrollY": true,
+            "scrollX": true,
+            columns: defaultColumns
         });
-    };
+    }
+
+    function initIonSlider() {
+        $(".sliderRange").ionRangeSlider({
+            type: "double",
+            grid: true,
+            min: 0,
+            max: 1000,
+            from: 200,
+            to: 800
+        });
+    }
 
     // initialize base select2
     function initializeSelect2() {
@@ -59,8 +146,6 @@
         var venue = parseVenue();
         var street = parseStreet();
         var lsm = parseLSM();
-
-        // console.log(categories);
 
         $("#inp_category").select2({
             data: categories
@@ -91,17 +176,71 @@
         });
     }
 
-    function destroyDataTable() {
+    // clear datatable
+    function clearDataTable() {
         c.filteredData = [];
-        c.dataTable.clear().draw();
+        if(c.dataTable) {
+            c.dataTable.clear().draw();
+        }
     }
 
-    function initializeDataTable(data) {
-        destroyDataTable();
+    // add data to datatable
+    function addDataToDataTable(data) {
+        clearDataTable();
         c.dataTable.rows.add(data).draw();
 
     }
 
+    var QueryString = function () {
+        // This function is anonymous, is executed immediately and
+        // the return value is assigned to QueryString!
+        var query_string = {};
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            // If first entry with this name
+            if (typeof query_string[pair[0]] === "undefined") {
+                query_string[pair[0]] = decodeURIComponent(pair[1]);
+                // If second entry with this name
+            } else if (typeof query_string[pair[0]] === "string") {
+                var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+                query_string[pair[0]] = arr;
+                // If third or later entry with this name
+            } else {
+                query_string[pair[0]].push(decodeURIComponent(pair[1]));
+            }
+        }
+        return query_string;
+    }();
+
+    function saveDataFromDatable() {
+        var dataArray = [];
+        var dataPar = '';
+        var dataJoid = QueryString.a;
+        c.dataTable.data().each(function(d) {
+            var id = d.location_id;
+            dataArray.push(id);
+        });
+        dataPar = JSON.stringify(dataArray);
+        $.ajax({
+            type : 'POST',
+            url : '/ajax/filter/save_locations',
+            data : {
+                dataPass : dataPar,
+                joId : dataJoid
+            },
+            success : function (res) {
+                console.log(res)
+            }
+        })
+    }
+
+    $('#save_filtered_table').click(function(){
+        saveDataFromDatable();
+    });
+
+    // filter data
     function filters(key, value) {
         var results = [];
         for(var item of c.data){
@@ -117,10 +256,10 @@
     function bindEvents() {
         $("#inp_category").on('change', function(e) {
             c.filters.category = e.target.value;
-            destroyDataTable();
+            clearDataTable();
 
             var data = filters('category', c.filters.category);
-            initializeDataTable(data);
+            addDataToDataTable(data);
 
             $("#inp_subcategory").empty();
             $("#inp_subcategory").select2({
@@ -130,10 +269,10 @@
 
         $("#inp_subcategory").on('change', function(e) {
             c.filters.subCategory = e.target.value;
-            destroyDataTable();
+            clearDataTable();
 
             var data = filters('subcategory', e.target.value);
-            initializeDataTable(data);
+            addDataToDataTable(data);
 
             $("#inp_area").empty();
             $("#inp_area").select2({
@@ -143,37 +282,60 @@
 
         $("#inp_area").on('change', function(e) {
             c.filters.area = e.target.value;
-            destroyDataTable();
+            clearDataTable();
 
             var data = filters('area', e.target.value);
-            initializeDataTable(data);
+            addDataToDataTable(data);
 
             $("#inp_subarea").empty();
             $("#inp_subarea").select2({
                 data: parseSubArea()
             });
         });
+
+        $('#filterTable').on('click','a.del-btn-jois', function (e) {
+            var loc_id = c.dataTable.cell( $(this).parents('td') ).data();
+            console.log(loc_id)
+            removeLocation(loc_id);
+            c.dataTable.row($(this).parents('tr')).remove().draw();
+        })
+    }
+
+    function removeLocation(loc_id) {
+        $.post('/ajax/filter/remove_location/' + loc_id,{}, function(res) {
+            console.log(res)
+        });
     }
 
     // get initial data
     function fetchData() {
-        fetch('/ajax/filter/get_locations')
+        fetch('/ajax/filter/get_saved_locations/'+QueryString.a)
             .then(function(res) {
-
+                if(res.status != 200) {
+                    fetch('/ajax/filter/get_locations').then(function(res) {
+                        res.json().then(function(json) {
+                            c.data = json;
+                            initializeSelect2();
+                            initDataTable(true);
+                            addDataToDataTable(c.data);
+                        });
+                    });
+                    return;
+                }
                 // Convert Response to json
                 res.json().then(function(json) {
                     c.data = json;
-
                     initializeSelect2();
-                    initializeDataTable(c.data);
+                    initDataTable(false);
+                    addDataToDataTable(c.data);
                 });
-        });
+            });
     }
 
     // parse category
     function parseCategoryItems() {
         var result = [];
-        destroyDataTable();
+        clearDataTable();
         for (var item of c.data) {
             if (item.category != '') {
                 if (doesAlreadyExist(result, 'id', item.category)) {
@@ -220,6 +382,7 @@
         return result
     }
 
+    // parse area
     function parseArea() {
         var result = [];
 
@@ -250,6 +413,7 @@
         return result
     }
 
+    // parse subarea
     function parseSubArea() {
         var result = [];
 
@@ -280,12 +444,12 @@
         return result
     }
 
+    // parse venue
     function parseVenue() {
         var result = [];
 
         for (var item of c.data) {
             if (item.venue != '') {
-                console.log(doesAlreadyExist(result, 'id', item.venue));
                 if (doesAlreadyExist(result, 'id', item.venue)) {
                     continue;
                 }
@@ -300,12 +464,12 @@
         return result
     }
 
+    // parse street
     function parseStreet() {
         var result = [];
 
         for (var item of c.data) {
             if (item.street != '') {
-                console.log(doesAlreadyExist(result, 'id', item.street));
                 if (doesAlreadyExist(result, 'id', item.street)) {
                     continue;
                 }
@@ -320,12 +484,12 @@
         return result
     }
 
+    // parse lsm
     function parseLSM() {
         var result = [];
 
         for (var item of c.data) {
             if (item.lsm != '') {
-                console.log(doesAlreadyExist(result, 'id', item.lsm));
                 if (doesAlreadyExist(result, 'id', item.lsm)) {
                     continue;
                 }
@@ -355,72 +519,3 @@
 
     c.init();
 })(jQuery);
-
-// $("#inp_category").select2({
-//     placeholder: 'Select Category',
-//     allowClear: true,
-//     ajax: {
-//         url: "/ajax/filter/get_categories",
-//         cache: true,
-//         dataType: 'json',
-//         processResults: function (data) {
-//             var results = [{
-//                 id: '0',
-//                 text:'Select...'
-//             }];
-//             $.each(data, function(index, item){
-//                 results.push({
-//                     id: item.category,
-//                     text: item.category
-//                 });
-//             });
-//             return {
-//                 results: results
-//             };
-//         }
-//     }
-// }).on('select2:select', function () {
-//     $("#inp_subcategory").select2();
-// });
-// $("#inp_subcategory").select2({
-//     placeholder: 'Select Subcategory',
-//     allowClear: true,
-//     ajax: {
-//         url: "/ajax/filter/get_subcategories",
-//         cache: true,
-//         data: function (params) {
-//             return {
-//                 term: params.term,
-//                 category: $('#inp_category').val()
-//             };
-//         },
-//         dataType: 'json',
-//         processResults: function (data) {
-//             var results = [{
-//                 id: '0',
-//                 text:'Select...'
-//             }];
-//             $.each(data, function(index, item){
-//                 results.push({
-//                     id: item.subcategory,
-//                     text: item.subcategory
-//                 });
-//             });
-//             results.push({
-//                 id: '',
-//                 text:'Select...'
-//             });
-//             return {
-//                 results: results
-//             };
-//         }
-//     }
-// });
-$(".sliderRange").ionRangeSlider({
-    type: "double",
-    grid: true,
-    min: 0,
-    max: 1000,
-    from: 200,
-    to: 800
-});
